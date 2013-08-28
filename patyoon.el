@@ -39,19 +39,20 @@
          flymake-sass
          go-mode
          google-c-style
-         haskell-mode
+         ;;haskell-mode
          haskell-latex
          helm
          ido-ubiquitous
          ido-yes-or-no
          jinja2-mode
          jekyll-el
-         ;;jedi
+         jedi
          magit
          markdown-mode
          ;;org
          package
          popup
+         egg
          ;;rope
          ;;ropemacs
          ruby-mode
@@ -283,8 +284,8 @@ vi style of % jumping to matching brace."
   (goto-line 9)
   )
 
-(add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
-(autoload 'haskell-latex-mode "haskell-latex")
+;;(add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
+;;(autoload 'haskell-latex-mode "haskell-latex")
 
 (defun next-user-buffer ()
     "Switch to the next user buffer.
@@ -364,7 +365,7 @@ Emacs buffers are those whose name starts with *."
 (add-hook 'python-mode-hook
           (function (lambda ()
                       (setq indent-tabs-mode nil
-                            tab-width 4))))
+                            tab-width 2))))
 
 ;; now either el-get is `require'd already, or have been `load'ed by the
 ;; el-get installer.
@@ -390,3 +391,159 @@ Emacs buffers are those whose name starts with *."
 (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
 
 (setq TeX-PDF-mode t)
+;; set alt keys for meta
+(setq mac-option-modifier 'meta)
+;; only works in cocoa version
+;;(mac-key-mode 1)
+
+;; (setq-default indent-tabs-mode nil)
+;; ;; tabs are alwasy 2 spaces at TellApart
+(setq-default tab-width 2)
+(setq indent-line-function 'insert-tab)
+;;no popup when opening buffer from terminal
+(setq ns-pop-up-frames nil)
+
+;; ;;;;;; From Jesh's
+
+;; ;; ;; Show trailing whitespace
+;; ;; (require 'whitespace)
+;; ;; (setq whitespace-style '(trailing tabs newline tab-mark newline-mark))
+;; ;; (custom-set-variables '(show-trailing-whitespace t))
+
+;; ;; ;; Highlight TODO, FIXME, and lines longer than 80 chars
+;; ;; (make-face 'long-line-face)
+;; ;; (set-face-background 'long-line-face "#452828")
+;; ;; (defvar long-line-face 'long-line-face)
+;; ;; (defun sourcecode_buffers ()
+;; ;;   "Returns non-nil if current mode corresponds to source code."
+;; ;;   (memq major-mode '(c++-mode
+;; ;;                      c-mode
+;; ;;                      javascript-mode
+;; ;;                      python-mode
+;; ;;                      sawzall-mode
+;; ;;                      perl-mode
+;; ;;                      makefile-mode
+;; ;;                      emacs-lisp-mode
+;; ;;                      nxml-mode)))
+;; ;; (defun add-fixme-highlighting ()
+;; ;;   "Turn on extra highlighting for 'FIXME' and 'TODO'."
+;; ;;   (if (sourcecode_buffers)
+;; ;;       (progn
+;; ;;         (font-lock-add-keywords
+;; ;;          nil
+;; ;;          '(("\\<\\(FIXME\\|TODO\\|NOTE\\|XXX+\\)" 0 font-lock-warning-face
+;; ;;             prepend)))
+;; ;;         (font-lock-add-keywords
+;; ;;          nil
+;; ;;          '(("^.\\{81\\}\\(.+\\)$" 1 'long-line-face append)))
+;; ;;         (font-lock-add-keywords
+;; ;;          nil
+;; ;;          '((",[^ \n]" 0 'long-line-face append)))
+;; ;;         )
+;; ;;     )
+;; ;;   )
+;; ;; (add-hook 'font-lock-mode-hook 'add-fixme-highlighting)
+
+;; ;; (defun remove-trailing-whitespace ()
+;; ;;   (interactive)
+;; ;;   (save-excursion
+;; ;;     (goto-char (point-min))
+;; ;;     (while (re-search-forward "[ \t]+$" nil t)
+;; ;;       (replace-match "" nil nil))))
+;; ;; (add-hook 'write-file-hooks 'remove-trailing-whitespace)
+
+;; ;; ;; Indentation
+;; ;; (setq default-tab-width 2)
+;; ;; (setq c-basic-offset 2)
+;; ;; (setq js-indent-level 2)
+
+;; ;-----------------------------
+;; ; Python Specifics
+;; ;-----------------------------
+;; ;(add-to-list 'load-path "/Users/jeshua/config/emacs/elpy-0.9/")
+;; ;(load "/Users/jeshua/config/emacs/elpy-0.9/elpy-autoloads.el")
+;; ;(package-initialize)
+;; ;(elpy-enable)
+;; ;(elpy-use-ipython)
+;; ;(elpy-clean-modeline)
+;; ;(auto-complete-mode)
+
+;; ;;  (when (load "flymake" t)
+;; ;;       (defun flymake-pyflakes-init ()
+;; ;;         (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;; ;;                            'flymake-create-temp-inplace))
+;; ;;        (local-file (file-relative-name
+;; ;;                 temp-file
+;; ;;                 (file-name-directory buffer-file-name))))
+;; ;;           (list "pyflakes" (list local-file))))
+;; ;;       (add-to-list 'flymake-allowed-file-name-masks
+;; ;;            '("\\.py\\'" flymake-pyflakes-init)))
+;; ;; ;(add-hook 'find-file-hook 'flymake-find-file-hook)
+
+;; ;; (require 'package)
+;; ;; (add-to-list 'package-archives
+;; ;;     '("marmalade" .
+;; ;;       "http://marmalade-repo.org/packages/"))
+;; ;; (package-initialize)
+;; ;; (add-to-list 'package-archives
+;; ;;   '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+;; ;; ;(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; ;; ;(defun my-flymake-show-help ()
+;; ;; ;  (when (get-char-property (point) 'flymake-overlay)
+;; ;; ;   (let ((help (get-char-property (point) 'help-echo)))
+;; ;; ;    (if help (message "%s" help)))))
+
+;; ;; ;(add-hook 'post-command-hook 'my-flymake-show-help)
+
+;; ;; ;(add-to-list 'load-path "/Users/jeshua/config/emacs/python")
+;; ;; ;(require 'python-mode)
+;; ;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+
+;; ;; ;(add-hook 'python-mode-hook 'my-python-hook)
+
+;; ;; ;; (defun py-outline-level ()
+;; ;; ;;   "This is so that `current-column` DTRT in otherwise-hidden text"
+;; ;; ;;   ;; from ada-mode.el
+;; ;; ;;   (let (buffer-invisibility-spec)
+;; ;; ;;     (save-excursion
+;; ;; ;;       (skip-chars-forward "\t ")
+;; ;; ;;       (current-column))))
+
+;; ;; ;; ; this fragment originally came from the web somewhere, but the outline-regexp
+;; ;; ;; ; was horribly broken and is broken in all instances of this code floating
+;; ;; ;; ; around.  Finally fixed by Charl P. Botha <http://cpbotha.net/>
+;; ;; ;; (defun my-python-hook ()
+;; ;; ;;   (setq outline-regexp "[^ \t\n]\\|[ \t]*\\(def[ \t]+\\|class[ \t]+\\)")
+;; ;; ;;   ; enable our level computation
+;; ;; ;;   (setq outline-level 'py-outline-level)
+;; ;; ;;   ; do not use their \C-c@ prefix, too hard to type. Note this overides
+;; ;; ;;   ;some python mode bindings
+;; ;; ;;   (setq outline-minor-mode-prefix "\C-c")
+;; ;; ;;   ; turn on outline mode
+;; ;; ;;   (outline-minor-mode t)
+;; ;; ;;   ; initially hide all but the headers
+;; ;; ;;   (hide-body)
+;; ;; ;;   (show-paren-mode 1)
+;; ;; ;; )
+
+;; ;; ;(setq python-check-command "/Users/jeshua/python-setup/python-check.sh")
+
+;; ;; (require 'python-pep8)
+;; ;; (require 'python-pylint)
+
+;; ;; ;; (add-hook 'python-mode-hook
+;; ;; ;;           '(lambda ()
+;; ;; ;;              (progn (define-key python-mode-map "\C-m" 'newline-and-indent))))
+;; ;; ;; (add-hook 'python-mode-hook
+;; ;; ;;           (function (lambda ()
+;; ;; ;;                       (setq indent-tabs-mode nil
+;; ;; ;;                             tab-width 2))))
+
+;; (setq-default indent-tabs-mode nil)
+;; (setq-default tab-width 2)
+;; (setq-default python-indent 2)
+;; (setq-default py-indent-offset 2)
+;; (setq py-indent  2)
+;; (setq py-indent-offset  2)

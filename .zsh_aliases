@@ -1,0 +1,40 @@
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
+
+#truecrypt
+alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
+alias zz='ls'
+
+alias psa="ps -aef"
+alias ll="ls -lh"
+
+alias ff="find . -name"
+
+alias rmwhitespace="sed -e 's/^ *//g' -e 's/ *$//g'"
+alias ssh_rye="ssh_into ${DEFAULT_HADOOP_MASTER_HOSTNAME} 'source /mnt/tmp/patrick/init.sh; cd ${RYE_SCRIPT_DIRECTORY}'"
+
+alias ssh-rye="ssh -t -i /Volumes/tc/keys/ro/key_pair_us-east-1 -o StrictHostKeyChecking=no hadoop@$HADOOP 'cd /ebs1/tellapart/deploy/jeshua/tellapart/rye/scripts; bash;'"
+
+
+6613733523
