@@ -1,13 +1,21 @@
 [alias]
-	co = checkout
-	ci = commit
 	rb = rebase
-  amne = "ci -a "
-	lol = log --oneline --graph --decorate
 	stat = status
 	ci = commit
 	st = status
   sb = status -s -b
+  ##### commit #####
+	ci = commit
+	cia = commit -a
+	cim = commit -m
+	ciam = commit -am
+	cid = commit --amend
+	ciad = commit -a --amend
+  ##### checkout #####	
+	co = checkout
+	cob = checkout -b
+	ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
+	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
   ##### stash #####
 	sa = stash apply
 	sc = stash clear
@@ -15,6 +23,7 @@
 	sl = stash list
 	sp = stash pop
 	ss = stash save
+  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"	
   ##### merge #####
 	m = merge
   ##### reset #####
@@ -27,13 +36,13 @@
 	rehh = reset --hard HEAD
 	remh = reset --mixed HEAD
 	resh = reset --soft HEAD
-  #### rebase #####
+  ##### rebase #####
   rb = rebase
 	rba = rebase --abort
 	rbc = rebase --continue
 	rbi = rebase --interactive
 	rbs = rebase --skip
-  #### push #####
+  ##### push #####
 	ps = push
 	psf = push -f
 	psu = push -u
@@ -41,6 +50,7 @@
 	psfo = push -f origin
 	psuo = push -u origin
 	psom = push origin master
+  ##### stash #####	
   save = stash save
   pop = stash pop --index
   gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
@@ -49,13 +59,12 @@
 	amendn = "commit --amend --no-edit"
   rom = "rebase origin/master"
   slog = "log --decorate=short"
+  ##### diff #####	
 	d = difftool
   dc = diff --cached
 	dk = diff --check
 	dck = diff --cached --check
   ksdiff = difftool --gui
-  cb = "!sh -c 'original_branch=$(git branch 2>/dev/null | grep '^*' | colrm 1 2); git co $0; git log | head -10; git co $original_branch'"
-  del = "branch -D"
   save = stash save
   pop = stash pop --index
   restash = !git stash pop  --index &amp;&amp; git stash save
@@ -70,7 +79,10 @@
   rev = log -1 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset'
 ## show the number of commits by each person.
   sh = shortlog -sn
-  #############
+  ##### add ######
+	a = add .
+	ai = add -i
+  ##### remote #####
 	r = remote
 	ra = remote add
 	rm = remote rm
@@ -79,18 +91,59 @@
 	rs = remote show
 	rso = remote show origin
 	rpo = remote prune origin
-	#############
+	##### show #####
 	w = show
 	wp = show -p
 	wr = show -p --no-color
+	##### apply #####
+	ap = apply
+	as = apply --stat
+	ac = apply --check
+	##### am #####
+	ama = am --abort
+	amr = am --resolved
+	ams = am --skip
+	##### branch ######
+	b = branch
+	ba = branch -a
+	bd = branch -d
+	br = branch -r
+	cb = "!sh -c 'original_branch=$(git branch 2>/dev/null | grep '^*' | colrm 1 2); git co $0; git log | head -10; git co $original_branch'"
+  del = "branch -D"
+	f = fetch
+	fo = fetch origin
+	#############
+	fp = format-patch
+	#############
+	fk = fsck
+		#############
+	m = merge
+	ma = merge --abort
+	mc = merge --continue
+	ms = merge --skip
+	#############
+	pr = prune -v
+	#############
+	ps = push
+	psf = push -f
+	psu = push -u
+	pso = push origin
+	psfo = push -f origin
+	psuo = push -u origin
+	psom = push origin master
+	#############
+	#############
+	rb = rebase
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbs = rebase --skip
 	#############
 	assume = update-index --assume-unchanged
 	unassume = update-index --no-assume-unchanged
 	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
-	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-	ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
-	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 	human = name-rev --name-only --refs=refs/heads/*
+
 [core]
 	editor = "/Applications/Emacs.app/Contents/MacOS/Emacs"
 	pager = "/usr/bin/less -N"
@@ -144,7 +197,11 @@
 ##### TellApart specific ####
 [include]
   path = .gitconfig_tellapart
-
+[github]
+	user = patyoon
+	token = token
+[instaweb]
+	httpd = apache2 -f	
 
 
 
@@ -197,9 +254,6 @@
 # 	cd = commit --amend
 # 	cad = commit -a --amend
 # 	#############
-# 	a = add .
-# 	ai = add -i
-# 	#############
 # 	ap = apply
 # 	as = apply --stat
 # 	ac = apply --check
@@ -211,8 +265,7 @@
 # 	l = log --oneline
 # 	lg = log --oneline --graph --decorate
 # 	#############
-# 	o = checkout
-# 	ob = checkout -b
+
 # 	#############
 # 	b = branch
 # 	ba = branch -a
@@ -282,33 +335,3 @@
 # 	wp = show -p
 # 	wr = show -p --no-color
 # 	#############
-# 	assume = update-index --assume-unchanged
-# 	unassume = update-index --no-assume-unchanged
-# 	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
-# 	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-# 	ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
-# 	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
-# 	human = name-rev --name-only --refs=refs/heads/*
-# [color]
-# 	ui = always
-# [color "branch"]
-# 	current = yellow bold
-# 	local = green bold
-# 	remote = cyan bold
-# [color "diff"]
-# 	meta = yellow bold
-# 	frag = magenta bold
-# 	old = red bold
-# 	new = green bold
-# 	whitespace = red reverse
-# [color "status"]
-# 	added = green bold
-# 	changed = yellow bold
-# 	untracked = red bold
-# [diff]
-# 	tool = vimdiff
-# [difftool]
-# 	prompt = false
-# [github]
-# 	user = pkumar
-# 	token = token

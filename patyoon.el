@@ -541,9 +541,9 @@ Emacs buffers are those whose name starts with *."
 ;; ;; ;;                       (setq indent-tabs-mode nil
 ;; ;; ;;                             tab-width 2))))
 
-;; (setq-default indent-tabs-mode nil)
-;; (setq-default tab-width 2)
-;; (setq-default python-indent 2)
-;; (setq-default py-indent-offset 2)
-;; (setq py-indent  2)
-;; (setq py-indent-offset  2)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default python-indent 2)
+(setq-default py-indent-offset 2)
+(setq py-indent  2)
+(setq py-indent-offset  2)

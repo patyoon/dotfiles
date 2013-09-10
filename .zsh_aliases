@@ -36,5 +36,16 @@ alias ssh_rye="ssh_into ${DEFAULT_HADOOP_MASTER_HOSTNAME} 'source /mnt/tmp/patri
 
 alias ssh-rye="ssh -t -i /Volumes/tc/keys/ro/key_pair_us-east-1 -o StrictHostKeyChecking=no hadoop@$HADOOP 'cd /ebs1/tellapart/deploy/jeshua/tellapart/rye/scripts; bash;'"
 
-
-6613733523
+alias eniac='ssh yeyoon@eniac.seas.upenn.edu'
+alias cis505='ssh cis505@eniac.seas.upenn.edu'
+alias shepard='ssh 158.130.51.23 -l yeyoon'
+alias shepardy='ssh -Y 158.130.51.23 -l yeyoon'
+alias wwbp='ssh yeyoon@ssh.wwbp.org'
+alias rms='ssh yeyoon@rms.wharton.upenn.edu'
+alias emacsw='/Applications/Emacs.app/Contents/MacOS/Emacs'
+alias killemacs='kill `ps -A | grep Emacs | sed "s/^ *//g" | cut -f1 -d " "`'
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../..'
+alias ipython='ipython --no-banner --no-confirm-exit'
+alias less='less -F'

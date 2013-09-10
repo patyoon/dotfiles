@@ -33,7 +33,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/bin:/usr/texbin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:/usr/texbin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:/sw/bin:/sw/sbin:/usr/texbin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin://bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/texbin:/usr/X11R6/bin:$TELLAPART_HOME/tools/bin:/opt/local/bin:/Users/patrickyoon/tools:/:/opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin:/opt/local/bin/:
 
 ## Functions ##
 zsh_stats() { history|awk '{print $2}'|grep -v zsh_stats|sort|uniq -c|sort -rn|head}
@@ -208,6 +207,8 @@ HISTFILESIZE=2000
 # Alias definitions.
 if [ -f ~/.zsh_aliases ]; then
     . ~/.zsh_aliases
+else
+    echo "zsh_aliases not found"
 fi
 
 # Get colors in manual pages
@@ -248,12 +249,15 @@ export TOOL_HOME=/Users/patrickyoon/tools
 # TellApart specific
 if [ -f ~/.zsh_ta ]; then
     . ~/.zsh_ta
+else
+    echo "zsh_ta not found"
 fi
 
 # Bash function for custom grep
 function wgrep {
     grep -rIn -C 2 $1 ./
 }
+
 
 # Set up env variables so that iPython works with pytest as first dir (no FE
 # settings problem)
