@@ -1,0 +1,16 @@
+Host gerrit
+     Hostname dev.tellapart.com
+     Port 29418
+     User patrick
+
+Host dev.tellapart.com
+     Hostname dev.tellapart.com
+     IdentityFile /Volumes/tc/keys/devel/key_pair_us-east-1
+
+Host test-frontend
+     User ubuntu
+     Hostname ec2-54-211-36-85.compute-1.amazonaws.com
+
+Host public-test-frontend
+     User ubuntu
+     Hostname ec2-54-226-190-213.compute-1.amazonaws.com

@@ -7,10 +7,6 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -37,7 +33,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/Users/Yoon/.opam/system/bin:/usr/texbin:/usr/local/share/npm/bin:/Users/Yoon/bin:/usr/local/bin:/usr/local/sbin:/usr/texbin:/usr/local/share/npm/bin:/Users/Yoon/bin:/usr/local/bin:/usr/local/sbin:/sw/bin:/sw/sbin:/usr/texbin:/usr/local/share/npm/bin:/Users/Yoon/bin:/usr/local/bin:/usr/local/sbin:/Users/Yoon/.rvm/gems/ruby-1.9.3-p362@rails3tutorial2ndEd/bin:/Users/Yoon/.rvm/gems/ruby-1.9.3-p362@global/bin:/Users/Yoon/.rvm/rubies/ruby-1.9.3-p362/bin:/Users/Yoon/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/texbin:/Users/Yoon/.rvm/bin:/usr/X11R6/bin
 
 ## Functions ##
 zsh_stats() { history|awk '{print $2}'|grep -v zsh_stats|sort|uniq -c|sort -rn|head}
@@ -55,21 +50,6 @@ countdeps() {
 
 search() {
     pacman -Ss $@ ; rawr -s "$@"
-}
-
-vimwhich() {
-    which $1 && vim `which $1`
-}
-filewhich() {
-    which $1 && file `which $1`
-}
-
-vimrcconf() {
-    if [[ `whoami` == "root" ]]; then
-        vim /etc/rc.conf
-    elif [[ `whoami` == "ogion" ]]; then
-        sudo vim /etc/rc.conf
-    fi
 }
 
 rcd() {
@@ -217,3 +197,105 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
+
+#alias python='/opt/local/bin/python2.6
+
+# for setting history length see HISTSIZE and HISTFILESIZE
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# Get colors in manual pages
+man() {
+    env \
+        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+        LESS_TERMCAP_md=$(printf "\e[1;31m") \
+        LESS_TERMCAP_me=$(printf "\e[0m") \
+        LESS_TERMCAP_se=$(printf "\e[0m") \
+        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+        LESS_TERMCAP_ue=$(printf "\e[0m") \
+        LESS_TERMCAP_us=$(printf "\e[1;32m") \
+        man "$@"
+}
+
+# Change directory to the current Finder directory (OS X)
+cdf() {
+    target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+    if [ "$target" != "" ]; then
+        cd "$target"; pwd
+    else
+        echo 'No Finder window found' >&2
+    fi
+}
+
+# One command to update all.
+update() {
+    #local brew="brew update; brew upgrade;"
+    local macport="port selfupdate; sudo port upgrade outdated;"
+    local gisty="gisty pull_all; gisty sync_delete"
+    local gem="gem update;"
+    local pip="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U -q"
+    sh -c $brew$gisty; sudo sh -c $gem$pip$macport
+}
+
+export TOOL_HOME=/Users/patrickyoon/tools
+
+# TellApart specific commands.
+if [ -f ~/.zsh_ta ]; then
+    . ~/.zsh_ta
+fi
+
+# Bash function for custom grep
+function wgrep {
+    grep -rIn -C 2 $1 ./
+}
+
+function pyrgrep {
+    grep -r $1 --include "*.py" $2
+}
+
+# de-dup history
+setopt HIST_IGNORE_DUPS
+
+# DIRSTACK
+
+DIRSTACKFILE="$HOME/.cache/zsh/dirs"
+if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
+    dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
+    [[ -d $dirstack[1] ]] && cd $dirstack[1]
+fi
+chpwd() {
+    print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+}
+
+DIRSTACKSIZE=20
+
+setopt autopushd pushdsilent pushdtohome
+
+## Remove duplicate entries
+setopt pushdignoredups
+
+## This reverts the +/- operators.
+setopt pushdminus
+
+# Deletes given string from known known_hosts file.
+function delete-known-host {
+    sed "/$1/d" ~/.ssh/known_hosts > tmp_283497
+    mv tmp_283497 ~/.ssh/known_hosts
+}
+
+# nginx short cuts
+alias nginx-start='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
+alias nginx-stop='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
+alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
+
+# cask for
+export PATH="/Users/Yoon/.cask/bin:$PATH"
+
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages

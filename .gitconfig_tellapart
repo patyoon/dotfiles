@@ -1,0 +1,7 @@
+##### tellapart specific #####
+[user]
+	name = Patrick Yoon
+	email = patrick@tellapart.com
+[alias]
+	review = "!sh -c '$TAHOME/py/tellapart/scripts/precommit_hook.py --review && git review-unsafe $0'"
+	review-unsafe = "!sh -c 'git push --receive-pack=\"git receive-pack --reviewer=$0@tellapart.com --reviewer=code-reviews@tellapart.com\" gerrit:tellapart HEAD:refs/for/master'"
