@@ -8,6 +8,62 @@
       (goto-char (point-max))
       (eval-print-last-sexp))))
 ;; list all packages that I want
+(setq my-el-get-packages
+      (append
+       '(css-mode
+         egg
+         gist
+         anything
+         yasnippet
+         zenburn
+         yaml-mode
+         yas-jit
+         virtualenv
+         sql-complete
+         slime
+         sass-mode
+         rvm
+         android-mode
+         auto-complete
+         clojure-mode
+         coffee-mode
+         ;;csharp-mode
+         csv-mode
+         cython-mode
+         django-mode
+         ein
+         flymake
+         flymake-coffee
+         flymake-css
+         flymake-ruby
+         flymake-haml
+         flymake-sass
+         go-mode
+         google-c-style
+         ;;haskell-mode
+         haskell-latex
+         helm
+         ido-ubiquitous
+         ido-yes-or-no
+         jinja2-mode
+         jekyll-el
+         jedi
+         magit
+         markdown-mode
+         ;;org
+         package
+         popup
+         egg
+         ;;rope
+         ;;ropemacs
+         ruby-mode
+         ruby-compilation
+         smex
+         )
+       (mapcar 'el-get-source-name el-get-sources)))
+
+(el-get 'sync my-el-get-packages)
+
 
 ;; Turn off icomplete, use helm instead
 (icomplete-mode 99)
