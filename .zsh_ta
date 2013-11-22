@@ -9,6 +9,8 @@
 
 export PATH=$PATH:$TELLAPART_HOME/tools/bin
 
+export HADOOP
+
 ##### Functions #####
 
 ### ssh-ro ###
@@ -18,7 +20,7 @@ function ssh-ro {
 
 ### ssh-ro-master ###
 function ssh-ro-master {
-  ssh-ro hadoop@$HADOOP_MASTER_DNS "$@"
+  ssh-ro hadoop@$DEFAULT_DEFAULT_HADOOP_MASTER_HOSTNAME "$@"
 }
 
 ### scp-ro ###
@@ -39,10 +41,10 @@ function ssh-prod-west {
 ### pullfile ###
 # Pulls report results from S3 and downloads to current directory.
 # Usage: pullfile <report-name> e.g. pullfile ctr_by_criteria
-# Requirements: Must set up $USER, $HADOOP_MASTER_DNS first
+# Requirements: Must set up $USER, $DEFAULT_DEFAULT_HADOOP_MASTER_HOSTNAME first
 function pullfile {
-  ssh-ro hadoop@$HADOOP_MASTER_DNS "mkdir -p /mnt/tmp/$USER; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/$USER/$1.txt; gzip -f /mnt/tmp/$USER/$1.txt"
-  scp-ro hadoop@$HADOOP_MASTER_DNS:/mnt/tmp/$USER/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/$USER; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/$USER/$1.txt; gzip -f /mnt/tmp/$USER/$1.txt"
+  scp-ro hadoop@$DEFAULT_DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/$USER/$1.txt.gz .
   gunzip $1.txt.gz
 }
 
@@ -110,27 +112,26 @@ function gen-thrift {
 ##### Aliases #####
 alias flush-dns-cache="dscacheutil -flushcache"
 alias datepy="python -c 'import time; print time.time()'"
+
 alias gtfo='gen-thrift && (cd $TELLAPART_HOME/py && env PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py:$TELLAPART_HOME/build/gen-py:$TELLAPART_HOME/rye/scripts:$TELLAPART_HOME/py/tellapart/third_party fab -f tellapart/deploy/fabfile.py deploy_config:prod auto_prod_push)'
 
 #Rye Default Cluster
 export DEFAULT_HADOOP_MASTER_HOSTNAME='EC2-23-23-238-60.compute-1.amazonaws.com'
-export DEFAULT_HADOOP_MASTER_JOBTRACKER='http://ec2-23-23-238-60.compute-1.amazonaws.com:9100'
+export DEFAULT_HADOOP_MASTER_HOSTNAME_JOBTRACKER='http://ec2-23-23-238-60.compute-1.amazonaws.com:9100'
 export DEFAULT_AZKABAN='htt1p://ec2-23-23-238-60.compute-1.amazonaws.com:8081'
 
 #Rye Nightly Cluster
 
-export NIGHTLY_HADOOP_MASTER_HOSTNAME='ec2-54-243-234-161.compute-1.amazonaws.com'
-export NIGHTLY_HADOOP_MASTER_JOBTRACKER='http://ec2-54-243-234-161.compute-1.amazonaws.com:9100'
+export NIGHTLY_DEFAULT_HADOOP_MASTER_HOSTNAME='ec2-54-243-234-161.compute-1.amazonaws.com'
+export NIGHTLY_DEFAULT_HADOOP_MASTER_HOSTNAME_JOBTRACKER='http://ec2-54-243-234-161.compute-1.amazonaws.com:9100'
 export NIGHTLY_AZKABAN='http://ec2-54-243-234-161.compute-1.amazonaws.com:8081'
 export EDITOR=emacs
 alias em="open -a /Applications/Emacs.app \"$@\" && osascript -e 'tell application \"Emacs.app\" to activate'"
 
 # Mount Truecrypt volume and create tc truecript symlink to untitled truecrypt volume.
-mount_tc
-
 export PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py/tellapart/third_party:$TELLAPART_HOME/build/gen-py:$TELLAPART_HOME/py:$PYTHONPATH
 export TC_KEY_DIR=/Volumes/tc/keys
-export TELLAPART_HOME=/Users/patrickyoon/workspace/tellapart
+export TELLAPART_HOME=/Users/patrick/workspace/tellapart
 export TAHOME=$TELLAPART_HOME
 export TA_ROOT=$TELLAPART_HOME
 export TELLAPART_PYTHONPATH="$TELLAPART_HOME/py"
@@ -150,8 +151,8 @@ export WEST_2_CONTROLLER="ec2-54-245-104-203.us-west-2.compute.amazonaws.com"
 export DEVEL_SERVER="ec2-50-19-80-99.compute-1.amazonaws.com"
 
 # ssh into HADOOP MASTER default
-alias ssh-hm="sshinto $HADOOP_MASTER"
-alias refresh-jt="delete-known-host $HADOOP_MASTER"
+alias ssh-hm="sshinto $DEFAULT_HADOOP_MASTER_HOSTNAME"
+alias refresh-jt="delete-known-host $DEFAULT_HADOOP_MASTER_HOSTNAME"
 # ssh into HADOOP MASTER nightly
 alias ssh-hmn="sshinto $HM_NIGHTLY"
 
@@ -219,7 +220,7 @@ function upload-local-crumbjs-test {
 #alias upload-crumbjs-test=" && PYTHONPATH=../../py CLOSURE_COMPILER_JAR=../../third_party/google_closure_compiler/compiler.jar fab-2.6 prod make && scp-devel ./crumb.js ubuntu@$DEVEL_SERVER:~/crumb_test.js"
 #alias upload-crumbjs-test-nomin="cd $TELLAPART_HOME/crumb/js && PYTHONPATH=../../py CLOSURE_COMPILER_JAR=../../third_party/google_closure_compiler/compiler.jar fab-2.6 prod:minify=0 make && scp-devel ./crumb.js ubuntu@$DEVEL_SERVER:~/crumb_test.js"
 
-export DEPLOY_FAB="fab-2.6 -f ${TELLAPART_HOME}/py/tellapart/deploy/fabfile.py"
+export DEPLOY_FAB="fab -f ${TELLAPART_HOME}/py/tellapart/deploy/fabfile.py"
 export KEY_PAIR_EAST="${TC_KEY_DIR}/prod/key_pair_us-east-1"
 export KEY_PAIR_WEST="${TC_KEY_DIR}/prod/key_pair_us-west-1"
 
@@ -232,17 +233,16 @@ alias spec-restart="$DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:prod restart_spe
 alias spec-restart-west="$DEPLOY_FAB -i $KEY_PAIR_WEST deploy_config:prod restart_specific_prod_server"
 # For canaries that are not FEs
 alias canary-prod="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:prod bundle canary"
-
 # Conductor pushing.
 alias conductor-canary-west="conductor canary --cluster main-west"
 alias conductor-canary="conductor canary --cluster main-east"
 alias conductor-release="conductor release_test --cluster main-east --servername"
 
-alias rye-devel-manual="cd $TELLAPART_PYTHONPATH && fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$HADOOP_MASTER -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
-alias rye-devel="cd $TELLAPART_PYTHONPATH && echo -e '\n\n\n\n' | fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$HADOOP_MASTER -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
-alias rye-devel-py="cd $TELLAPART_PYTHONPATH && echo -e 'py\n\n\n\n' | fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$HADOOP_MASTER -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
+alias rye-devel-manual="cd $TELLAPART_PYTHONPATH && fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
+alias rye-devel="cd $TELLAPART_PYTHONPATH && echo -e '\n\n\n\n' | fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
+alias rye-devel-py="cd $TELLAPART_PYTHONPATH && echo -e 'py\n\n\n\n' | fab -f tellapart/deploy/fabfile.py --hide running -H hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME -i ${TC_KEY_DIR}/ro/key_pair_us-east-1 deploy_config:rye rye_config:devel bundle rye && cd - && say rye devel done"
 
-alias rye-nightly="cd $TELLAPART_PYTHONPATH && fab -f tellapart/deploy/fabfile.py --hide running -H $HADOOP_MASTER -i $TC_KEY_DIR/ro/key_pair_us-east-1 deploy_config:rye rye_config:nightly bundle rye && cd - && say rye prod done"
+alias rye-nightly="cd $TELLAPART_PYTHONPATH && fab -f tellapart/deploy/fabfile.py --hide running -H $DEFAULT_HADOOP_MASTER_HOSTNAME -i $TC_KEY_DIR/ro/key_pair_us-east-1 deploy_config:rye rye_config:nightly bundle rye && cd - && say rye prod done"
 
 alias prod-push="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB deploy_config:prod auto_prod_push"
 alias prod-restart="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB deploy_config:prod auto_prod_restart"
@@ -272,11 +272,11 @@ alias jstests="cd $TELLAPART_HOME/crumb/js; fab-2.6 testing make && open tests/c
 # -----------------------------------------------------------------------------
 
 # For AWS tools:
-export AWS_ELB_HOME=/Users/patrickyoon/tools/ElasticLoadBalancing-1.0.12.0/
-export AWS_CLOUDWATCH_HOME=/Users/patrickyoon/tools/CloudWatch-1.0.12.1/
-export AWS_AUTO_SCALING_HOME=/Users/patrickyoon/tools/AutoScaling-1.0.39.0/
+export AWS_ELB_HOME=/Users/patrick/tools/ElasticLoadBalancing-1.0.12.0/
+export AWS_CLOUDWATCH_HOME=/Users/patrick/tools/CloudWatch-1.0.12.1/
+export AWS_AUTO_SCALING_HOME=/Users/patrick/tools/AutoScaling-1.0.39.0/
 export EC2_HOME=/usr/ec2-api-tools
-export JAVA_HOME=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
 export PATH=$PATH:$AWS_ELB_HOME/bin:${AWS_AUTO_SCALING_HOME}/bin:${AWS_CLOUDWATCH_HOME}/bin:$EC2_HOME/bin
 
 # NOTE: must change the following after a key rotation:
@@ -310,32 +310,32 @@ function switchhosts {
 }
 
 function pullfile {
-  ssh-ro hadoop@$HADOOP_MASTER "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$HADOOP_MASTER:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
   gunzip $1.txt.gz
 }
 function pullfile-nightly {
-  ssh-ro hadoop@$HADOOP_MASTER "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/nightly/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$HADOOP_MASTER:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/nightly/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
   gunzip $1.txt.gz
 }
 
 function pullhive {
-  ssh-ro hadoop@$HADOOP_MASTER "mkdir -p /mnt/tmp/patrick; cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/$1/* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$HADOOP_MASTER:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/$1/* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
   gunzip $1.txt.gz
   sed s//,/g <$1.txt >$1.csv
 }
 
 function pullryehive {
-  ssh-ro hadoop@$HADOOP_MASTER "gzip -f /mnt/tmp/patrick/run/$1.out"
-  scp-ro hadoop@$HADOOP_MASTER:/mnt/tmp/patrick/run/$1.out.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/patrick/run/$1.out"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/run/$1.out.gz .
   gunzip $1.out.gz
 }
 
 function pullryehive-no-out {
-  ssh-ro hadoop@$HADOOP_MASTER "gzip -f /mnt/tmp/patrick/run/$1"
-  scp-ro hadoop@$HADOOP_MASTER:/mnt/tmp/patrick/run/$1.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/patrick/run/$1"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/run/$1.gz .
   gunzip $1.gz
 }
 
@@ -345,8 +345,8 @@ function sed-ctrl-a {
 
 function oids-by-user_tags {
   cd ~/tmp/orders/
-  ssh-ro hadoop@$HADOOP_MASTER "cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/hive_output/* > /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt"
-  scp-ro hadoop@$HADOOP_MASTER:/ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt ~/tmp/orders/cp_orders.txt
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/hive_output/* > /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt ~/tmp/orders/cp_orders.txt
   python orders.py
   open ./
 }
@@ -387,5 +387,24 @@ alias configurator="python $TELLAPART_HOME/py/tellapart/scripts/configurator_cli
 # Set up env variables so that iPython works with pytest as first dir (no FE
 # settings problem)
 # used in tools/bin/tapy
-export TAPY=`which ipython`
-alias testtapy='PYTHONPATH=$TAHOME/pytest tapy'
+#export TAPY=`which ipython`
+#alias testtapy='PYTHONPATH=$TAHOME/pytest tapy'
+
+function rye-job {
+    python $TELLAPART_HOME/rye/scripts/rye_cluster_remote.py --run_script rye_jobs_launcher.py --jobs=$1 --start_date=$2 --end_date=$3
+}
+
+export PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py/tellapart/third_party:$TELLAPART_HOME/build/gen-py:/Users/patrick/workspace/py/tellapart/third_party:$TELLAPART_HOME/rye/scripts
+
+#mount truecrypt volume
+/Users/patrick/workspace/tools/mount_tc
+
+function test-gtfo {
+pushd $TAHOME/py
+gen-thrift
+fab -f tellapart/deploy/fabfile.py \
+deploy_config:devel_ec2 \
+bundle:use_commit_id=HEAD,perform_bundle_diff=false \
+canary
+popd
+}

@@ -1,4 +1,10 @@
-;; use el-get for package manager
+;;; My emacs setup
+;;; use el-get for package manager
+
+(global-unset-key (kbd "C-x p"))
+
+;; (setenv "PYTHONPATH" "  /usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages/:/Library/Python/2.6/site-packages/:/Users/patrick/workspace/tellapart/pytest:/Users/patrick/workspace/tellapart/py/tellapart/third_party:/Users/patrick/workspace/tellapart/build/gen-py:/Users/patrick/workspace/tellapart/py:/pytest:/py/tellapart/third_party:/build/gen-py")
+
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
@@ -7,40 +13,31 @@
     (let (el-get-master-branch)
       (goto-char (point-max))
       (eval-print-last-sexp))))
+
+  ;; let's set the python path correctly as well
+  ;; (setenv "PYTHONPATH" (concat python-files-dir
+  ;;                              (concat path-separator
+  ;;                                      (getenv "PYTHONPATH"))))
+
 ;; list all packages that I want
 (setq my-el-get-packages
       (append
        '(css-mode
-         egg
          gist
          anything
          yasnippet
          zenburn
          yaml-mode
          yas-jit
+         flx
          virtualenv
          sql-complete
          slime
          sass-mode
-         rvm
-         android-mode
          auto-complete
-         clojure-mode
          coffee-mode
-         ;;csharp-mode
-         csv-mode
          cython-mode
          django-mode
-         ein
-         flymake
-         flymake-coffee
-         flymake-css
-         flymake-ruby
-         flymake-haml
-         flymake-sass
-         go-mode
-         google-c-style
-         ;;haskell-mode
          haskell-latex
          helm
          ido-ubiquitous
@@ -50,14 +47,14 @@
          jedi
          magit
          markdown-mode
-         ;;org
          package
          popup
-         egg
-         ;;rope
-         ;;ropemacs
-         ruby-mode
-         ruby-compilation
+         python-mode
+         rope
+         ropemacs
+         pymacs
+         pos-tip
+         popup-pos-tip
          smex
          )
        (mapcar 'el-get-source-name el-get-sources)))
@@ -97,10 +94,6 @@
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
-;; Use Helm for buffer switching and file finding
-;;(global-set-key (kbd "\C-x b") 'helm-buffers-list)
-;;(global-set-key (kbd "\C-x \C-f") 'helm-find-files)
 
 ;; Recentf is a minor mode that builds a list of recently opened files.
 ;; http://www.emacswiki.org/emacs/RecentFiles
@@ -235,9 +228,11 @@ vi style of % jumping to matching brace."
 ;;Needed for compatibility with flyspell
 (ac-flyspell-workaround)
 (setq ac-auto-start 3)
-(setq ac-auto-show-menu t)
-(setq ac-quick-help-delay .3)
+(setq ac-auto-show-menu 0.5)
+;;(setq ac-quick-help-delay .5)
+(setq ac-use-quick-help -1)
 (ac-set-trigger-key "TAB")
+(ac-set-trigger-key "<tab>")
 ;; Make \C-n and \C-p work in autocompletion menu
 (setq ac-use-menu-map t)
 (define-key ac-menu-map "\C-n" 'ac-next)
@@ -285,7 +280,7 @@ vi style of % jumping to matching brace."
 (global-subword-mode 1) ;move thru camelCaseWords
 
 ;; fontify code in code blocks
-(setq org-src-fontify-natively t)
+;;(setq org-src-fontify-natively t)
 
 ;; ;; swap to have to have similar behavior as shell.
 (global-set-key "\C-w" 'backward-kill-word)
@@ -301,8 +296,8 @@ vi style of % jumping to matching brace."
   (goto-line 9)
   )
 
-;;(add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
-;;(autoload 'haskell-latex-mode "haskell-latex")
+(add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
+(autoload 'haskell-latex-mode "haskell-latex")
 
 (defun next-user-buffer ()
   "Switch to the next user buffer.
@@ -377,14 +372,6 @@ Emacs buffers are those whose name starts with *."
 (global-set-key "\C-cep" 'evernote-post-region)
 (global-set-key "\C-ceb" 'evernote-browser)
 
-;; python-mode
-
-;; python mode tab width
-(add-hook 'python-mode-hook
-          (function (lambda ()
-                      (setq indent-tabs-mode nil
-                            tab-width 2))))
-
 ;; now either el-get is `require'd already, or have been `load'ed by the
 ;; el-get installer.
 (add-to-list 'el-get-recipe-path (expand-file-name "~/prg/el-get/recipes"))
@@ -405,7 +392,7 @@ Emacs buffers are those whose name starts with *."
 ;; set alt keys for meta
 (setq mac-option-modifier 'meta)
 ;; only works in cocoa version
-;;(mac-key-mode 1)
+;; (mac-key-mode 1)
 
 ;; (setq-default indent-tabs-mode nil)
 ;; ;; tabs are alwasy 2 spaces at TellApart
@@ -413,47 +400,6 @@ Emacs buffers are those whose name starts with *."
 (setq indent-line-function 'insert-tab)
 ;;no popup when opening buffer from terminal
 (setq ns-pop-up-frames nil)
-
-;; ;;;;;; From Jesh's
-
-;; ;; Show trailing whitespace
-;; (require 'whitespace)
-;; (setq whitespace-style '(trailing tabs newline tab-mark newline-mark))
-;; (custom-set-variables '(show-trailing-whitespace t))
-
-;; ;; ;; Highlight TODO, FIXME, and lines longer than 80 chars
-;; ;; (make-face 'long-line-face)
-;; ;; (set-face-background 'long-line-face "#452828")
-;; ;; (defvar long-line-face 'long-line-face)
-;; ;; (defun sourcecode_buffers ()
-;; ;;   "Returns non-nil if current mode corresponds to source code."
-;; ;;   (memq major-mode '(c++-mode
-;; ;;                      c-mode
-;; ;;                      javascript-mode
-;; ;;                      python-mode
-;; ;;                      sawzall-mode
-;; ;;                      perl-mode
-;; ;;                      makefile-mode
-;; ;;                      emacs-lisp-mode
-;; ;;                      nxml-mode)))
-;; ;; (defun add-fixme-highlighting ()
-;; ;;   "Turn on extra highlighting for 'FIXME' and 'TODO'."
-;; ;;   (if (sourcecode_buffers)
-;; ;;       (progn
-;; ;;         (font-lock-add-keywords
-;; ;;          nil
-;; ;;          '(("\\<\\(FIXME\\|TODO\\|NOTE\\|XXX+\\)" 0 font-lock-warning-face
-;; ;;             prepend)))
-;; ;;         (font-lock-add-keywords
-;; ;;          nil
-;; ;;          '(("^.\\{81\\}\\(.+\\)$" 1 'long-line-face append)))
-;; ;;         (font-lock-add-keywords
-;; ;;          nil
-;; ;;          '((",[^ \n]" 0 'long-line-face append)))
-;; ;;         )
-;; ;;     )
-;; ;;   )
-;; ;; (add-hook 'font-lock-mode-hook 'add-fixme-highlighting)
 
 (defun remove-trailing-whitespace ()
   (interactive)
@@ -468,80 +414,37 @@ Emacs buffers are those whose name starts with *."
 (setq c-basic-offset 2)
 (setq js-indent-level 2)
 
-;; ;-----------------------------
-;; ; Python Specifics
-;; ;-----------------------------
-;; ;(add-to-list 'load-path "/Users/jeshua/config/emacs/elpy-0.9/")
-;; ;(load "/Users/jeshua/config/emacs/elpy-0.9/elpy-autoloads.el")
-;; ;(package-initialize)
-;; ;(elpy-enable)
-;; ;(elpy-use-ipython)
-;; ;(elpy-clean-modeline)
-;; ;(auto-complete-mode)
-
-;; ;; (require 'package)
-;; ;; (add-to-list 'package-archives
-;; ;;     '("marmalade" .
-;; ;;       "http://marmalade-repo.org/packages/"))
-;; ;; (package-initialize)
-;; ;; (add-to-list 'package-archives
-;; ;;   '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
-;; ;; ;(defun my-flymake-show-help ()
-;; ;; ;  (when (get-char-property (point) 'flymake-overlay)
-;; ;; ;   (let ((help (get-char-property (point) 'help-echo)))
-;; ;; ;    (if help (message "%s" help)))))
-
-;; ;; ;(add-hook 'post-command-hook 'my-flymake-show-help)
-
 ;; Instead of python.el, use python-mode.el that supports ipython.
-;;(require 'python-mode)
+(require 'python-mode)
 
 ;; yas with ido-ubiquotous
-  ;; Completing point by some yasnippet key
-  ;; (defun yas-ido-expand ()
-  ;;   "Lets you select (and expand) a yasnippet key"
-  ;;   (interactive)
-  ;;     (let ((original-point (point)))
-  ;;       (while (and
-  ;;               (not (= (point) (point-min) ))
-  ;;               (not
-  ;;                (string-match "[[:space:]\n]" (char-to-string (char-before)))))
-  ;;         (backward-word 1))
-  ;;     (let* ((init-word (point))
-  ;;            (word (buffer-substring init-word original-point))
-  ;;            (list (yas-active-keys)))
-  ;;       (goto-char original-point)
-  ;;       (let ((key (remove-if-not
-  ;;                   (lambda (s) (string-match (concat "^" word) s)) list)))
-  ;;         (if (= (length key) 1)
-  ;;             (setq key (pop key))
-  ;;           (setq key (ido-completing-read "key: " list nil nil word)))
-  ;;         (delete-char (- init-word original-point))
-  ;;         (insert key)
-  ;;         (yas-expand)))))
+;;  Completing point by some yasnippet key
+  (defun yas-ido-expand ()
+    "Lets you select (and expand) a yasnippet key"
+    (interactive)
+      (let ((original-point (point)))
+        (while (and
+                (not (= (point) (point-min) ))
+                (not
+                 (string-match "[[:space:]\n]" (char-to-string (char-before)))))
+          (backward-word 1))
+      (let* ((init-word (point))
+             (word (buffer-substring init-word original-point))
+             (list (yas-active-keys)))
+        (goto-char original-point)
+        (let ((key (remove-if-not
+                    (lambda (s) (string-match (concat "^" word) s)) list)))
+          (if (= (length key) 1)
+              (setq key (pop key))
+            (setq key (ido-completing-read "key: " list nil nil word)))
+          (delete-char (- init-word original-point))
+          (insert key)
+          (yas-expand)))))
 
-  ;;     (define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
-
-;;(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+      (define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
 
 ;; (require 'python-pep8)
 ;; (require 'python-pylint)
-
-;; zshrc does not affect carbon emacs.
-
-;;set ipython as default python shell
-(setq
- python-shell-interpreter "ipython"
- python-shell-interpreter-args ""
- python-shell-prompt-regexp "In \\[[0-9]+\\]: "
- python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
- python-shell-completion-setup-code
- "from IPython.core.completerlib import module_completion"
- python-shell-completion-module-string-code
- "';'.join(module_completion('''%s'''))\n"
- python-shell-completion-string-code
- "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
 ;; use Ropemacs
 ;; turn off until I figure out how to use it.
@@ -596,11 +499,10 @@ Emacs buffers are those whose name starts with *."
 ;; ;; ;;                             tab-width 2))))
 
 ;; python jedi setup
-(add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'jedi:ac-setup)
+;; (add-hook 'python-mode-hook 'auto-complete-mode)
+;; (add-hook 'python-mode-hook 'jedi:ac-setup)
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (setq jedi:setup-keys t)
-
 
 ;; ipython notebook
 ;;(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
@@ -636,6 +538,15 @@ Emacs buffers are those whose name starts with *."
 ;; smart parens mode sucks!
 ;;(smartparens-global-mode -1)
 ;;(smartparens-mode -1)
+(show-smartparens-global-mode t)
+
+;;  pos-tip
+     ;; (require 'popup-pos-tip)
+     ;; (defadvice popup-tip
+     ;;   (around popup-pos-tip-wrapper (string &rest args) activate)
+     ;;   (if (eq window-system 'x)
+     ;;       (apply 'popup-pos-tip string args)
+     ;;     ad-do-it))
 
 ;; (set-variable temporary-file-directory "/tmp")
 ;;    (defconst emacs-tmp-dir (format "%s/%s%s/" temporary-file-directory "emacs" (user-uid)))
@@ -649,66 +560,152 @@ Emacs buffers are those whose name starts with *."
 ;;            '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
 ;;             ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "/usr/local/sacha-backup/\\2" t)))
 
-;;(require 'ipython)
-(setq python-python-command "/usr/bin/python2.7")
-
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)
 (setq flycheck-check-syntax-automatically '(save))
-
-    (setenv "PATH"
-            (concat
-             "~/.virtualenvs/default/bin" ":"
-             (getenv "PATH")
-             ))
-
-;; ;;rope
-
-(require 'pymacs)
-  (setenv "PYMACS_PYTHON" "python2.7")
-
-   (defun load-ropemacs ()
-      "Load pymacs and ropemacs"
-      (interactive)
-      (setenv "PYMACS_PYTHON" "python2.6")
-      (require 'pymacs)
-      (pymacs-load "ropemacs" "rope-")
-
-      ;; ropemacs variables
-      (setq ropemacs-confirm-saving 'nil)
-      (setq ropemacs-enable-autoimport 't)
-      (setq ropemacs-autoimport-modules '("os" "shutil"))
-      (setq ropemacs-autoimport-underlineds 't)
-    )
-
-  (autoload 'pymacs-apply "pymacs")
-  (autoload 'pymacs-call "pymacs")
-  (autoload 'pymacs-eval "pymacs" nil t)
-  (autoload 'pymacs-exec "pymacs" nil t)
-  (autoload 'pymacs-load "pymacs" nil t)
-(load-ropemacs)
-  (setq ropemacs-enable-autoimport t)
+(setq flycheck-highlighting-mode 'lines)
+;; ;;ropex
 
 ;; virtualenv support
   (push "~/.virtualenvs/default/bin" exec-path)
 
 
+;; python-mode
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+
+;; python mode tab width
+(add-hook 'python-mode-hook
+          (function (lambda ()
+                      (setq indent-tabs-mode nil
+                            tab-width 2))))
+
+
   ; use IPython
   (setq-default py-shell-name "ipython")
   (setq-default py-which-bufname "IPython")
-  ; use the wx backend, for both mayavi and matplotlib
-  (setq py-python-command-args
-    '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
-  (setq py-force-py-shell-name-p t)
-
   ; switch to the interpreter after executing code
   (setq py-shell-switch-buffers-on-execute-p t)
   (setq py-switch-buffers-on-execute-p t)
   ; don't split windows
   (setq py-split-windows-on-execute-p nil)
-  ; try to automagically figure out indentation
+(setq py-force-py-shell-name-p t)
+;;(require 'ipython)
   (setq py-smart-indentation t)
 
-  (provide 'patyoon)
-  ;;; patyoon.el ends here
+;; change comint keys for ipython shell
+  (require 'comint)
+    (define-key comint-mode-map (kbd "M-") 'comint-next-input)
+    (define-key comint-mode-map (kbd "M-") 'comint-previous-input)
+    (define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
+    (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
+(setq-default explicit-shell-file-name "/bin/zsh")
+;; need to fix ^A things.
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+(push "~/.virtualenvs/tellapart/bin" exec-path)
+(setenv "PATH"
+           (concat
+           "~/.virtualenvs/tellapart/bin" ":"
+           (getenv "PATH")
+           ))
+  ;; (defmacro after (mode &rest body)
+  ;;   `(eval-after-load ,mode
+  ;;      '(progn ,@body)))
+
+  ;; (after 'auto-complete
+  ;;        (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+  ;;        (setq ac-use-menu-map t)
+  ;;        (define-key ac-menu-map "\C-n" 'ac-next)
+  ;;        (define-key ac-menu-map "\C-p" 'ac-previous))
+
+  ;; (after 'auto-complete-config
+  ;;        (ac-config-default)
+  ;;        (when (file-exists-p (expand-file-name "/Users/patrick/.emacs.d/el-get/pymacs"))
+  ;;          (ac-ropemacs-initialize)
+  ;;          (ac-ropemacs-setup)))
+
+  ;; (after 'auto-complete-autoloads
+  ;;        (autoload 'auto-complete-mode "auto-complete" "enable auto-complete-mode" t nil)
+  ;;        (add-hook 'python-mode-hook
+  ;;                  (lambda ()
+  ;;                    (require 'auto-complete-config)
+  ;;                    (add-to-list 'ac-sources 'ac-source-ropemacs)
+  ;;                    (auto-complete-mode))))
+
+
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
+
+  (add-hook 'lisp-mode-hook '(lambda ()
+    (local-set-key (kbd "RET") 'newline-and-indent)))
+
+;; use rsync
+(setq tramp-default-method "rsyncc")
+
+(setq debug-on-message "^Wrong")
+(setq debug-on-error t)
+
+;; (require 'anything-ipython)
+;; (add-hook 'python-mode-hook #'(lambda ()
+;;                                 (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+;; (add-hook 'ipython-shell-hook #'(lambda ()
+;;                                   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+
+;; ;; If you want to use anything-show-completion.el,(facultative)
+;; ;; <http://www.emacswiki.org/cgi-bin/emacs/anything-show-completion.el>
+;; ;; add these lines:
+
+;; (when (require 'anything-show-completion nil t)
+;;   (use-anything-show-completion 'anything-ipython-complete
+;;                                 '(length initial-pattern)))
+
+
+;;(unload-feature 'ipython)
+
+(provide 'patyoon)
+;;; patyoon.el ends here
+
+(setq virtual-env (getenv "VIRTUAL_ENV"))
+
+(if (not (equal virtual-env 'nil))
+    (setq load-path (append
+                     (list (concat virtual-env "/src/pymacs" ))
+                     load-path))
+  (let ((foo 'bar))
+    (require 'pymacs)
+    (pymacs-load "ropemacs" "rope-")
+    (setq ropemacs-enable-autoimport 't)
+    ))
+
+
+
+
+
+  (setq make-backup-files t)
+
+
+  (setq delete-old-versions t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t)
+
+
+(add-to-list 'backup-directory-alist
+             (cons "." "~/.backups/"))
+(setq tramp-backup-directory-alist backup-directory-alist)
+(setq make-backup-files t)
+
+  ;; Backup (file~) disabled and auto-save (#file#) locally to prevent delays in editing remote files
+  (add-to-list 'backup-directory-alist
+               (cons tramp-file-name-regexp nil))
+(setq tramp-auto-save-directory temporary-file-directory)
+
+  (setq tramp-verbose 10)
+
+  (setenv "TMPDIR" "/tmp")
+
+  (require 'backup-each-save)
+   (add-hook 'after-save-hook 'backup-each-save)
+;;  (defvar backup-each-save-mirror-location "~/.backups")

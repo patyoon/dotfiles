@@ -244,7 +244,7 @@ update() {
     sh -c $brew$gisty; sudo sh -c $gem$pip$macport
 }
 
-export TOOL_HOME=/Users/patrickyoon/tools
+export TOOL_HOME=/Users/patrick/workspace/tools
 
 # TellApart specific commands.
 if [ -f ~/.zsh_ta ]; then
@@ -290,12 +290,7 @@ function delete-known-host {
     mv tmp_283497 ~/.ssh/known_hosts
 }
 
-# nginx short cuts
-alias nginx-start='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
-alias nginx-stop='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
-alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
-
 # cask for
-export PATH="/Users/Yoon/.cask/bin:$PATH"
+export PATH="/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
 
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages:/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages
+export PYTHONPATH=/Library/Python/2.6/site-packages:/usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages:$PYTHONPATH
