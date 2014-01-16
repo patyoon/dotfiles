@@ -22,8 +22,7 @@
 ;; list all packages that I want
 (setq my-el-get-packages
       (append
-       '(css-mode
-         gist
+       '(gist
          anything
          yasnippet
          zenburn
@@ -32,7 +31,6 @@
          flx
          virtualenv
          sql-complete
-         slime
          sass-mode
          auto-complete
          coffee-mode
@@ -41,10 +39,8 @@
          haskell-latex
          helm
          ido-ubiquitous
-         ido-yes-or-no
          jinja2-mode
          jekyll-el
-         jedi
          magit
          markdown-mode
          package
@@ -564,7 +560,8 @@ Emacs buffers are those whose name starts with *."
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)
 (setq flycheck-check-syntax-automatically '(save))
-(setq flycheck-highlighting-mode 'lines)
+(bounds-of-thing-at-point 'symbol)
+
 ;; ;;ropex
 
 ;; virtualenv support
@@ -679,12 +676,7 @@ Emacs buffers are those whose name starts with *."
     (setq ropemacs-enable-autoimport 't)
     ))
 
-
-
-
-
   (setq make-backup-files t)
-
 
   (setq delete-old-versions t
         kept-new-versions 6
