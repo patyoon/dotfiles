@@ -336,3 +336,6 @@
 # 	wp = show -p
 # 	wr = show -p --no-color
 # 	#############
+[user]
+	name = Patrick Yoon
+	email = patrick@tellapart.com
