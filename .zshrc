@@ -291,7 +291,7 @@ function delete-known-host {
 }
 
 # cask for
-export PATH="/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
+export PATH="/usr/local/Cellar/python26/2.6.9/bin/:/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
 
 export PYTHONPATH=/Library/Python/2.6/site-packages:/usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages:$PYTHONPATH
 

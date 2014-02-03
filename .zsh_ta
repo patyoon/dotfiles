@@ -131,7 +131,7 @@ alias em="open -a /Applications/Emacs.app \"$@\" && osascript -e 'tell applicati
 # Mount Truecrypt volume and create tc truecript symlink to untitled truecrypt volume.
 export PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py/tellapart/third_party:$TELLAPART_HOME/build/gen-py:$TELLAPART_HOME/py:$PYTHONPATH
 export TC_KEY_DIR=/Volumes/tc/keys
-export TELLAPART_HOME=/Users/patrick/workspace/tellapart
+export TELLAPART_HOME=/Users/ta_0012/workspace/tellapart
 export TAHOME=$TELLAPART_HOME
 export TA_ROOT=$TELLAPART_HOME
 export TELLAPART_PYTHONPATH="$TELLAPART_HOME/py"
@@ -157,12 +157,12 @@ alias refresh-jt="delete-known-host $DEFAULT_HADOOP_MASTER_HOSTNAME"
 alias ssh-hmn="sshinto $HM_NIGHTLY"
 
 # This test instance will change, update here.
-export PATRICK_INSTANCE="ec2-107-21-90-198.compute-1.amazonaws.com"
-export PATRICK_INSTANCE_WEST="ec2-204-236-157-172.us-west-1.compute.amazonaws.com"
+export TA_0012_INSTANCE="ec2-107-21-90-198.compute-1.amazonaws.com"
+export TA_0012_INSTANCE_WEST="ec2-204-236-157-172.us-west-1.compute.amazonaws.com"
 
-alias ssh-patrick-instance="sshinto $PATRICK_INSTANCE"
-# cwi is copy patrick instance
-alias cwi="echo $PATRICK_INSTANCE | pbcopy"
+alias ssh-ta_0012-instance="sshinto $TA_0012_INSTANCE"
+# cwi is copy ta_0012 instance
+alias cwi="echo $TA_0012_INSTANCE | pbcopy"
 
 # ELB utils
 alias dereg-west="elb-deregister-instances-from-lb FrontendElb --region=us-west-1 --instances"
@@ -205,9 +205,9 @@ function upload-crumbjs-test {
   scp-devel ./crumb.js ubuntu@$DEVEL_SERVER:~/crumb_test.js
 }
 
-function upload-patrick-crumbjs-test {
+function upload-ta_0012-crumbjs-test {
   crumbjs-test-make $1
-  scp-prod-east ./crumb.js ubuntu@$PATRICK_INSTANCE:~/crumb_test.js
+  scp-prod-east ./crumb.js ubuntu@$TA_0012_INSTANCE:~/crumb_test.js
 }
 
 function upload-local-crumbjs-test {
@@ -225,9 +225,9 @@ export KEY_PAIR_EAST="${TC_KEY_DIR}/prod/key_pair_us-east-1"
 export KEY_PAIR_WEST="${TC_KEY_DIR}/prod/key_pair_us-west-1"
 
 # Pushing to canaries
-export FAB_RC_PATRICK_INSTANCE="~/config/canary-patrick.cfg"
-alias canary-patrick="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:devel_ec2 bundle:use_commit_id=HEAD,perform_bundle_diff=False canary:hostname=$PATRICK_INSTANCE -c $FAB_RC_PATRICK_INSTANCE && say canary way done"
-alias canary-patrick-west="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_WEST deploy_config:devel_ec2 bundle:use_commit_id=HEAD,perform_bundle_diff=False canary:hostname=$PATRICK_INSTANCE_WEST -c $FAB_RC_PATRICK_INSTANCE && say canary way done"
+export FAB_RC_TA_0012_INSTANCE="~/config/canary-ta_0012.cfg"
+alias canary-ta_0012="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:devel_ec2 bundle:use_commit_id=HEAD,perform_bundle_diff=False canary:hostname=$TA_0012_INSTANCE -c $FAB_RC_TA_0012_INSTANCE && say canary way done"
+alias canary-ta_0012-west="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_WEST deploy_config:devel_ec2 bundle:use_commit_id=HEAD,perform_bundle_diff=False canary:hostname=$TA_0012_INSTANCE_WEST -c $FAB_RC_TA_0012_INSTANCE && say canary way done"
 alias canary-devel="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:devel_ec2 bundle canary"
 alias spec-restart="$DEPLOY_FAB -i $KEY_PAIR_EAST deploy_config:prod restart_specific_prod_server"
 alias spec-restart-west="$DEPLOY_FAB -i $KEY_PAIR_WEST deploy_config:prod restart_specific_prod_server"
@@ -252,7 +252,7 @@ alias prod-restart-single="cd $TELLAPART_PYTHONPATH && $DEPLOY_FAB deploy_config
 export SELENIUM_INSTANCE="ec2-23-22-3-149.compute-1.amazonaws.com"
 alias selenium-runtests="cd $TELLAPART_PYTHONPATH; $DEPLOY_FAB deploy_config:prod run_selenium_tests"
 alias selenium-deploy="cd $TELLAPART_HOME/selenium/scripts && python push_to_prod.py ../.. ${SELENIUM_INSTANCE} && cd -"
-alias selenium-proxy="ssh -i ${TC_KEY_DIR}/prod/awsprodkey7.pem -L 3389:${SELENIUM_INSTANCE}:3389 ubuntu@${PATRICK_INSTANCE}"
+alias selenium-proxy="ssh -i ${TC_KEY_DIR}/prod/awsprodkey7.pem -L 3389:${SELENIUM_INSTANCE}:3389 ubuntu@${TA_0012_INSTANCE}"
 
 # Runs TellApart python unit tests
 alias pt="cd $TELLAPART_HOME; run_tests py; cd -"
@@ -272,11 +272,11 @@ alias jstests="cd $TELLAPART_HOME/crumb/js; fab-2.6 testing make && open tests/c
 # -----------------------------------------------------------------------------
 
 # For AWS tools:
-export AWS_ELB_HOME=/Users/patrick/tools/ElasticLoadBalancing-1.0.12.0/
-export AWS_CLOUDWATCH_HOME=/Users/patrick/tools/CloudWatch-1.0.12.1/
-export AWS_AUTO_SCALING_HOME=/Users/patrick/tools/AutoScaling-1.0.39.0/
-export EC2_HOME=/usr/ec2-api-tools
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
+export AWS_ELB_HOME=/Users/ta_0012/tools/ElasticLoadBalancing-1.0.12.0/
+export AWS_CLOUDWATCH_HOME=/Users/ta_0012/tools/CloudWatch-1.0.12.1/
+export AWS_AUTO_SCALING_HOME=/Users/ta_0012/tools/AutoScaling-1.0.39.0/
+EC2_HOME=$TAHOME/tools/ec2-api-tools
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home
 export PATH=$PATH:$AWS_ELB_HOME/bin:${AWS_AUTO_SCALING_HOME}/bin:${AWS_CLOUDWATCH_HOME}/bin:$EC2_HOME/bin
 
 # NOTE: must change the following after a key rotation:
@@ -310,32 +310,32 @@ function switchhosts {
 }
 
 function pullfile {
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/ta_0012; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/$USER/reports/$1/part-* > /mnt/tmp/ta_0012/$1.txt; gzip -f /mnt/tmp/ta_0012/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/ta_0012/$1.txt.gz .
   gunzip $1.txt.gz
 }
 function pullfile-nightly {
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/nightly/reports/$1/part-* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/ta_0012; hadoop fs -cat s3n://tellapart-rye-dataz/tmp/output/nightly/reports/$1/part-* > /mnt/tmp/ta_0012/$1.txt; gzip -f /mnt/tmp/ta_0012/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/ta_0012/$1.txt.gz .
   gunzip $1.txt.gz
 }
 
 function pullhive {
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/patrick; cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/$1/* > /mnt/tmp/patrick/$1.txt; gzip -f /mnt/tmp/patrick/$1.txt"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/$1.txt.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "mkdir -p /mnt/tmp/ta_0012; cat /ebs1/tellapart/deploy/ta_0012/tellapart/rye/scripts/$1/* > /mnt/tmp/ta_0012/$1.txt; gzip -f /mnt/tmp/ta_0012/$1.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/ta_0012/$1.txt.gz .
   gunzip $1.txt.gz
   sed s//,/g <$1.txt >$1.csv
 }
 
 function pullryehive {
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/patrick/run/$1.out"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/run/$1.out.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/ta_0012/run/$1.out"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/ta_0012/run/$1.out.gz .
   gunzip $1.out.gz
 }
 
 function pullryehive-no-out {
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/patrick/run/$1"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/patrick/run/$1.gz .
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "gzip -f /mnt/tmp/ta_0012/run/$1"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/mnt/tmp/ta_0012/run/$1.gz .
   gunzip $1.gz
 }
 
@@ -345,8 +345,8 @@ function sed-ctrl-a {
 
 function oids-by-user_tags {
   cd ~/tmp/orders/
-  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "cat /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/hive_output/* > /ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt"
-  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/ebs1/tellapart/deploy/patrick/tellapart/rye/scripts/cp_orders.txt ~/tmp/orders/cp_orders.txt
+  ssh-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME "cat /ebs1/tellapart/deploy/ta_0012/tellapart/rye/scripts/hive_output/* > /ebs1/tellapart/deploy/ta_0012/tellapart/rye/scripts/cp_orders.txt"
+  scp-ro hadoop@$DEFAULT_HADOOP_MASTER_HOSTNAME:/ebs1/tellapart/deploy/ta_0012/tellapart/rye/scripts/cp_orders.txt ~/tmp/orders/cp_orders.txt
   python orders.py
   open ./
 }
@@ -382,7 +382,7 @@ function update_aws {
 
 alias canarypushtest='cd $TELLAPART_HOME/py && PYTHONPATH=.:$PYTHONPATH fab -f tellapart/deploy/fabfile.py deploy_config:devel_ec2 bundle canary'
 
-alias configurator="python $TELLAPART_HOME/py/tellapart/scripts/configurator_client.py --user patrick"
+alias configurator="python $TELLAPART_HOME/py/tellapart/scripts/configurator_client.py --user ta_0012"
 
 # Set up env variables so that iPython works with pytest as first dir (no FE
 # settings problem)
@@ -394,10 +394,7 @@ function rye-job {
     python $TELLAPART_HOME/rye/scripts/rye_cluster_remote.py --run_script rye_jobs_launcher.py --jobs=$1 --start_date=$2 --end_date=$3
 }
 
-export PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py/tellapart/third_party:$TELLAPART_HOME/build/gen-py:/Users/patrick/workspace/py/tellapart/third_party:$TELLAPART_HOME/rye/scripts
-
-#mount truecrypt volume
-/Users/patrick/workspace/tools/mount_tc
+export PYTHONPATH=$TELLAPART_HOME/pytest:$TELLAPART_HOME/py/tellapart/third_party:$TELLAPART_HOME/build/gen-py:/Users/ta_0012/workspace/py/tellapart/third_party:$TELLAPART_HOME/rye/scripts
 
 function test-gtfo {
 pushd $TAHOME/py

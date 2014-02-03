@@ -1,4 +1,5 @@
 [alias]
+  acn = !git add -u && git commit --amend --no-edit
 	rb = rebase
 	stat = status
 	ci = commit
@@ -11,7 +12,7 @@
 	ciam = commit -am
 	cid = commit --amend
 	ciad = commit -a --amend
-  ##### checkout #####	
+  ##### checkout #####
 	co = checkout
 	cob = checkout -b
 	ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
@@ -23,7 +24,7 @@
 	sl = stash list
 	sp = stash pop
 	ss = stash save
-  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"	
+  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   ##### merge #####
 	m = merge
   ##### reset #####
@@ -50,7 +51,7 @@
 	psfo = push -f origin
 	psuo = push -u origin
 	psom = push origin master
-  ##### stash #####	
+  ##### stash #####
   save = stash save
   pop = stash pop --index
   gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
@@ -59,7 +60,7 @@
 	amendn = "commit --amend --no-edit"
   rom = "rebase origin/master"
   slog = "log --decorate=short"
-  ##### diff #####	
+  ##### diff #####
 	d = difftool
   dc = diff --cached
 	dk = diff --check
@@ -202,7 +203,7 @@
 	user = patyoon
 	token = token
 [instaweb]
-	httpd = apache2 -f	
+	httpd = apache2 -f
 
 
 
