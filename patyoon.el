@@ -29,7 +29,8 @@
          yaml-mode
          yas-jit
          flx
-         virtualenv
+         backup-each-save
+         virtualenvwrapper
          sql-complete
          sass-mode
          auto-complete
@@ -681,7 +682,6 @@ Emacs buffers are those whose name starts with *."
         kept-new-versions 6
         kept-old-versions 2
         version-control t)
-
 
 (add-to-list 'backup-directory-alist
              (cons "." "~/.backups/"))

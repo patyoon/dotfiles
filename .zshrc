@@ -290,11 +290,6 @@ function delete-known-host {
     mv tmp_283497 ~/.ssh/known_hosts
 }
 
-# cask for
-export PATH="/usr/local/Cellar/python26/2.6.9/bin/:/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
-
-export PYTHONPATH=/Library/Python/2.6/site-packages:/usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages:$PYTHONPATH
-
 bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
