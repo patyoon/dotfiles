@@ -17,14 +17,20 @@
       (append
        '(gist
          anything
+         yasnippet
          zenburn
+         yaml-mode
+         yas-jit
          flx
+         backup-each-save
+         virtualenvwrapper
          sql-complete
          auto-complete
          coffee-mode
          cython-mode
          django-mode
          haskell-latex
+         helm
          ido-ubiquitous
          jinja2-mode
          magit

@@ -281,9 +281,6 @@ function delete-known-host {
     mv tmp_283497 ~/.ssh/known_hosts
 }
 
-# cask for
-export PATH="/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
-
 bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
