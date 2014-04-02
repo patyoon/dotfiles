@@ -85,3 +85,5 @@ alias less='less -F'
 alias nginx-start='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-stop='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
+
+alias aws='ssh -i ~/keys/patyoon_key_pair.pem ubuntu@ec2-54-193-107-97.us-west-1.compute.amazonaws.com'

@@ -198,18 +198,9 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-#alias python='/opt/local/bin/python2.6
-
 # for setting history length see HISTSIZE and HISTFILESIZE
 HISTSIZE=1000
 HISTFILESIZE=2000
-
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
 
 # Get colors in manual pages
 man() {
@@ -291,10 +282,35 @@ function delete-known-host {
 }
 
 # cask for
-export PATH="/usr/local/Cellar/python26/2.6.9/bin/:/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
-
-export PYTHONPATH=/Library/Python/2.6/site-packages:/usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages:$PYTHONPATH
+export PATH="/usr/local/bin:/Users/patrick/.cask/bin:$PATH"
 
 bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
+
+export VIRTUALENVWRAPPER_PYTHON=`which python`
+export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
+source `which virtualenvwrapper.sh`
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# JAVA_HOME for ec2 cli tools
+export JAVA_HOME="`/usr/libexec/java_home`"
+# ec2 api tools home.
+export EC2_HOME=/Users/Yoon/tools/ec2-api-tools
+# add ec2 api tools to path
+export PATH=$PATH:$EC2_HOME/bin
+export PYTHONSTARTUP=$HOME/.pythonstartup
+
+# unalias run-help
+# autoload run-help
+# HELPDIR=/usr/local/share/zsh/helpfiles
+
+# . `brew --prefix`/etc/profile.d/z.sh
+
+cd $HOME
