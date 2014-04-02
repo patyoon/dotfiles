@@ -1,0 +1,24 @@
+import os
+import sys
+import re
+from math import *
+from types import *
+from pprint import pprint
+from inspect import getsource
+from collections import defaultdict, Counter, namedtuple
+import itertools
+import functools
+from datetime import datetime
+from array import array
+import profile
+import dis
+
+import pydoc, inspect
+def source(obj):
+	"""Source of the object."""
+	try:
+	  pydoc.pipepager(inspect.getsource(obj), 'less')
+	except IOError:
+	  pass
+
+import rlcompleter, readline
