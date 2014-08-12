@@ -193,9 +193,6 @@
     prompt = false
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
-##### TellApart specific ####
-[include]
-  path = .gitconfig_tellapart
 [github]
 	user = patyoon
 	token = token
@@ -310,8 +307,10 @@
 # 	wp = show -p
 # 	wr = show -p --no-color
 # 	#############
-[user]
-	name = Patrick Yoon
-	email = patrick.yoon@airbnb.com
 [push]
 	default = current
+[user]
+	name = Patrick Yoon
+  email = me@patyoon.com
+[include]
+  path = .gitconfig_airbnb
