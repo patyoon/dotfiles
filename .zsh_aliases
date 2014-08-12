@@ -79,9 +79,14 @@ alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../..'
 alias ipythone='ipython --no-banner --no-confirm-exit'
-alias less='less -F'
+alias less='less -F -R'
 
 # nginx short cuts
 alias nginx-start='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-stop='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
+
+# use gitsafe, wrapper for git safety.
+alias git=gitsafe
+# sublime text
+alias subl='~/Applications/Sublime\ Text\ 2/sublime_text'

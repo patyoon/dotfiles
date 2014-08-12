@@ -3,8 +3,6 @@
 
 (global-unset-key (kbd "C-x p"))
 
-;; (setenv "PYTHONPATH" "  /usr/local/Cellar/python26/2.6.8/lib/python2.6/site-packages/:/Library/Python/2.6/site-packages/:/Users/patrick/workspace/tellapart/pytest:/Users/patrick/workspace/tellapart/py/tellapart/third_party:/Users/patrick/workspace/tellapart/build/gen-py:/Users/patrick/workspace/tellapart/py:/pytest:/py/tellapart/third_party:/build/gen-py")
-
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
@@ -53,6 +51,12 @@
          pos-tip
          popup-pos-tip
          smex
+         rails-el
+         dired+
+         dired-details+
+         find-dired+
+         find-dired-
+         wuxch-dired
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
@@ -69,7 +73,7 @@
 (defun disable-guru-mode ()
   (guru-mode -1)
 )
-(setq prelude-guru nil)
+
 (add-hook 'prelude-prog-mode-hook 'disable-guru-mode t)
 
 ;; use ido-ubiquitous mode.
@@ -234,6 +238,9 @@ vi style of % jumping to matching brace."
 (setq ac-use-menu-map t)
 (define-key ac-menu-map "\C-n" 'ac-next)
 (define-key ac-menu-map "\C-p" 'ac-previous)
+(setq ac-ignore-case nil)
+(add-to-list 'ac-modes 'enh-ruby-mode)
+(add-to-list 'ac-modes 'web-mode)
 
 ;;More package archives
 (add-to-list 'package-archives
@@ -263,14 +270,6 @@ vi style of % jumping to matching brace."
 ;; Ido-ubiquitous broken in M-x man, disable it
 ;; (add-to-list 'ido-ubiquitous-command-exceptions 'man)
 ;; (ido-ubiquitous-disable-in man)
-
-;;Email setup
-;; (setq user-mail-address "kinetoz@gmail.com")
-;;       (setq user-full-name "Patrick Yoon")
-;; (setq smtpmail-smtp-user "kinetoz")
-;; (setq smtpmail-smtp-server "smtp.gmail.com")
-;; (setq mail-user-agent 'message-user-agent)
-;; (setq message-send-mail-function 'smtpmail-send-it)
 
 (setq make-backup-files nil) ; stop creating those backup~ files
 (setq backup-by-copying t)
@@ -511,6 +510,10 @@ Emacs buffers are those whose name starts with *."
 (setq py-indent  2)
 (setq py-indent-offset  2)
 
+(defun my-ruby-mode-hook nil
+  (setq whitespace-line-column 100))
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
@@ -530,12 +533,9 @@ Emacs buffers are those whose name starts with *."
 
 (global-set-key (kbd "<C-right>") 'right-word)
 (global-set-key (kbd "<C-left>") 'left-word)
-
+(turn-off-smartparens-mode)
 (toggle-debug-on-error 1)
-;; smart parens mode sucks!
-;;(smartparens-global-mode -1)
-;;(smartparens-mode -1)
-(show-smartparens-global-mode t)
+;; Disable smart parens mode
 
 ;;  pos-tip
      ;; (require 'popup-pos-tip)
@@ -563,11 +563,6 @@ Emacs buffers are those whose name starts with *."
 (setq flycheck-check-syntax-automatically '(save))
 (bounds-of-thing-at-point 'symbol)
 
-;; ;;ropex
-
-;; virtualenv support
-  (push "~/.virtualenvs/default/bin" exec-path)
-
 ;; python-mode
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 
@@ -576,7 +571,6 @@ Emacs buffers are those whose name starts with *."
           (function (lambda ()
                       (setq indent-tabs-mode nil
                             tab-width 2))))
-
 
   ; use IPython
   (setq-default py-shell-name "ipython")
@@ -661,9 +655,6 @@ Emacs buffers are those whose name starts with *."
 
 ;;(unload-feature 'ipython)
 
-(provide 'patyoon)
-;;; patyoon.el ends here
-
 (setq virtual-env (getenv "VIRTUAL_ENV"))
 
 (if (not (equal virtual-env 'nil))
@@ -708,3 +699,35 @@ Emacs buffers are those whose name starts with *."
       (insert "import ipdb; ipdb.set_trace()")
       (highlight-lines-matching-regexp "^[ ]*import ipdb; ipdb.set_trace()"))
     (define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)
+
+(setq ruby-deep-indent-paren nil)
+
+(define-key sp-keymap (kbd "H-<right>") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "H-<left>") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "C-<left>") nil)
+(define-key sp-keymap (kbd "C-<right>") nil)
+
+(global-set-key (kbd "C-<right>") 'right-word)
+(global-set-key (kbd "C-<left>") 'left-word)
+
+(global-set-key (kbd "C-x a a") `ag)
+
+(require 'wuxch-dired)
+(require 'wuxch-dired-copy-paste)
+;;http://stackoverflow.com/questions/1824696/function-to-call-same-shell-command-in-dired
+;; (defun dired-do-shell-mac-open-vqn ()
+;; (interactive)
+;; (dired-do-async-shell-command
+;; "open" current-prefix-arg
+;; (dired-get-marked-files t current-prefix-arg)))
+(defun dired-do-shell-mac-open-vqn ()
+  (interactive)
+  (save-window-excursion
+    (dired-do-async-shell-command
+     "open" current-prefix-arg
+     (dired-get-marked-files t current-prefix-arg))))
+
+(define-key dired-mode-map (kbd "H-o") 'dired-do-shell-mac-open-vqn)
+
+(provide 'patyoon)
+;;; patyoon.el ends here

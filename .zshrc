@@ -204,13 +204,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
 # Get colors in manual pages
 man() {
     env \
@@ -245,11 +238,6 @@ update() {
 }
 
 export TOOL_HOME=/Users/patrick/workspace/tools
-
-# TellApart specific commands.
-if [ -f ~/.zsh_ta ]; then
-    . ~/.zsh_ta
-fi
 
 # Bash function for custom grep
 function wgrep {
@@ -293,3 +281,48 @@ function delete-known-host {
 bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# Airbnb specific settings
+
+if [ -f ~/.zsh_airbnb ]; then
+    . ~/.zsh_airbnb
+else
+    echo ".zsh_aliases not found"
+fi
+
+if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
+  mkdir /Users/"$(whoami)"/.cache/zsh
+  touch /Users/"$(whoami)"/.cache/zsh/dirs
+fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export EDITOR=emacs
+
+# Emacs-like region copy and paste
+
+# x-copy-region-as-kill () {
+#     zle copy-region-as-kill
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-copy-region-as-kill
+# x-kill-region () {
+#     zle kill-region
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-kill-region
+# x-yank () {
+#     CUTBUFFER=$(xsel -o)
+#     zle yank
+# }
+# zle -N x-yank
+# bindkey -e '\eW' x-copy-region-as-kill
+# bindkey -e '^W' x-kill-region
+# bindkey -e '^Y' x-yank

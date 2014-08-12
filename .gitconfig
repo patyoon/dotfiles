@@ -86,7 +86,6 @@
   ##### remote #####
 	r = remote
 	ra = remote add
-	rm = remote rm
 	rv = remote -v
 	rp = remote prune
 	rs = remote show
@@ -145,7 +144,7 @@
 	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 	human = name-rev --name-only --refs=refs/heads/*
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
-
+	prune-merged = ! "git branch --merged master | grep -v -E '^(\\* |  master$)' | xargs -n 1 git branch -d"
 [core]
 	editor = "/Applications/Emacs.app/Contents/MacOS/Emacs"
 	pager = "/usr/bin/less -N"
@@ -184,8 +183,6 @@
 [merge]
 	tool = emerge
   conflictstyle = diff3
-[push]
-	default = simple
 [branch]
 	autosetuprebase = always
 [diff]
@@ -205,30 +202,6 @@
 [instaweb]
 	httpd = apache2 -f
 
-
-
-
-
-# [user]
-# 	name = Pavan Kumar Sunkara
-# 	email = pavan.sss1991@gmail.com
-# [core]
-# 	editor = vim
-# 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-# 	excludesfile = ~/.gitignore
-# [sendemail]
-# 	smtpencryption = tls
-# 	smtpserver = smtp.gmail.com
-# 	smtpuser = pavan.sss1991@gmail.com
-# 	smtppass = password
-# 	smtpserverport = 587
-# [web]
-# 	browser = google-chrome
-# [instaweb]
-# 	httpd = apache2 -f
-# [rerere]
-# 	enabled = 1
-# 	autoupdate = 1
 # [alias]
 # 	s = status
 # 	sb = status -s -b
@@ -339,4 +312,6 @@
 # 	#############
 [user]
 	name = Patrick Yoon
-	email = patrick@tellapart.com
+	email = patrick.yoon@airbnb.com
+[push]
+	default = current

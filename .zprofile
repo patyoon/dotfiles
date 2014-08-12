@@ -14,9 +14,6 @@ export PROJECT_HOME=$HOME/workspace
 source /usr/local/bin/virtualenvwrapper.sh
 export TOOL_HOME=${HOME}/workspace/tools
 
-#mount tc volume on startup
-${TOOL_HOME}/mount_tc
-
 #  Enable bash complete
 autoload -U +X bashcompinit && bashcompinit
 
