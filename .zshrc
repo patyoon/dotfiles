@@ -198,8 +198,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-#alias python='/opt/local/bin/python2.6
-
 # for setting history length see HISTSIZE and HISTFILESIZE
 HISTSIZE=1000
 HISTFILESIZE=2000
@@ -281,6 +279,168 @@ function delete-known-host {
 bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
+
+export VIRTUALENVWRAPPER_PYTHON=`which python`
+export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
+source `which virtualenvwrapper.sh`
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# JAVA_HOME for ec2 cli tools
+export JAVA_HOME="`/usr/libexec/java_home`"
+# ec2 api tools home.
+export EC2_HOME=/Users/Yoon/tools/ec2-api-tools
+# add ec2 api tools to path
+export PATH=$PATH:$EC2_HOME/bin
+export PYTHONSTARTUP=$HOME/.pythonstartup
+
+# unalias run-help
+# autoload run-help
+# HELPDIR=/usr/local/share/zsh/helpfiles
+
+# . `brew --prefix`/etc/profile.d/z.sh
+
+cd $HOME
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# Airbnb specific settings
+
+if [ -f ~/.zsh_airbnb ]; then
+    . ~/.zsh_airbnb
+else
+    echo ".zsh_aliases not found"
+fi
+
+if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
+  mkdir /Users/"$(whoami)"/.cache/zsh
+  touch /Users/"$(whoami)"/.cache/zsh/dirs
+fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export EDITOR=emacs
+
+# Emacs-like region copy and paste
+
+# x-copy-region-as-kill () {
+#     zle copy-region-as-kill
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-copy-region-as-kill
+# x-kill-region () {
+#     zle kill-region
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-kill-region
+# x-yank () {
+#     CUTBUFFER=$(xsel -o)
+#     zle yank
+# }
+# zle -N x-yank
+# bindkey -e '\eW' x-copy-region-as-kill
+# bindkey -e '^W' x-kill-region
+# bindkey -e '^Y' x-yank
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# Airbnb specific settings
+
+if [ -f ~/.zsh_airbnb ]; then
+    . ~/.zsh_airbnb
+else
+    echo ".zsh_aliases not found"
+fi
+
+if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
+  mkdir /Users/"$(whoami)"/.cache/zsh
+  touch /Users/"$(whoami)"/.cache/zsh/dirs
+fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export EDITOR=emacs
+
+# Emacs-like region copy and paste
+
+# x-copy-region-as-kill () {
+#     zle copy-region-as-kill
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-copy-region-as-kill
+# x-kill-region () {
+#     zle kill-region
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-kill-region
+# x-yank () {
+#     CUTBUFFER=$(xsel -o)
+#     zle yank
+# }
+# zle -N x-yank
+# bindkey -e '\eW' x-copy-region-as-kill
+# bindkey -e '^W' x-kill-region
+# bindkey -e '^Y' x-yank
+
+# Alias definitions.
+if [ -f ~/.zsh_aliases ]; then
+    . ~/.zsh_aliases
+else
+    echo ".zsh_aliases not found"
+fi
+
+# Airbnb specific settings
+
+if [ -f ~/.zsh_airbnb ]; then
+    . ~/.zsh_airbnb
+else
+    echo ".zsh_aliases not found"
+fi
+
+if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
+  mkdir /Users/"$(whoami)"/.cache/zsh
+  touch /Users/"$(whoami)"/.cache/zsh/dirs
+fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export EDITOR=emacs
+
+# Emacs-like region copy and paste
+
+# x-copy-region-as-kill () {
+#     zle copy-region-as-kill
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-copy-region-as-kill
+# x-kill-region () {
+#     zle kill-region
+#     print -rn $CUTBUFFER | xsel -i
+# }
+# zle -N x-kill-region
+# x-yank () {
+#     CUTBUFFER=$(xsel -o)
+#     zle yank
+# }
+# zle -N x-yank
+# bindkey -e '\eW' x-copy-region-as-kill
+# bindkey -e '^W' x-kill-region
+# bindkey -e '^Y' x-yank
 
 # Alias definitions.
 if [ -f ~/.zsh_aliases ]; then
