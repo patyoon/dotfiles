@@ -1,0 +1,191 @@
+[alias]
+	# multi commands & misc #
+  acn = ! git add -u && git commit --amend --no-edit
+	cb = "!sh -c 'original_branch=$(git branch 2>/dev/null | grep '^*' | colrm 1 2); git co $0; git log | head -10; git co $original_branch'"
+	assume = update-index --assume-unchanged
+	unassume = update-index --no-assume-unchanged
+	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+	human = name-rev --name-only --refs=refs/heads/*
+	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
+	prune-merged = ! "git branch --merged master | grep -v -E '^(\\* |  master$)' | xargs -n 1 git branch -d"
+  gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
+	prune-empty="git filter-branch -f --prune-empty -- --all"
+  files = diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT
+  fixup = !sh -c 'git commit -m &quot;fixup! $(git log -1 --format='\''%s'\'' $@)&quot;' -
+  squash = !sh -c 'git commit -m &quot;squash! $(git log -1 --format='\''%s'\'' $@)&quot;' -
+	# show the number of commits by each person.
+  sh = shortlog -sn
+
+  # pull #
+	pl = pull
+	plu = pull -u
+	plo = pull origin
+	plp = pull upstream
+	plom = pull origin master
+	plpm = pull upstream master
+	pb = pull --rebase
+	pbo = pull --rebase origin
+	pbp = pull --rebase upstream
+	pbom = pull --rebase origin master
+	pbpm = pull --rebase upstream master
+
+  # status #
+	st = status
+  sb = status -s -b
+
+  # commit #
+	ci = commit
+	cia = commit -a
+	cim = commit -m
+	ciam = commit -am
+	cid = commit --amend
+	ciad = commit -a --amend
+
+  # checkout #
+	co = checkout
+	cob = checkout -b
+	co-ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
+	co-theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
+	# stash #
+	sa = stash apply
+	sc = stash clear
+	sd = stash drop
+	sl = stash list
+	sp = stash pop
+	ss = stash save
+  save = stash save
+  pop = stash pop --index
+  restash = !git stash pop  --index &amp;&amp; git stash save
+  rs = !git stash pop  --index &amp;&amp; git stash save
+	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+
+  # reset #
+	re = reset
+	rh = reset HEAD
+	reh = reset --hard
+	rem = reset --mixed
+	res = reset --soft
+	rehh = reset --hard HEAD
+	remh = reset --mixed HEAD
+	resh = reset --soft HEAD
+  oops = reset --soft HEAD~1
+
+  # rebase #
+  rb = rebase
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbs = rebase --skip
+
+  # push #
+	ps = push
+	psf = push -f
+	psu = push -u
+	pso = push origin
+	psfo = push -f origin
+	psuo = push -u origin
+	psom = push origin master
+  # push to a branch named patrick/<branch-name>
+  pspb = "! f() { git push origin patrick/$1; }; f "
+  # force push to a branch named patrick/<branch-name>
+	pspbf = "! f() { git push -f origin patrick/$1; }; f "
+
+  # stash #
+  save = stash save
+  pop = stash pop --index
+
+  # log #
+	lm = log --pretty=format: "%h %s [%an]\n\n" --graph
+  ls = "log --decorate=short"
+ 	lo = log --oneline
+  hist = log --graph --pretty=format: "%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset" --abbrev-commit --date=relative
+  rev = log -1 --pretty=format: "%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset"
+	l = log -10 --pretty=tformat:'%C(yellow)%ad %Cred%h%C(bold blue)%d%Creset %s' --date=short
+  l2 = log -10 --pretty=tformat:'%C(yellow)%ad %Cred%h%C(bold blue)%d%Creset %s %Cgreen(%an)%Creset' --date=short
+  l3 = log -10 --pretty=tformat:'%Cred%h%C(bold blue)%d%Creset %s %C(yellow)%cr %Cgreen%an%Creset' --date=relative
+  l4 = log -10 --pretty=tformat:'%Cred%h %C(yellow)%ad %Cgreen%an%C(bold blue)%d %Creset%s' --date=short
+  lg = log -10 --graph --pretty=tformat:'%C(yellow)%ad %Cred%h%C(bold blue)%d%Creset %s' --date=short
+  lg2 = log -10 --graph --pretty=tformat:'%C(yellow)%ad %Cred%h%C(bold blue)%d%Creset %s %Cgreen(%an)%Creset' --date=short
+  lg3 = log -10 --graph --pretty=tformat:'%Cred%h%C(bold blue)%d%Creset %s %C(yellow)%cr %Cgreen%an%Creset' --date=relative
+  lg4 = log -10 --graph --pretty=tformat:'%Cred%h %C(yellow)%ad %Cgreen%an%C(bold blue)%d %Creset%s' --date=short
+
+  # diff #
+	d = difftool
+  dc = diff --cached
+	dk = diff --check
+	dck = diff --cached --check
+  ksdiff = difftool --gui
+
+  ##### add ######
+	a = add .
+	ai = add -i
+
+  # remote #
+	r = remote
+	ra = remote add
+	rv = remote -v
+	rp = remote prune
+	rs = remote show
+	rso = remote show origin
+	rpo = remote prune origin
+
+	# show #
+	w = show
+	wp = show -p
+	wr = show -p --no-color
+
+	# apply #
+	ap = apply
+	as = apply --stat
+	ac = apply --check
+
+	# am #
+	ama = am --abort
+	amr = am --resolved
+	ams = am --skip
+
+  # branch #
+	b = branch
+	ba = branch -a
+	bd = branch -d
+	br = branch -r
+  bD = branch -D
+
+  # fetch #
+	f = fetch
+	fo = fetch origin
+  fa = fetch --all --tags --prune
+
+	# foramt-patch #
+	fp = format-patch
+
+	# fsck #
+	fk = fsck
+
+	# merge #
+	m = merge
+	ma = merge --abort
+	mc = merge --continue
+	ms = merge --skip
+
+	# prune #
+	pr = prune -v
+
+	# push #
+	ps = push
+	psf = push -f
+	psu = push -u
+	pso = push origin
+	psfo = push -f origin
+	psuo = push -u origin
+	psom = push origin master
+
+  # rebase #
+	rb = rebase
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbs = rebase --skip
+  rbom = "rebase origin/master"
+  rbia = rebase --interactive --autosquash
