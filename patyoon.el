@@ -57,6 +57,7 @@
          find-dired+
          find-dired-
          wuxch-dired
+				 wuxch-dired-copy-paste
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
