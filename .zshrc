@@ -282,7 +282,7 @@ bindkey '^[[1;9D' backward-word
 
 export VIRTUALENVWRAPPER_PYTHON=`which python`
 export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
-source `which virtualenvwrapper.sh`
+# source `which virtualenvwrapper.sh`
 
 # Alias definitions.
 if [ -f ~/.zsh_aliases ]; then
