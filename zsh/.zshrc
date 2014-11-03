@@ -1,5 +1,5 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -7,30 +7,77 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
 
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+# Uncomment the following line to use case-sensitive completion.
+CASE_SENSITIVE="true"
 
-# Comment this out to disable bi-weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
+# Uncomment the following line to disable bi-weekly auto-update checks.
+DISABLE_AUTO_UPDATE="true"
 
-# Uncomment to change how many often would you like to wait before auto-updates occur? (in days)
-# export UPDATE_ZSH_DAYS=13
+# Uncomment the following line to change how often to auto-update (in days).
+export UPDATE_ZSH_DAYS=13
 
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
+# Uncomment the following line to disable colors in ls.
+DISABLE_LS_COLORS="true"
 
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# Uncomment the following line to disable auto-setting terminal title.
+DISABLE_AUTO_TITLE="true"
 
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-# COMPLETION_WAITING_DOTS="true"
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+export ARCHFLAGS="-arch x86_64"
+
+# ssh
+export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Customize to your needs...
 
@@ -83,7 +130,6 @@ x () {
 
 # END FUNCTIONS
 
-
 DIRSTACKSIZE=${DIRSTACKSIZE:-20}
 DIRSTACKFILE=${DIRSTACKFILE:-${HOME}/.zdirs}
 
@@ -110,20 +156,18 @@ dirjump() {
 ## miscellaneous code ##
 
 ## Some quick Perl-hacks aka /useful/ oneliner
-#bew() { perl -le 'print unpack "B*","'$1'"' }
-#web() { perl -le 'print pack "B*","'$1'"' }
-#hew() { perl -le 'print unpack "H*","'$1'"' }
-#weh() { perl -le 'print pack "H*","'$1'"' }
-#pversion()    { perl -M$1 -le "print $1->VERSION" } # i. e."pversion LWP -> 5.79"
-#getlinks ()   { perl -ne 'while ( m/"((www|ftp|http):\/\/.*?)"/gc ) { print $1, "\n"; }' $* }
-#gethrefs ()   { perl -ne 'while ( m/href="([^"]*)"/gc ) { print $1, "\n"; }' $* }
-#getanames ()  { perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
-#getforms ()   { perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
-#getstrings () { perl -ne 'while ( m/"(.*?)"/gc ) { print $1, "\n"; }' $*}
-#getanchors () { perl -ne 'while ( m/«([^«»\n]+)»/gc ) { print $1, "\n"; }' $* }
-#showINC ()    { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
-#vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
-#vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
+bew() { perl -le 'print unpack "B*","'$1'"' }
+web() { perl -le 'print pack "B*","'$1'"' }
+hew() { perl -le 'print unpack "H*","'$1'"' }
+weh() { perl -le 'print pack "H*","'$1'"' }
+pversion()    { perl -M$1 -le "print $1->VERSION" } # i. e."pversion LWP -> 5.79"
+getlinks ()   { perl -ne 'while ( m/"((www|ftp|http):\/\/.*?)"/gc ) { print $1, "\n"; }' $* }
+gethrefs ()   { perl -ne 'while ( m/href="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+getanames ()  { perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+getforms ()   { perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
+getstrings () { perl -ne 'while ( m/"(.*?)"/gc ) { print $1, "\n"; }' $*}
+getanchors () { perl -ne 'while ( m/«([^«»\n]+)»/gc ) { print $1, "\n"; }' $* }
+showINC ()    { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
 
 # key bindings
 
@@ -307,154 +351,12 @@ export PYTHONSTARTUP=$HOME/.pythonstartup
 
 cd $HOME
 
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
 # Airbnb specific settings
 
 if [ -f ~/.zsh_airbnb ]; then
     . ~/.zsh_airbnb
 else
-    echo ".zsh_aliases not found"
-fi
-
-if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
-  mkdir /Users/"$(whoami)"/.cache/zsh
-  touch /Users/"$(whoami)"/.cache/zsh/dirs
-fi
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-export EDITOR=emacs
-
-# Emacs-like region copy and paste
-
-# x-copy-region-as-kill () {
-#     zle copy-region-as-kill
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-copy-region-as-kill
-# x-kill-region () {
-#     zle kill-region
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-kill-region
-# x-yank () {
-#     CUTBUFFER=$(xsel -o)
-#     zle yank
-# }
-# zle -N x-yank
-# bindkey -e '\eW' x-copy-region-as-kill
-# bindkey -e '^W' x-kill-region
-# bindkey -e '^Y' x-yank
-
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
-# Airbnb specific settings
-
-if [ -f ~/.zsh_airbnb ]; then
-    . ~/.zsh_airbnb
-else
-    echo ".zsh_aliases not found"
-fi
-
-if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
-  mkdir /Users/"$(whoami)"/.cache/zsh
-  touch /Users/"$(whoami)"/.cache/zsh/dirs
-fi
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-export EDITOR=emacs
-
-# Emacs-like region copy and paste
-
-# x-copy-region-as-kill () {
-#     zle copy-region-as-kill
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-copy-region-as-kill
-# x-kill-region () {
-#     zle kill-region
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-kill-region
-# x-yank () {
-#     CUTBUFFER=$(xsel -o)
-#     zle yank
-# }
-# zle -N x-yank
-# bindkey -e '\eW' x-copy-region-as-kill
-# bindkey -e '^W' x-kill-region
-# bindkey -e '^Y' x-yank
-
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
-# Airbnb specific settings
-
-if [ -f ~/.zsh_airbnb ]; then
-    . ~/.zsh_airbnb
-else
-    echo ".zsh_aliases not found"
-fi
-
-if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
-  mkdir /Users/"$(whoami)"/.cache/zsh
-  touch /Users/"$(whoami)"/.cache/zsh/dirs
-fi
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-export EDITOR=emacs
-
-# Emacs-like region copy and paste
-
-# x-copy-region-as-kill () {
-#     zle copy-region-as-kill
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-copy-region-as-kill
-# x-kill-region () {
-#     zle kill-region
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-kill-region
-# x-yank () {
-#     CUTBUFFER=$(xsel -o)
-#     zle yank
-# }
-# zle -N x-yank
-# bindkey -e '\eW' x-copy-region-as-kill
-# bindkey -e '^W' x-kill-region
-# bindkey -e '^Y' x-yank
-
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
-# Airbnb specific settings
-
-if [ -f ~/.zsh_airbnb ]; then
-    . ~/.zsh_airbnb
-else
-    echo ".zsh_aliases not found"
+    echo ".zsh_airbnb not found"
 fi
 
 if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then

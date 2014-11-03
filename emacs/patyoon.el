@@ -618,7 +618,6 @@ Emacs buffers are those whose name starts with *."
 (global-set-key (kbd "C-x a a") `ag)
 
 (require 'wuxch-dired)
-(require 'wuxch-dired-copy-paste)
 ;;http://stackoverflow.com/questions/1824696/function-to-call-same-shell-command-in-dired
 ;; (defun dired-do-shell-mac-open-vqn ()
 ;; (interactive)
