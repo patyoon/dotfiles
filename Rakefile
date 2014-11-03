@@ -1,7 +1,7 @@
 require 'mkmf'
 
 FILES = Hash.new
-FILES[:git] = %w(.gitconfig .gitignore .gitignore_global)
+FILES[:git] = %w(.gitconfig .gitattributes .gitconfig_aliases .gitignore_global)
 FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases)
 FILES[:python] = %w(.pylintrc .pythonstartup)
 FILES[:misc] = %w(.screenrc .inputrc tmux.conf)
