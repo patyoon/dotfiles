@@ -8,7 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
-CASE_SENSITIVE="true"
+#CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 DISABLE_AUTO_UPDATE="true"
@@ -31,7 +31,7 @@ COMPLETION_WAITING_DOTS="true"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -45,7 +45,7 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git python rails zeus vagrant ruby rvm rsync brew coffee common-aliases autopep8 bundler fabric gem gitfest meteor node npm osx pip screen tmux tmuxinator)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -328,13 +328,6 @@ export VIRTUALENVWRAPPER_PYTHON=`which python`
 export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
 # source `which virtualenvwrapper.sh`
 
-# Alias definitions.
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-else
-    echo ".zsh_aliases not found"
-fi
-
 # JAVA_HOME for ec2 cli tools
 export JAVA_HOME="`/usr/libexec/java_home`"
 # ec2 api tools home.
@@ -343,21 +336,12 @@ export EC2_HOME=/Users/Yoon/tools/ec2-api-tools
 export PATH=$PATH:$EC2_HOME/bin
 export PYTHONSTARTUP=$HOME/.pythonstartup
 
-# unalias run-help
-# autoload run-help
-# HELPDIR=/usr/local/share/zsh/helpfiles
-
-# . `brew --prefix`/etc/profile.d/z.sh
-
 cd $HOME
 
-# Airbnb specific settings
-
-if [ -f ~/.zsh_airbnb ]; then
-    . ~/.zsh_airbnb
-else
-    echo ".zsh_airbnb not found"
-fi
+for f in .zsh_*aliases; do
+    echo "Sourcing $f"
+    source $f
+done
 
 if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
   mkdir /Users/"$(whoami)"/.cache/zsh

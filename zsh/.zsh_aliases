@@ -85,3 +85,6 @@ alias less='less -F -R'
 alias nginx-start='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-stop='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
 alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
+
+# python related
+alias pip-upgrade-all='pip freeze --local | grep -v "^\-e" | cut -d = -f 1  | xargs pip install -U'

@@ -14,7 +14,7 @@ export PROJECT_HOME=$HOME/workspace
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 		source /usr/local/bin/virtualenvwrapper.sh
 else
-    echo ".zshrc not found"
+    echo "virtualenvwrapper.sh not found"
 fi
 
 #  Enable bash complete
@@ -22,9 +22,3 @@ autoload -U +X bashcompinit && bashcompinit
 
 # Show git branch in command line prompt
 export PS1="\\w:\$(git branch 2>/dev/null | grep '^*' | colrm 1 2)\$ "
-
-if [ -f ~/.zshrc ]; then
-    source ~/.zshrc
-else
-    echo ".zshrc not found"
-fi

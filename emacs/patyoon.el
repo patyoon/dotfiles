@@ -729,5 +729,11 @@ Emacs buffers are those whose name starts with *."
 
 (define-key dired-mode-map (kbd "H-o") 'dired-do-shell-mac-open-vqn)
 
+;; Magic for for associating first line of a file with a mode.
+
+;; jinja2-mode
+(add-to-list 'magic-mode-alist '("{%.*%}" . jinja2-mode) )
+
 (provide 'patyoon)
 ;;; patyoon.el ends here
+
