@@ -344,7 +344,7 @@ for f in .zsh_*aliases; do
 done
 
 if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
-  mkdir /Users/"$(whoami)"/.cache/zsh
+  mkdir -p /Users/"$(whoami)"/.cache/zsh
   touch /Users/"$(whoami)"/.cache/zsh/dirs
 fi
 

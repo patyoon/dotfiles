@@ -26,7 +26,7 @@ BREW_PACKAGE_FILE = 'brew_packages.txt'
 PYTHON_PACKAGE_FILE = 'python_packages.txt'
 
 namespace 'install' do
-  task ':all' => [:git, :zsh, :python, :emacs, :ruby] do
+  task 'all' => [:git, :zsh, :python, :emacs, :ruby] do
     puts 'Installed all!'
   end
 
@@ -40,13 +40,13 @@ namespace 'install' do
   end
 
   task 'python' do
+    # TODO: Incorporate virtualenv.
     FILES[:python].each { |file| determine_action(file, "python") }
     print "Install all packages in #{PYTHON_PACKAGE_FILE}? [yn] "
     case STDIN.gets.chomp
     when 'y'
       print "Installing all packages in #{PYTHON_PACKAGE_FILE}"
       system "sudo pip install -U -r python/#{PYTHON_PACKAGE_FILE}"
-      break
     when 'n'
       exit
     else
