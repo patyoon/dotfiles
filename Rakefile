@@ -15,7 +15,7 @@ PACKAGES[:brew] = 'brew_packages.txt'
 
 EMACS_PATH = "#{ENV['HOME']}/.emacs.d"
 PRELUDE_REPO_URL = 'https://github.com/bbatsov/prelude.git'
-PRELUDE_MODULE_FILE = 'emacs/prelude_modules.el'
+PRELUDE_MODULE_FILE = 'prelude_modules.el'
 
 OMZ_PATH = "#{ENV['HOME']}/.oh-my-zsh"
 OMZ_REPO_URL = 'https://github.com/robbyrussell/oh-my-zsh.git'
@@ -71,9 +71,17 @@ namespace 'install' do
 
   task 'emacs' do
     clone_emacs_prelude
+    # Add prelude_modules.el which contains modules to use.
     link_file(PRELUDE_MODULE_FILE, 'emacs', EMACS_PATH)
-    FILES[:emacs].each{ |file| determine_action(
-      file, "emacs", "#{EMACS_PATH}/personal") }
+    # Link main el file.
+    FILES[:emacs].each do |file| determine_action(
+      file, "emacs", "#{EMACS_PATH}/personal")
+    end
+    # Link all partial el files in /partials.
+    Dir.glob('emacs/partials/*').select do |file|
+      puts File.basename(file)
+      determine_action(File.basename(file), "emacs/partials", "#{EMACS_PATH}/personal/partials")
+    end
   end
 
   task 'brew' do
@@ -176,9 +184,13 @@ def clone_omz
   end
 end
 
-def link_file(file, type, dest)
-  puts "linking #{dest}/#{file}"
-  system "ln -s -f $PWD/#{type}/#{file} #{dest}/#{file}"
+def link_file(file, type, dest_dir)
+  # Extract directory part of dest and create if not exists.
+  if !File.exists?(dest_dir)
+    mkdir_p dest_dir
+  end
+  puts "linking #{dest_dir}/#{file}"
+  system "ln -s -f $PWD/#{type}/#{file} #{dest_dir}/#{file}"
 end
 
 def replace_file(file, type, dest)

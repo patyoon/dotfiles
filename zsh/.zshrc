@@ -70,17 +70,6 @@ export ARCHFLAGS="-arch x86_64"
 # ssh
 export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Customize to your needs...
-
 ## Functions ##
 zsh_stats() { history|awk '{print $2}'|grep -v zsh_stats|sort|uniq -c|sort -rn|head}
 mcd() { [ -n "$1" ] && mkdir -p "$@" && cd "$1"; }
@@ -351,24 +340,3 @@ fi
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 export EDITOR=emacs
-
-# Emacs-like region copy and paste
-
-# x-copy-region-as-kill () {
-#     zle copy-region-as-kill
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-copy-region-as-kill
-# x-kill-region () {
-#     zle kill-region
-#     print -rn $CUTBUFFER | xsel -i
-# }
-# zle -N x-kill-region
-# x-yank () {
-#     CUTBUFFER=$(xsel -o)
-#     zle yank
-# }
-# zle -N x-yank
-# bindkey -e '\eW' x-copy-region-as-kill
-# bindkey -e '^W' x-kill-region
-# bindkey -e '^Y' x-yank

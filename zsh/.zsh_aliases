@@ -78,7 +78,6 @@ alias killemacs='kill `ps -A | grep Emacs | sed "s/^ *//g" | cut -f1 -d " "`'
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../..'
-alias ipythone='ipython --no-banner --no-confirm-exit'
 alias less='less -F -R'
 
 # nginx short cuts
@@ -88,3 +87,4 @@ alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macport
 
 # python related
 alias pip-upgrade-all='pip freeze --local | grep -v "^\-e" | cut -d = -f 1  | xargs pip install -U'
+alias ipythone='ipython --no-banner --no-confirm-exit'

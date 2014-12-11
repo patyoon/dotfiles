@@ -1,8 +1,7 @@
-;;; My emacs setup
+;;; Code: My emacs setup
 ;;; use el-get for package manager
 
-(global-unset-key (kbd "C-x p"))
-
+;; use el-get for manaing packages.
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
@@ -11,11 +10,6 @@
     (let (el-get-master-branch)
       (goto-char (point-max))
       (eval-print-last-sexp))))
-
-  ;; let's set the python path correctly as well
-  ;; (setenv "PYTHONPATH" (concat python-files-dir
-  ;;                              (concat path-separator
-  ;;                                      (getenv "PYTHONPATH"))))
 
 ;; list all packages that I want
 (setq my-el-get-packages
@@ -44,7 +38,6 @@
          markdown-mode
          package
          popup
-         python-mode
          rope
          ropemacs
          pymacs
@@ -53,34 +46,32 @@
          smex
          rails-el
          dired+
-         dired-details+
-         find-dired+
-         find-dired-
-         wuxch-dired
-				 wuxch-dired-copy-paste
+         enh-ruby-mode
+         jedi
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
 (el-get 'sync my-el-get-packages)
 
-
-;; Turn off icomplete, use helm instead
+;; Turn off icomplete, use helm instead.
 (icomplete-mode 99)
 
-;; ;; disable whitespace mode showing whitespaces as dots.
+;; Disable whitespace mode showing whitespaces as dots.
 ;; (setq prelude-whitespace nil)
 
-;; use arrow navigatioin in editor buffers..for now.
+;; use arrow navigation for now.
 (defun disable-guru-mode ()
   (guru-mode -1)
-)
+  )
 
 (add-hook 'prelude-prog-mode-hook 'disable-guru-mode t)
 
 ;; use ido-ubiquitous mode.
 ;; ido-style completion for (almost) every function that uses the standard
-;; completion function "completing-read"
+;; completion function "completing-read".
 ;; https://github.com/technomancy/ido-ubiquitous
+(require 'ido)
+(ido-mode 1)
 (ido-ubiquitous 1)
 '(ido-enable-last-directory-history nil)
 '(ido-enable-regexp nil)
@@ -109,33 +100,16 @@
 (global-linum-mode t)
 (setq linum-format "%d ")
 
-;; for fixing broken fringes issue
-;;(fringe-mode 0)
-
-;;C mode setup
-(setq c-basic-offset 2)
-(add-hook 'prelude-c-mode-common-hook
-          '(lambda ()
-             (electric-pair-mode 0)
-             (c-set-style "gnu")))
-
-;; Eldoc in C mode
-(add-hook 'prelude-c-mode-hook 'c-turn-on-eldoc-mode)
-
-;; ;;Command for sending to email (bound to C-c m)
-;; (defun mail-current-buffer ()
-;;   "Send the current buffer to email (for Mac)"
-;;   (interactive)
-;;   (shell-command (format "open -a Sparrow %s" (buffer-file-name))))
-;; (define-key global-map "\C-cm" 'mail-current-buffer)
+;; for fixing broken fringe-mode issue
+(set-fringe-mode '(0 . 0))
 
 ;;Make lines wrap instead of going over edge
 (global-visual-line-mode)
 
-;;Bind compile
+;;Bind compile.
 (global-set-key "\C-cl" 'compile)
 
-; From http://www.emacswiki.org/emacs/ParenthesisMatching#toc4
+;; From http://www.emacswiki.org/emacs/ParenthesisMatching#toc4
 (defun goto-match-paren (arg)
   "Go to the matching parenthesis if on parenthesis AND last command is a movement command, otherwise insert %.
 vi style of % jumping to matching brace."
@@ -183,21 +157,6 @@ vi style of % jumping to matching brace."
           ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
           (t (self-insert-command (or arg 1))))))
 (global-set-key (kbd "%") 'goto-match-paren)
-
-;; Reindent on yank
-;; http://emacswiki.org/emacs/AutoIndentation
-;; (dolist (command '(yank yank-pop))
-;;   (eval `(defadvice ,command (after indent-region activate)
-;;            (and (not current-prefix-arg)
-;;                 (member major-mode '(emacs-lisp-mode lisp-mode
-;;                                                      clojure-mode    scheme-mode
-;;                                                      ruby-mode
-;;                                                      rspec-mode
-;;                                                      c-mode          c++-mode
-;;                                                      objc-mode       latex-mode
-;;                                                      plain-tex-mode java-mode))
-;;                 (let ((mark-even-if-inactive transient-mark-mode))
-;;                   (indent-region (region-beginning) (region-end) nil))))))
 
 ;; Delete extra whitespace when killing lines
 (defun kill-and-join-forward (&optional arg)
@@ -279,7 +238,7 @@ vi style of % jumping to matching brace."
 ;; fontify code in code blocks
 ;;(setq org-src-fontify-natively t)
 
-;; ;; swap to have to have similar behavior as shell.
+;; swap to have to have similar behavior as shell.
 (global-set-key "\C-w" 'backward-kill-word)
 (global-set-key "\C-x\C-k" 'kill-region)
 
@@ -315,22 +274,22 @@ User buffers are those whose name does not start with *."
           (setq i (1+ i)) (previous-buffer))))))
 
 (defun next-emacs-buffer ()
-    "Switch to the next emacs buffer.
+  "Switch to the next emacs buffer.
 Emacs buffers are those whose name starts with *."
-      (interactive)
-        (next-buffer)
-          (let ((i 0))
-                (while (and (not (string-match "^*" (buffer-name))) (< i 50))
-                        (setq i (1+ i)) (next-buffer))))
+  (interactive)
+  (next-buffer)
+  (let ((i 0))
+    (while (and (not (string-match "^*" (buffer-name))) (< i 50))
+      (setq i (1+ i)) (next-buffer))))
 
 (defun previous-emacs-buffer ()
-    "Switch to the previous emacs buffer.
+  "Switch to the previous emacs buffer.
 Emacs buffers are those whose name starts with *."
-      (interactive)
-        (previous-buffer)
-          (let ((i 0))
-                (while (and (not (string-match "^*" (buffer-name))) (< i 50))
-                        (setq i (1+ i)) (previous-buffer))))
+  (interactive)
+  (previous-buffer)
+  (let ((i 0))
+    (while (and (not (string-match "^*" (buffer-name))) (< i 50))
+      (setq i (1+ i)) (previous-buffer))))
 
 ;; sample easy keys
 (global-set-key (kbd "<f5>") 'load-file) ; Load file
@@ -392,7 +351,6 @@ Emacs buffers are those whose name starts with *."
 ;; (mac-key-mode 1)
 
 ;; (setq-default indent-tabs-mode nil)
-;; ;; tabs are alwasy 2 spaces at TellApart
 (setq-default tab-width 2)
 (setq indent-line-function 'insert-tab)
 ;;no popup when opening buffer from terminal
@@ -411,121 +369,34 @@ Emacs buffers are those whose name starts with *."
 (setq c-basic-offset 2)
 (setq js-indent-level 2)
 
-;; Instead of python.el, use python-mode.el that supports ipython.
-(require 'python-mode)
-
 ;; yas with ido-ubiquotous
 ;;  Completing point by some yasnippet key
-  (defun yas-ido-expand ()
-    "Lets you select (and expand) a yasnippet key"
-    (interactive)
-      (let ((original-point (point)))
-        (while (and
-                (not (= (point) (point-min) ))
-                (not
-                 (string-match "[[:space:]\n]" (char-to-string (char-before)))))
-          (backward-word 1))
-      (let* ((init-word (point))
-             (word (buffer-substring init-word original-point))
-             (list (yas-active-keys)))
-        (goto-char original-point)
-        (let ((key (remove-if-not
-                    (lambda (s) (string-match (concat "^" word) s)) list)))
-          (if (= (length key) 1)
-              (setq key (pop key))
-            (setq key (ido-completing-read "key: " list nil nil word)))
-          (delete-char (- init-word original-point))
-          (insert key)
-          (yas-expand)))))
+(defun yas-ido-expand ()
+  "Lets you select (and expand) a yasnippet key"
+  (interactive)
+  (let ((original-point (point)))
+    (while (and
+            (not (= (point) (point-min) ))
+            (not
+             (string-match "[[:space:]\n]" (char-to-string (char-before)))))
+      (backward-word 1))
+    (let* ((init-word (point))
+           (word (buffer-substring init-word original-point))
+           (list (yas-active-keys)))
+      (goto-char original-point)
+      (let ((key (remove-if-not
+                  (lambda (s) (string-match (concat "^" word) s)) list)))
+        (if (= (length key) 1)
+            (setq key (pop key))
+          (setq key (ido-completing-read "key: " list nil nil word)))
+        (delete-char (- init-word original-point))
+        (insert key)
+        (yas-expand)))))
 
-      (define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
-
-;; (require 'python-pep8)
-;; (require 'python-pylint)
-
-;; use Ropemacs
-;; turn off until I figure out how to use it.
-;; (add-to-list 'load-path "~/.emacs.d/vendor/pymacs-0.24-beta2")
-;; (require 'pymacs)
-;; (pymacs-load "ropemacs" "rope-")
-;; (setq ropemacs-enable-autoimport t)
-
-;; Automatically remove trailing whitespace when file is saved.
-(add-hook 'python-mode-hook
-          (lambda()
-            (add-hook 'local-write-file-hooks
-                      '(lambda()
-                         (save-excursion
-                           (delete-trailing-whitespace))))))
-
-;; ;; ;(add-hook 'python-mode-hook 'my-python-hook)
-
-;; ;; ;; (defun py-outline-level ()
-;; ;; ;;   "This is so that `current-column` DTRT in otherwise-hidden text"
-;; ;; ;;   ;; from ada-mode.el
-;; ;; ;;   (let (buffer-invisibility-spec)
-;; ;; ;;     (save-excursion
-;; ;; ;;       (skip-chars-forward "\t ")
-;; ;; ;;       (current-column))))
-
-;; ;; ;; ; this fragment originally came from the web somewhere, but the outline-regexp
-;; ;; ;; ; was horribly broken and is broken in all instances of this code floating
-;; ;; ;; ; around.  Finally fixed by Charl P. Botha <http://cpbotha.net/>
-;; ;; ;; (defun my-python-hook ()
-;; ;; ;;   (setq outline-regexp "[^ \t\n]\\|[ \t]*\\(def[ \t]+\\|class[ \t]+\\)")
-;; ;; ;;   ; enable our level computation
-;; ;; ;;   (setq outline-level 'py-outline-level)
-;; ;; ;;   ; do not use their \C-c@ prefix, too hard to type. Note this overides
-;; ;; ;;   ;some python mode bindings
-;; ;; ;;   (setq outline-minor-mode-prefix "\C-c")
-;; ;; ;;   ; turn on outline mode
-;; ;; ;;   (outline-minor-mode t)
-;; ;; ;;   ; initially hide all but the headers
-;; ;; ;;   (hide-body)
-;; ;; ;;   (show-paren-mode 1)
-;; ;; ;; )
-
-;; ;; ;(setq python-check-command "/Users/jeshua/python-setup/python-check.sh")
-
-;; ;; ;; (add-hook 'python-mode-hook
-;; ;; ;;           '(lambda ()
-;; ;; ;;              (progn (define-key python-mode-map "\C-m" 'newline-and-indent))))
-;; ;; ;; (add-hook 'python-mode-hook
-;; ;; ;;           (function (lambda ()
-;; ;; ;;                       (setq indent-tabs-mode nil
-;; ;; ;;                             tab-width 2))))
-
-;; python jedi setup
-;; (add-hook 'python-mode-hook 'auto-complete-mode)
-;; (add-hook 'python-mode-hook 'jedi:ac-setup)
-;; (add-hook 'python-mode-hook 'jedi:setup)
-;; (setq jedi:setup-keys t)
-
-;; ipython notebook
-;;(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq-default python-indent 2)
-(setq-default py-indent-offset 2)
-(setq py-indent  2)
-(setq py-indent-offset  2)
-
-(defun my-ruby-mode-hook nil
-  (setq whitespace-line-column 100))
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+(define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
-
-;; ;;pdb setup, note the python version
-;; (setq pdb-path '/usr/lib/python2.6/pdb.py
-;;       gud-pdb-command-name (symbol-name pdb-path)
-;;       (defadvice pdb (before gud-query-cmdline activate)
-;;         "Provide a better default command line when called interactively."))
-;; (interactive
-;;  (list (gud-query-cmdline pdb-path
-;;                           (file-name-nondirectory buffer-file-name))))
 
 ;; tramp to use server nicknames
 (tramp-set-completion-function "ssh"
@@ -539,12 +410,12 @@ Emacs buffers are those whose name starts with *."
 ;; Disable smart parens mode
 
 ;;  pos-tip
-     ;; (require 'popup-pos-tip)
-     ;; (defadvice popup-tip
-     ;;   (around popup-pos-tip-wrapper (string &rest args) activate)
-     ;;   (if (eq window-system 'x)
-     ;;       (apply 'popup-pos-tip string args)
-     ;;     ad-do-it))
+;; (require 'popup-pos-tip)
+;; (defadvice popup-tip
+;;   (around popup-pos-tip-wrapper (string &rest args) activate)
+;;   (if (eq window-system 'x)
+;;       (apply 'popup-pos-tip string args)
+;;     ad-do-it))
 
 ;; (set-variable temporary-file-directory "/tmp")
 ;;    (defconst emacs-tmp-dir (format "%s/%s%s/" temporary-file-directory "emacs" (user-uid)))
@@ -564,74 +435,18 @@ Emacs buffers are those whose name starts with *."
 (setq flycheck-check-syntax-automatically '(save))
 (bounds-of-thing-at-point 'symbol)
 
-;; python-mode
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+;; (defmacro after (mode &rest body)
+;;   `(eval-after-load ,mode
+;;      '(progn ,@body)))
 
-;; python mode tab width
-(add-hook 'python-mode-hook
-          (function (lambda ()
-                      (setq indent-tabs-mode nil
-                            tab-width 2))))
+;; (after 'auto-complete
+;;        (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+;;        (setq ac-use-menu-map t)
+;;        (define-key ac-menu-map "\C-n" 'ac-next)
+;;        (define-key ac-menu-map "\C-p" 'ac-previous))
 
-  ; use IPython
-  (setq-default py-shell-name "ipython")
-  (setq-default py-which-bufname "IPython")
-  ; switch to the interpreter after executing code
-  (setq py-shell-switch-buffers-on-execute-p t)
-  (setq py-switch-buffers-on-execute-p t)
-  ; don't split windows
-  (setq py-split-windows-on-execute-p nil)
-(setq py-force-py-shell-name-p t)
-;;(require 'ipython)
-  (setq py-smart-indentation t)
-
-;; change comint keys for ipython shell
-  (require 'comint)
-    (define-key comint-mode-map (kbd "M-") 'comint-next-input)
-    (define-key comint-mode-map (kbd "M-") 'comint-previous-input)
-    (define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
-    (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
-(setq-default explicit-shell-file-name "/bin/zsh")
-;; need to fix ^A things.
-(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-(push "~/.virtualenvs/tellapart/bin" exec-path)
-(setenv "PATH"
-           (concat
-           "~/.virtualenvs/tellapart/bin" ":"
-           (getenv "PATH")
-           ))
-  ;; (defmacro after (mode &rest body)
-  ;;   `(eval-after-load ,mode
-  ;;      '(progn ,@body)))
-
-  ;; (after 'auto-complete
-  ;;        (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
-  ;;        (setq ac-use-menu-map t)
-  ;;        (define-key ac-menu-map "\C-n" 'ac-next)
-  ;;        (define-key ac-menu-map "\C-p" 'ac-previous))
-
-  ;; (after 'auto-complete-config
-  ;;        (ac-config-default)
-  ;;        (when (file-exists-p (expand-file-name "/Users/patrick/.emacs.d/el-get/pymacs"))
-  ;;          (ac-ropemacs-initialize)
-  ;;          (ac-ropemacs-setup)))
-
-  ;; (after 'auto-complete-autoloads
-  ;;        (autoload 'auto-complete-mode "auto-complete" "enable auto-complete-mode" t nil)
-  ;;        (add-hook 'python-mode-hook
-  ;;                  (lambda ()
-  ;;                    (require 'auto-complete-config)
-  ;;                    (add-to-list 'ac-sources 'ac-source-ropemacs)
-  ;;                    (auto-complete-mode))))
-
-
-;; (require 'pymacs)
-;; (pymacs-load "ropemacs" "rope-")
-
-  (add-hook 'lisp-mode-hook '(lambda ()
-    (local-set-key (kbd "RET") 'newline-and-indent)))
+(add-hook 'lisp-mode-hook '(lambda ()
+                             (local-set-key (kbd "RET") 'newline-and-indent)))
 
 ;; use rsync
 (setq tramp-default-method "rsyncc")
@@ -639,69 +454,30 @@ Emacs buffers are those whose name starts with *."
 (setq debug-on-message "^Wrong")
 (setq debug-on-error t)
 
-;; (require 'anything-ipython)
-;; (add-hook 'python-mode-hook #'(lambda ()
-;;                                 (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
-;; (add-hook 'ipython-shell-hook #'(lambda ()
-;;                                   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+(setq make-backup-files t)
 
-;; ;; If you want to use anything-show-completion.el,(facultative)
-;; ;; <http://www.emacswiki.org/cgi-bin/emacs/anything-show-completion.el>
-;; ;; add these lines:
-
-;; (when (require 'anything-show-completion nil t)
-;;   (use-anything-show-completion 'anything-ipython-complete
-;;                                 '(length initial-pattern)))
-
-
-;;(unload-feature 'ipython)
-
-(setq virtual-env (getenv "VIRTUAL_ENV"))
-
-;; (if (not (equal virtual-env 'nil))
-;;     (setq load-path (append
-;;                      (list (concat virtual-env "/src/pymacs" ))
-;;                      load-path))
-;;   (let ((foo 'bar))
-;;     (require 'pymacs)
-;;     (pymacs-load "ropemacs" "rope-")
-;;     (setq ropemacs-enable-autoimport 't)
-;;     ))
-
-  (setq make-backup-files t)
-
-  (setq delete-old-versions t
-        kept-new-versions 6
-        kept-old-versions 2
-        version-control t)
+(setq delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 (add-to-list 'backup-directory-alist
              (cons "." "~/.backups/"))
 (setq tramp-backup-directory-alist backup-directory-alist)
 (setq make-backup-files t)
 
-  ;; Backup (file~) disabled and auto-save (#file#) locally to prevent delays in editing remote files
-  (add-to-list 'backup-directory-alist
-               (cons tramp-file-name-regexp nil))
+;; Backup (file~) disabled and auto-save (#file#) locally to prevent delays in editing remote files
+(add-to-list 'backup-directory-alist
+             (cons tramp-file-name-regexp nil))
 (setq tramp-auto-save-directory temporary-file-directory)
 
-  (setq tramp-verbose 10)
+(setq tramp-verbose 10)
 
-  (setenv "TMPDIR" "/tmp")
+(setenv "TMPDIR" "/tmp")
 
-  (require 'backup-each-save)
-   (add-hook 'after-save-hook 'backup-each-save)
+(require 'backup-each-save)
+(add-hook 'after-save-hook 'backup-each-save)
 ;;  (defvar backup-each-save-mirror-location "~/.backups")
-
-(defun python-add-breakpoint ()
-      "Add a break point"
-      (interactive)
-      (newline-and-indent)
-      (insert "import ipdb; ipdb.set_trace()")
-      (highlight-lines-matching-regexp "^[ ]*import ipdb; ipdb.set_trace()"))
-    (define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)
-
-(setq ruby-deep-indent-paren nil)
 
 (define-key sp-keymap (kbd "H-<right>") 'sp-forward-slurp-sexp)
 (define-key sp-keymap (kbd "H-<left>") 'sp-forward-barf-sexp)
@@ -713,27 +489,16 @@ Emacs buffers are those whose name starts with *."
 
 (global-set-key (kbd "C-x a a") `ag)
 
-(require 'wuxch-dired)
-;;http://stackoverflow.com/questions/1824696/function-to-call-same-shell-command-in-dired
-;; (defun dired-do-shell-mac-open-vqn ()
-;; (interactive)
-;; (dired-do-async-shell-command
-;; "open" current-prefix-arg
-;; (dired-get-marked-files t current-prefix-arg)))
-(defun dired-do-shell-mac-open-vqn ()
-  (interactive)
-  (save-window-excursion
-    (dired-do-async-shell-command
-     "open" current-prefix-arg
-     (dired-get-marked-files t current-prefix-arg))))
+;; Divide files into partials.
+;; Does not seem to work..
+(defvar partial-dir (expand-file-name "personal/partials" prelude-dir)
+  "This directory is for your personal configuration.")
 
-(define-key dired-mode-map (kbd "H-o") 'dired-do-shell-mac-open-vqn)
+        (message "Loading personal configuration files in %s..." partial-dir)
 
-;; Magic for for associating first line of a file with a mode.
-
-;; jinja2-mode
-(add-to-list 'magic-mode-alist '("{%.*%}" . jinja2-mode) )
+(when (file-exists-p partial-dir)
+    (message "Loading personal configuration files in %s..." partial-dir)
+  (mapc 'load (directory-files partial-dir 't "^[^#].*el$")))
 
 (provide 'patyoon)
 ;;; patyoon.el ends here
-
