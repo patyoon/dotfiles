@@ -48,6 +48,10 @@
          dired+
          enh-ruby-mode
          jedi
+         dired-details
+         find-dired+
+         company-mode
+         robe-mode
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
@@ -499,6 +503,12 @@ Emacs buffers are those whose name starts with *."
 (when (file-exists-p partial-dir)
     (message "Loading personal configuration files in %s..." partial-dir)
   (mapc 'load (directory-files partial-dir 't "^[^#].*el$")))
+
+;;(push 'company-robe company-backends)
+(add-hook 'robe-mode-hook 'ac-robe-setup)
+
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 
 (provide 'patyoon)
 ;;; patyoon.el ends here

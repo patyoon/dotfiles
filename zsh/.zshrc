@@ -332,9 +332,9 @@ for f in .zsh_*aliases; do
     source $f
 done
 
-if [ ! -f /Users/"$(whoami)"/.cache/zsh/dirs ]; then
-  mkdir -p /Users/"$(whoami)"/.cache/zsh
-  touch /Users/"$(whoami)"/.cache/zsh/dirs
+if [ ! -f $HOME/.cache/zsh/dirs ]; then
+  mkdir -p $HOME/.cache/zsh
+  touch $HOME/.cache/zsh/dirs
 fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
