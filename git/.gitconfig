@@ -1,150 +1,3 @@
-[alias]
-  acn = !git add -u && git commit --amend --no-edit
-	rb = rebase
-	stat = status
-	ci = commit
-	st = status
-  sb = status -s -b
-  ##### commit #####
-	ci = commit
-	cia = commit -a
-	cim = commit -m
-	ciam = commit -am
-	cid = commit --amend
-	ciad = commit -a --amend
-  ##### checkout #####
-	co = checkout
-	cob = checkout -b
-	ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
-	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
-  ##### stash #####
-	sa = stash apply
-	sc = stash clear
-	sd = stash drop
-	sl = stash list
-	sp = stash pop
-	ss = stash save
-  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-  ##### merge #####
-	m = merge
-  ##### reset #####
-  oops = reset --soft HEAD~1
-	re = reset
-	rh = reset HEAD
-	reh = reset --hard
-	rem = reset --mixed
-	res = reset --soft
-	rehh = reset --hard HEAD
-	remh = reset --mixed HEAD
-	resh = reset --soft HEAD
-  ##### rebase #####
-  rb = rebase
-	rba = rebase --abort
-	rbc = rebase --continue
-	rbi = rebase --interactive
-	rbs = rebase --skip
-  ##### push #####
-	ps = push
-	psf = push -f
-	psu = push -u
-	pso = push origin
-	psfo = push -f origin
-	psuo = push -u origin
-	psom = push origin master
-  ##### stash #####
-  save = stash save
-  pop = stash pop --index
-  gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
-	mylog = "log --pretty=format: '%h %s [%an]\n\n' --graph"
-	prune-empty="git filter-branch -f --prune-empty -- --all"
-	amendn = "commit --amend --no-edit"
-  rom = "rebase origin/master"
-  slog = "log --decorate=short"
-  ##### diff #####
-	d = difftool
-  dc = diff --cached
-	dk = diff --check
-	dck = diff --cached --check
-  ksdiff = difftool --gui
-  save = stash save
-  pop = stash pop --index
-  restash = !git stash pop  --index &amp;&amp; git stash save
-  rs = !git stash pop  --index &amp;&amp; git stash save
-  s = status
-  files = diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT
-  fixup = !sh -c 'git commit -m &quot;fixup! $(git log -1 --format='\''%s'\'' $@)&quot;' -
-  squash = !sh -c 'git commit -m &quot;squash! $(git log -1 --format='\''%s'\'' $@)&quot;' -
-  ri = rebase --interactive --autosquash
-  f = fetch --all --tags --prune
-  hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --date=relative
-  rev = log -1 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset'
-## show the number of commits by each person.
-  sh = shortlog -sn
-  ##### add ######
-	a = add .
-	ai = add -i
-  ##### remote #####
-	r = remote
-	ra = remote add
-	rv = remote -v
-	rp = remote prune
-	rs = remote show
-	rso = remote show origin
-	rpo = remote prune origin
-	##### show #####
-	w = show
-	wp = show -p
-	wr = show -p --no-color
-	##### apply #####
-	ap = apply
-	as = apply --stat
-	ac = apply --check
-	##### am #####
-	ama = am --abort
-	amr = am --resolved
-	ams = am --skip
-	##### branch ######
-	b = branch
-	ba = branch -a
-	bd = branch -d
-	br = branch -r
-	cb = "!sh -c 'original_branch=$(git branch 2>/dev/null | grep '^*' | colrm 1 2); git co $0; git log | head -10; git co $original_branch'"
-  del = "branch -D"
-	f = fetch
-	fo = fetch origin
-	#############
-	fp = format-patch
-	#############
-	fk = fsck
-		#############
-	m = merge
-	ma = merge --abort
-	mc = merge --continue
-	ms = merge --skip
-	#############
-	pr = prune -v
-	#############
-	ps = push
-	psf = push -f
-	psu = push -u
-	pso = push origin
-	psfo = push -f origin
-	psuo = push -u origin
-	psom = push origin master
-	#############
-	#############
-	rb = rebase
-	rba = rebase --abort
-	rbc = rebase --continue
-	rbi = rebase --interactive
-	rbs = rebase --skip
-	#############
-	assume = update-index --assume-unchanged
-	unassume = update-index --no-assume-unchanged
-	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
-	human = name-rev --name-only --refs=refs/heads/*
-	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
-	prune-merged = ! "git branch --merged master | grep -v -E '^(\\* |  master$)' | xargs -n 1 git branch -d"
 [core]
 	editor = "/Applications/Emacs.app/Contents/MacOS/Emacs"
 	pager = "/usr/bin/less -N"
@@ -180,9 +33,6 @@
 	autocorrect = 1
 [credential]
 	helper = osxkeychain
-[merge]
-	tool = emerge
-  conflictstyle = diff3
 [branch]
 	autosetuprebase = always
 [diff]
@@ -191,122 +41,11 @@
   guitool = Kaleidoscope
 [difftool]
     prompt = false
-[difftool "Kaleidoscope"]
-  cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [github]
 	user = patyoon
 	token = token
 [instaweb]
 	httpd = apache2 -f
-
-# [alias]
-# 	s = status
-# 	sb = status -s -b
-# 	#############
-# 	sa = stash apply
-# 	sc = stash clear
-# 	sd = stash drop
-# 	sl = stash list
-# 	sp = stash pop
-# 	ss = stash save
-# 	sw = stash show
-# 	#############
-# 	d = diff
-# 	dc = diff --cached
-# 	dl = difftool
-# 	dlc = difftool --cached
-# 	dk = diff --check
-# 	dp = diff --patience
-# 	dck = diff --cached --check
-# 	#############
-# 	c = commit
-# 	ca = commit -a
-# 	cm = commit -m
-# 	cam = commit -am
-# 	cd = commit --amend
-# 	cad = commit -a --amend
-# 	#############
-# 	ap = apply
-# 	as = apply --stat
-# 	ac = apply --check
-# 	#############
-# 	ama = am --abort
-# 	amr = am --resolved
-# 	ams = am --skip
-# 	#############
-# 	l = log --oneline
-# 	lg = log --oneline --graph --decorate
-# 	#############
-
-# 	#############
-# 	b = branch
-# 	ba = branch -a
-# 	bd = branch -d
-# 	br = branch -r
-# 	#############
-# 	f = fetch
-# 	fo = fetch origin
-# 	#############
-# 	fp = format-patch
-# 	#############
-# 	fk = fsck
-# 	#############
-# 	m = merge
-# 	ma = merge --abort
-# 	mc = merge --continue
-# 	ms = merge --skip
-# 	#############
-# 	pr = prune -v
-# 	#############
-# 	ps = push
-# 	psf = push -f
-# 	psu = push -u
-# 	pso = push origin
-# 	psfo = push -f origin
-# 	psuo = push -u origin
-# 	psom = push origin master
-# 	#############
-# 	pl = pull
-# 	plu = pull -u
-# 	plo = pull origin
-# 	plp = pull upstream
-# 	plom = pull origin master
-# 	plpm = pull upstream master
-# 	#############
-# 	pb = pull --rebase
-# 	pbo = pull --rebase origin
-# 	pbp = pull --rebase upstream
-# 	pbom = pull --rebase origin master
-# 	pbpm = pull --rebase upstream master
-# 	#############
-# 	rb = rebase
-# 	rba = rebase --abort
-# 	rbc = rebase --continue
-# 	rbi = rebase --interactive
-# 	rbs = rebase --skip
-# 	#############
-# 	re = reset
-# 	rh = reset HEAD
-# 	reh = reset --hard
-# 	rem = reset --mixed
-# 	res = reset --soft
-# 	rehh = reset --hard HEAD
-# 	remh = reset --mixed HEAD
-# 	resh = reset --soft HEAD
-# 	#############
-# 	r = remote
-# 	ra = remote add
-# 	rm = remote rm
-# 	rv = remote -v
-# 	rp = remote prune
-# 	rs = remote show
-# 	rso = remote show origin
-# 	rpo = remote prune origin
-# 	#############
-# 	w = show
-# 	wp = show -p
-# 	wr = show -p --no-color
-# 	#############
 [push]
 	default = current
 [user]
@@ -314,3 +53,7 @@
   email = me@patyoon.com
 [include]
   path = .gitconfig_airbnb
+[include]
+  path = .gitconfig_aliases
+[merge]
+  tool = ediff

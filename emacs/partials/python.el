@@ -71,11 +71,6 @@
 (setq py-indent  2)
 (setq py-indent-offset  2)
 
-(defun my-ruby-mode-hook nil
-  (setq whitespace-line-column 100))
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
-
-
 (defun python-add-breakpoint ()
   "Add a break point"
   (interactive)

@@ -11,5 +11,9 @@
 (add-to-list 'auto-mode-alist
              '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . enh-ruby-mode))
 
+(defun my-ruby-mode-hook nil
+  (setq whitespace-line-column 100))
+(add-hook 'enh-ruby-mode-hook 'my-ruby-mode-hook)
+
 (provide `ruby)
 ;;; ruby.el ends here
