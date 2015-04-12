@@ -56,6 +56,7 @@
 ;; ;; ;;                             tab-width 2))))
 
 ;; python jedi setup
+;; TODO - Add a way to install jedi server after checking if not installed.
 (add-hook 'python-mode-hook 'auto-complete-mode)
 (add-hook 'python-mode-hook 'jedi:ac-setup)
 (add-hook 'python-mode-hook 'jedi:setup)

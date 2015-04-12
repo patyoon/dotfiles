@@ -44,14 +44,19 @@
          pos-tip
          popup-pos-tip
          smex
-         rails-el
          dired+
-         enh-ruby-mode
          jedi
          dired-details
          find-dired+
          company-mode
-         robe-mode
+         ;; Offline  API Documentation Browser and Code Snippet Manager.
+         ;; https://github.com/stanaka/dash-at-point#readme
+         dash-at-point
+         ;; highlight-indentations
+         ;; https://github.com/antonj/Highlight-Indentation-for-Emacs
+         highlight-indentation
+         ;; http://emacsrocks.com/e13.html
+         multiple-cursors
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
@@ -84,7 +89,7 @@
 '(ido-use-filename-at-point (quote guess))
 '(ido-use-url-at-point t)
 
-;; Smex is a M-x enhancement for Emacs.
+;; M-x enhancement.
 ;; http://www.emacswiki.org/emacs/Smex
 (require 'smex)
 (setq smex-history-length 100)
@@ -92,7 +97,7 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-;; Recentf is a minor mode that builds a list of recently opened files.
+;; A minor mode that builds a list of recently opened files.
 ;; http://www.emacswiki.org/emacs/RecentFiles
 (add-to-list 'recentf-exclude "\\.ido\\.last")
 (add-to-list 'recentf-exclude "recentf")
@@ -210,13 +215,6 @@ vi style of % jumping to matching brace."
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-;; Buffer movement by arrow keys
-;; (require 'buffer-move)
-;; (global-set-key (kbd "<up>")     'buf-move-up)
-;; (global-set-key (kbd "<down>")   'buf-move-down)
-;; (global-set-key (kbd "<left>")   'buf-move-left)
-;; (global-set-key (kbd "<right>")  'buf-move-right)
-
 ;;CMake mode
 ;;(require 'cmake-mode)
 ;; (setq auto-mode-alist
@@ -245,16 +243,6 @@ vi style of % jumping to matching brace."
 ;; swap to have to have similar behavior as shell.
 (global-set-key "\C-w" 'backward-kill-word)
 (global-set-key "\C-x\C-k" 'kill-region)
-
-;;hyde
-(defun hyde-new-draft()
-  "Init a new blog post for hyde engine"
-  (interactive)
-  (insert "{% extends \"_post.html\" %}\n{%hyde\n   title:\n   categories:\n   created: ")
-  (insert (format-time-string "%Y-%m-%d"))
-  (insert "\n%}\n{% block article %}\n{% article %}\n\n{% endarticle %}\n{% endblock %}")
-  (goto-line 9)
-  )
 
 (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
 (autoload 'haskell-latex-mode "haskell-latex")
@@ -344,10 +332,6 @@ Emacs buffers are those whose name starts with *."
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(add-to-list 'load-path "~/.emacs.d/vendor/arduino")
-(setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
-(autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
-
 (setq TeX-PDF-mode t)
 ;; set alt keys for meta
 (setq mac-option-modifier 'meta)
@@ -371,7 +355,6 @@ Emacs buffers are those whose name starts with *."
 ;; Indentation
 (setq default-tab-width 2)
 (setq c-basic-offset 2)
-(setq js-indent-level 2)
 
 ;; yas with ido-ubiquotous
 ;;  Completing point by some yasnippet key
@@ -497,7 +480,6 @@ Emacs buffers are those whose name starts with *."
 ;; Does not seem to work..
 (defvar partial-dir (expand-file-name "personal/partials" prelude-dir)
   "This directory is for your personal configuration.")
-
         (message "Loading personal configuration files in %s..." partial-dir)
 
 (when (file-exists-p partial-dir)
@@ -507,8 +489,8 @@ Emacs buffers are those whose name starts with *."
 ;;(push 'company-robe company-backends)
 (add-hook 'robe-mode-hook 'ac-robe-setup)
 
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;; magit setup.
+(global-set-key (kbd "C-c g") 'magit-status)
 
 (provide 'patyoon)
 ;;; patyoon.el ends here

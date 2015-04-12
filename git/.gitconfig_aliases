@@ -15,7 +15,6 @@
   squash = !sh -c 'git commit -m &quot;squash! $(git log -1 --format='\''%s'\'' $@)&quot;' -
 	# show the number of commits by each person.
   sh = shortlog -sn
-  prune-prod = ! "git branch --merged production | grep -v -E '^(\\* |  production$)' | xargs -n 1 git branch -d"
 
   # pull #
 	pl = pull

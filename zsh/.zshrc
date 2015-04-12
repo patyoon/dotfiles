@@ -340,3 +340,6 @@ fi
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 export EDITOR=emacs
+
+# TODO: Only run after checking OS.
+defaults write NSGlobalDomain KeyRepeat -int 0.02
