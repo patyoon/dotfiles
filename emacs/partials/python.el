@@ -20,47 +20,40 @@
 
 ;; ;; ;(add-hook 'python-mode-hook 'my-python-hook)
 
-;; ;; ;; (defun py-outline-level ()
-;; ;; ;;   "This is so that `current-column` DTRT in otherwise-hidden text"
-;; ;; ;;   ;; from ada-mode.el
-;; ;; ;;   (let (buffer-invisibility-spec)
-;; ;; ;;     (save-excursion
-;; ;; ;;       (skip-chars-forward "\t ")
-;; ;; ;;       (current-column))))
+;; ;; (defun py-outline-level ()
+;; ;;   "This is so that `current-column` DTRT in otherwise-hidden text"
+;; ;;   ;; from ada-mode.el
+;; ;;   (let (buffer-invisibility-spec)
+;; ;;     (save-excursion
+;; ;;       (skip-chars-forward "\t ")
+;; ;;       (current-column))))
 
-;; ;; ;; ; this fragment originally came from the web somewhere, but the outline-regexp
-;; ;; ;; ; was horribly broken and is broken in all instances of this code floating
-;; ;; ;; ; around.  Finally fixed by Charl P. Botha <http://cpbotha.net/>
-;; ;; ;; (defun my-python-hook ()
-;; ;; ;;   (setq outline-regexp "[^ \t\n]\\|[ \t]*\\(def[ \t]+\\|class[ \t]+\\)")
-;; ;; ;;   ; enable our level computation
-;; ;; ;;   (setq outline-level 'py-outline-level)
-;; ;; ;;   ; do not use their \C-c@ prefix, too hard to type. Note this overides
-;; ;; ;;   ;some python mode bindings
-;; ;; ;;   (setq outline-minor-mode-prefix "\C-c")
-;; ;; ;;   ; turn on outline mode
-;; ;; ;;   (outline-minor-mode t)
-;; ;; ;;   ; initially hide all but the headers
-;; ;; ;;   (hide-body)
-;; ;; ;;   (show-paren-mode 1)
-;; ;; ;; )
+;; ;; ; this fragment originally came from the web somewhere, but the outline-regexp
+;; ;; ; was horribly broken and is broken in all instances of this code floating
+;; ;; ; around.  Finally fixed by Charl P. Botha <http://cpbotha.net/>
+;; ;; (defun my-python-hook ()
+;; ;;   (setq outline-regexp "[^ \t\n]\\|[ \t]*\\(def[ \t]+\\|class[ \t]+\\)")
+;; ;;   ; enable our level computation
+;; ;;   (setq outline-level 'py-outline-level)
+;; ;;   ; do not use their \C-c@ prefix, too hard to type. Note this overides
+;; ;;   ;some python mode bindings
+;; ;;   (setq outline-minor-mode-prefix "\C-c")
+;; ;;   ; turn on outline mode
+;; ;;   (outline-minor-mode t)
+;; ;;   ; initially hide all but the headers
+;; ;;   (hide-body)
+;; ;;   (show-paren-mode 1)
+;; ;; )
 
-;; ;; ;(setq python-check-command "/Users/jeshua/python-setup/python-check.sh")
+;; ;(setq python-check-command "/Users/jeshua/python-setup/python-check.sh")
 
-;; ;; ;; (add-hook 'python-mode-hook
-;; ;; ;;           '(lambda ()
-;; ;; ;;              (progn (define-key python-mode-map "\C-m" 'newline-and-indent))))
-;; ;; ;; (add-hook 'python-mode-hook
-;; ;; ;;           (function (lambda ()
-;; ;; ;;                       (setq indent-tabs-mode nil
-;; ;; ;;                             tab-width 2))))
-
-;; python jedi setup
-;; TODO - Add a way to install jedi server after checking if not installed.
-(add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'jedi:ac-setup)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)
+;; ;; (add-hook 'python-mode-hook
+;; ;;           '(lambda ()
+;; ;;              (progn (define-key python-mode-map "\C-m" 'newline-and-indent))))
+;; ;; (add-hook 'python-mode-hook
+;; ;;           (function (lambda ()
+;; ;;                       (setq indent-tabs-mode nil
+;; ;;                             tab-width 2))))
 
 ;; ipython notebook
 ;;(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
