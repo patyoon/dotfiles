@@ -317,10 +317,6 @@ export VIRTUALENVWRAPPER_PYTHON=`which python`
 export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
 # source `which virtualenvwrapper.sh`
 
-# JAVA_HOME for ec2 cli tools
-export JAVA_HOME="`/usr/libexec/java_home`"
-# ec2 api tools home.
-export EC2_HOME=/Users/Yoon/tools/ec2-api-tools
 # add ec2 api tools to path
 export PATH=$PATH:$EC2_HOME/bin
 export PYTHONSTARTUP=$HOME/.pythonstartup
@@ -343,3 +339,10 @@ export EDITOR=emacs
 
 # TODO: Only run after checking OS.
 defaults write NSGlobalDomain KeyRepeat -int 0.02
+
+if [ -d "$HOME/workspace/bin" ]; then
+    PATH=$PATH:$HOME/workspace/bin
+fi
+
+# https://github.com/nvbn/thefuck
+# alias fuck='$(thefuck $(fc -ln -1))'

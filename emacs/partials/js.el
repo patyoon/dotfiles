@@ -5,6 +5,8 @@
 
 (setq js-indent-level 2)
 
+(setq js2-basic-offset 2)
+
 (setq my-el-get-js-packages
       (append
        '(
@@ -15,7 +17,7 @@
 (el-get 'sync my-el-get-js-packages)
 
 (add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
+;;(add-hook 'js2-mode-hook 'ac-js2-mode)
 
 ;; jshint with flycheck.
 ;; https://truongtx.me/2014/02/21/emacs-setup-jshint-for-on-the-fly-petential-error-checking/

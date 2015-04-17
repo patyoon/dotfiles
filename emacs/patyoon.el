@@ -492,5 +492,12 @@ Emacs buffers are those whose name starts with *."
 ;; magit setup.
 (global-set-key (kbd "C-c g") 'magit-status)
 
+;; Start emacsclient server.
+(set-default 'server-socket-dir "~/.emacs.d/server")
+(if (functionp 'window-system)
+    (when (and (window-system)
+               (>= emacs-major-version 24))
+      (server-start)))
+
 (provide 'patyoon)
 ;;; patyoon.el ends here
