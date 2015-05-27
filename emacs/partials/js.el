@@ -3,6 +3,9 @@
 ;;; JavaScript mode setup.
 ;;; Referred https://truongtx.me/2014/02/23/set-up-javascript-development-environment-in-emacs/
 
+;; Use js2-mode.
+(add-to-list 'auto-mode-alist '("\\.\\(?:js\\|jsx\\|json\\)\\'" . js2-mode))
+
 (setq js-indent-level 2)
 
 (setq js2-basic-offset 2)
@@ -17,7 +20,6 @@
 (el-get 'sync my-el-get-js-packages)
 
 (add-hook 'js-mode-hook 'js2-minor-mode)
-;;(add-hook 'js2-mode-hook 'ac-js2-mode)
 
 ;; jshint with flycheck.
 ;; https://truongtx.me/2014/02/21/emacs-setup-jshint-for-on-the-fly-petential-error-checking/

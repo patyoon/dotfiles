@@ -59,6 +59,7 @@
          multiple-cursors
          robe-mode
          multi-term
+         js2-mode
          )
        (mapcar 'el-get-source-name el-get-sources)))
 
