@@ -338,11 +338,20 @@ Emacs buffers are those whose name starts with *."
 ;; only works in cocoa version
 ;; (mac-key-mode 1)
 
-;; (setq-default indent-tabs-mode nil)
+;;  http://stackoverflow.com/questions/69934/set-4-space-indent-in-emacs-in-text-mode
+(setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-(setq indent-line-function 'insert-tab)
+(custom-set-variables
+    ;; custom-set-variables was added by Custom.
+    ;; If you edit it by hand, you could mess it up, so be careful.
+    ;; Your init file should contain only one such instance.
+    ;; If there is more than one, they won't work right.
+   '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60))))
+(setq-default indent-line-function 'indent-relative)
+;;(setq indent-line-function 'insert-tab)
+
 ;;no popup when opening buffer from terminal
-(setq ns-pop-up-frames nil)
+(setq-default ns-pop-up-frames nil)
 
 (defun remove-trailing-whitespace ()
   (interactive)
@@ -392,7 +401,8 @@ Emacs buffers are those whose name starts with *."
 
 (global-set-key (kbd "<C-right>") 'right-word)
 (global-set-key (kbd "<C-left>") 'left-word)
-(turn-off-smartparens-mode)
+
+
 (toggle-debug-on-error 1)
 ;; Disable smart parens mode
 
@@ -498,6 +508,10 @@ Emacs buffers are those whose name starts with *."
     (when (and (window-system)
                (>= emacs-major-version 24))
       (server-start)))
+
+;; Prevent behavior of smartparens.el inserting / for quotes.
+;;  http://stackoverflow.com/questions/21661737/new-to-emacs-when-i-type-is-automatically-inserted
+(setq sp-autoescape-string-quote nil)
 
 (provide 'patyoon)
 ;;; patyoon.el ends here
