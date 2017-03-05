@@ -1,7 +1,7 @@
 ;; (require 'python-pep8)
 ;; (require 'python-pylint)
 
-(setq python-indent-offset 2)
+(setq python-indent-offset 4)
 
 ;; use Ropemacs
 ;; turn off until I figure out how to use it.
@@ -59,11 +59,11 @@
 ;;(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq-default python-indent 2)
-(setq-default py-indent-offset 2)
-(setq py-indent  2)
-(setq py-indent-offset  2)
+(setq-default tab-width 4)
+(setq-default python-indent 4)
+(setq-default py-indent-offset 4)
+(setq py-indent  4)
+(setq py-indent-offset  4)
 
 (defun python-add-breakpoint ()
   "Add a break point"
@@ -71,7 +71,7 @@
   (newline-and-indent)
   (insert "import ipdb; ipdb.set_trace()")
   (highlight-lines-matching-regexp "^[ ]*import ipdb; ipdb.set_trace()"))
-(define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)
+;;(define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)
 
 
 ;; python mode tab width

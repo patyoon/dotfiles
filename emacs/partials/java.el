@@ -2,35 +2,32 @@
 ;;; Commentary:
 ;;; Java mode setup.
 
-
-(setq my-el-get-java-packages
-      (append
-       '(
-         ;; https://github.com/senny/emacs-eclim
-         eclim
-         ))
-      )
-
-(el-get 'sync my-el-get-java-packages)
-
-(add-hook 'java-mode-hook 'gradle-mode)
-(setq eclim-auto-save t)
-(global-eclim-mode)
-
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
 
-(defun my-org-mode-hook nil
-  (setq whitespace-line-column 100))
-(add-hook 'org-mode-hook 'my-org-mode-hook)
+;; Override style from original java style.
+(c-add-style "my-java-style"
+             '("java"
+               (c-indent-level . 2)
+               (c-basic-offset . 2)
+               (c-hanging-braces-alist
+                ((substatement-open)
+                 (block-close . c-snug-do-while)
+                 (extern-lang-open after)
+                 (inexpr-class-open after)
+                 (inexpr-class-close before)))
+               (c-offsets-alist
+                (substatement-open . 0))
+               ))
 
-(custom-set-variables
- '(eclim-eclipse-dirs '("~/User/patrickyoon/Applications/eclipse"))
- '(eclim-executable "~/User/patrickyoon/Applications/eclipse/eclim"))
+(defun my-java-mode-hook nil
+  (setq c-default-style "my-java-style")
+  (c-set-style "my-java-style")
+  (setq whitespace-line-column 100)
+  )
 
-(require 'eclim)
-(global-eclim-mode)
+(add-hook 'java-mode-hook 'my-java-mode-hook)
 
 (provide `java)
 ;;; java.el ends here.

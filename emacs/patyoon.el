@@ -1,187 +1,191 @@
 ;;; Code: My emacs setup
 ;;; use el-get for package manager
 
-;; use el-get for manaing packages.
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+;; ;; use el-get for manaing packages.
+;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+;;     (let (el-get-master-branch)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp))))
 
-;; list all packages that I want
-(setq my-el-get-packages
-      (append
-       '(gist
-         anything
-         yasnippet
-         zenburn
-         yaml-mode
-         yas-jit
-         flx
-         backup-each-save
-         virtualenvwrapper
-         sql-complete
-         sass-mode
-         auto-complete
-         coffee-mode
-         cython-mode
-         django-mode
-         haskell-latex
-         helm
-         ido-ubiquitous
-         jinja2-mode
-         jekyll-el
-         magit
-         markdown-mode
-         package
-         popup
-         rope
-         ropemacs
-         pymacs
-         pos-tip
-         popup-pos-tip
-         smex
-         dired+
-         jedi
-         dired-details
-         find-dired+
-         company-mode
-         ;; Offline  API Documentation Browser and Code Snippet Manager.
-         ;; https://github.com/stanaka/dash-at-point#readme
-         dash-at-point
-         ;; highlight-indentations
-         ;; https://github.com/antonj/Highlight-Indentation-for-Emacs
-         highlight-indentation
-         ;; http://emacsrocks.com/e13.html
-         multiple-cursors
-         robe-mode
-         multi-term
-         js2-mode
-         )
-       (mapcar 'el-get-source-name el-get-sources)))
+;;More package archives
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-(el-get 'sync my-el-get-packages)
+;; ;; list all packages that I want
+;; (setq my-el-get-packages
+;;       (append
+;;        '(yasnippet
+;;          zenburn
+;;          yas-jit
+;;          backup-each-save
+;;          virtualenvwrapper
+;;          auto-complete
+;;          haskell-latex
+;;          jinja2-mode
+;;          package
+;;          popup
+;;          rope
+;;          ropemacs
+;;          pymacs
+;;          pos-tip
+;;          popup-pos-tip
+;;          dired+
+;;          jedi
+;;          dired-details
+;;          find-dired+
+;;          company-mode
+;;          ;; highlight-indentations
+;;          ;; https://github.com/antonj/Highlight-Indentation-for-Emacs
+;;          highlight-indentation
+;;          ;; http://emacsrocks.com/e13.html
+;;          multiple-cursors
+;;          )
+;;        (mapcar 'el-get-source-name el-get-sources)))
 
-;; Turn off icomplete, use helm instead.
-(icomplete-mode 99)
 
-;; Disable whitespace mode showing whitespaces as dots.
+;; (el-get 'sync my-el-get-packages)
+
+;; Emacs will run garbage collection after `gc-cons-threshold' bytes of consing.
+;; By increasing it to 10 MiB we reduce the number of pauses due to garbage collection.
+;; From: http://www.wilfred.me.uk/.emacs.d/init.html#orgheadline52
+(setq gc-cons-threshold (* 10 1024 1024))
+
+;; Configure to confirm before closing emacs.
+(setq confirm-kill-emacs 'y-or-n-p)
+
+;; Disable Prelude whitespace mode showing whitespaces as dots.
 ;; (setq prelude-whitespace nil)
 
-;; use arrow navigation for now.
+;; Use arrow navigation for now
 (defun disable-guru-mode ()
   (guru-mode -1)
   )
-
 (add-hook 'prelude-prog-mode-hook 'disable-guru-mode t)
 
-;; use ido-ubiquitous mode.
-;; ido-style completion for (almost) every function that uses the standard
-;; completion function "completing-read".
-;; https://github.com/technomancy/ido-ubiquitous
-(require 'ido)
-(ido-mode 1)
-(ido-ubiquitous 1)
-'(ido-enable-last-directory-history nil)
-'(ido-enable-regexp nil)
-'(ido-max-directory-size 300000)
-'(ido-max-file-prompt-width 0.1)
-'(ido-use-filename-at-point (quote guess))
-'(ido-use-url-at-point t)
+;; ;; ido-ubiquitous mode.
+;; ;; First turn off icomplete to use ido instead.
+;; (icomplete-mode 99)
+;; ;; ido-style completion for (almost) every function that uses the standard
+;; ;; completion function "completing-read".
+;; ;; https://github.com/technomancy/ido-ubiquitous
+;; (require 'ido)
+;; (ido-mode 1)
+;; (ido-ubiquitous 1)
+;; '(ido-enable-last-directory-history nil)
+;; '(ido-enable-regexp nil)
+;; '(ido-max-directory-size 300000)
+;; '(ido-max-file-prompt-width 0.1)
+;; '(ido-use-filename-at-point (quote guess))
+;; '(ido-use-url-at-point t)
 
-;; M-x enhancement.
+;; M-x enhancement built on top of ido.
 ;; http://www.emacswiki.org/emacs/Smex
 (require 'smex)
 (setq smex-history-length 100)
-(smex-initialize)
+(autoload 'smex "smex"
+  "Smex is a M-x enhancement for Emacs, it provides a convenient interface to
+your recently and most frequently used commands.")
 (global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-;; A minor mode that builds a list of recently opened files.
+;; recentf is a minor mode that builds a list of recently opened files.
+
+;; start recentf
 ;; http://www.emacswiki.org/emacs/RecentFiles
+
+;; run auto-cleanup of recentf without displaying on minibuffer.
+;; https://gist.github.com/masutaka/1325654
+(require 'cl)
+
+(defvar my-recentf-list-prev nil)
+
+(defun my-recentf-save-list ()
+  "If recentf-list and previous recentf-list is equal,
+do nothing"
+  (unless (equal recentf-list my-recentf-list-prev)
+    (recentf-save-list)
+    (setq my-recentf-list-prev recentf-list)))
+
+(defadvice write-region
+  (around recentf-no-message)
+  (ad-set-arg 4 'nomsg)
+  ad-do-it
+  (set-buffer-modified-p nil))
+
+(defadvice recentf-save-list
+  (around no-message activate)
+  "suppress the output from message() and write-region() to
+minibuffer"
+  (let ((activated (ad-is-active 'write-region)))
+    (ad-enable-advice 'write-region 'around 'recentf-no-message)
+    (ad-activate 'write-region)
+    (unwind-protect
+	(flet ((message (format-string &rest args)
+			(eval `(format ,format-string ,@args))))
+	  ad-do-it)
+      (ad-disable-advice 'write-region 'around 'recentf-no-message)
+      (if activated
+	  (ad-activate 'write-region)
+	(ad-deactivate 'write-region)))))
+
+(defadvice recentf-cleanup
+  (around no-message activate)
+  "suppress the output from message() to minibuffer"
+  (flet ((message (format-string &rest args)
+		  (eval `(format ,format-string ,@args))))
+    ad-do-it))
+
 (add-to-list 'recentf-exclude "\\.ido\\.last")
 (add-to-list 'recentf-exclude "recentf")
 (global-set-key (kbd "\C-x f") 'prelude-recentf-ido-find-file)
 ;; C-x b recent file finding. This feature relies upon the recentf package.
 (setq ido-use-virtual-buffers 1)
+(setq recentf-auto-cleanup 10)
+;;end recentf
 
-;; Turn on linum mode
+;; Turn on linum mode to display line number on the right.
 (global-linum-mode t)
 (setq linum-format "%d ")
 
-;; for fixing broken fringe-mode issue
+;; for fixing broken fringe-mode issue.
 (set-fringe-mode '(0 . 0))
 
 ;;Make lines wrap instead of going over edge
 (global-visual-line-mode)
 
-;;Bind compile.
-(global-set-key "\C-cl" 'compile)
-
-;; From http://www.emacswiki.org/emacs/ParenthesisMatching#toc4
-(defun goto-match-paren (arg)
-  "Go to the matching parenthesis if on parenthesis AND last command is a movement command, otherwise insert %.
-vi style of % jumping to matching brace."
-  (interactive "p")
-  (if (not (memq last-command '(
-                                set-mark
-                                cua-set-mark
-                                goto-match-paren
-                                down-list
-                                up-list
-                                end-of-defun
-                                beginning-of-defun
-                                backward-sexp
-                                forward-sexp
-                                backward-up-list
-                                forward-paragraph
-                                backward-paragraph
-                                end-of-buffer
-                                beginning-of-buffer
-                                backward-word
-                                forward-word
-                                mwheel-scroll
-                                backward-word
-                                forward-word
-                                mouse-start-secondary
-                                mouse-yank-secondary
-                                mouse-secondary-save-then-kill
-                                move-end-of-line
-                                move-beginning-of-line
-                                backward-char
-                                forward-char
-                                scroll-up
-                                scroll-down
-                                scroll-left
-                                scroll-right
-                                mouse-set-point
-                                next-buffer
-                                previous-buffer
-                                previous-line
-                                next-line
-                                )
-                 ))
-      (self-insert-command (or arg 1))
-    (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-          ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-          (t (self-insert-command (or arg 1))))))
-(global-set-key (kbd "%") 'goto-match-paren)
-
-;; Delete extra whitespace when killing lines
+;; Delete extra whitespace when killing lines.
 (defun kill-and-join-forward (&optional arg)
   "If at end of line, join with following; otherwise kill line.
-    Deletes whitespace at join."
+   Deletes whitespace at join."
   (interactive "P")
   (if (and (eolp) (not (bolp)))
       (delete-indentation t)
     (kill-line arg)))
 (global-set-key "\C-k" 'kill-and-join-forward)
 
-;; Elisp useful stuff
-(add-hook 'prelude-emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+;; indentation setting.
+
+;; start indent-mode.
+(setq-default indent-line-function 'indent-relative)
+;; ‘tab-stop-list’ holds a list of all the tab stops to use, when ‘indent-relative’ does not find an
+;; appropriate tab stop.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60))))
+
+;; Set default indentation to 2.
+(setq default-tab-width 2)
+
+;;  http://stackoverflow.com/questions/69934/set-4-space-indent-in-emacs-in-text-mode
+;; Permanently force Emacs to indent with spaces, never with TABs:
+(setq-default indent-tabs-mode nil)
+;; end indent.
 
 ;;  provides the function for displaying a tooltip at mouse
 ;;  position which allows users to easily show it.
@@ -193,7 +197,7 @@ vi style of % jumping to matching brace."
 ;;              (apply 'popup-pos-tip string args)
 ;;          ad-do-it))
 
-;;Autocomplete mode nicer autocomplete rendering
+;; Autocomplete mode: nicer autocomplete rendering
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
 (global-auto-complete-mode t)
@@ -211,20 +215,8 @@ vi style of % jumping to matching brace."
 (define-key ac-menu-map "\C-n" 'ac-next)
 (define-key ac-menu-map "\C-p" 'ac-previous)
 (setq ac-ignore-case nil)
-(add-to-list 'ac-modes 'enh-ruby-mode)
-(add-to-list 'ac-modes 'web-mode)
 
-;;More package archives
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-
-;;CMake mode
-;;(require 'cmake-mode)
-;; (setq auto-mode-alist
-;;       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-;;                 ("\\.cmake\\'" . cmake-mode))
-;;               auto-mode-alist))
-;; (setq auto-mode-a)
+(add-hook 'robe-mode-hook 'ac-robe-setup)
 
 ;;Disable flymake GUI warnings (they cause crash)
 (setq flymake-gui-warnings-enabled nil)
@@ -232,68 +224,15 @@ vi style of % jumping to matching brace."
 ;; Scroll to end of window before error
 (setq scroll-error-top-bottom t)
 
-;; Ido-ubiquitous broken in M-x man, disable it
-;; (add-to-list 'ido-ubiquitous-command-exceptions 'man)
-;; (ido-ubiquitous-disable-in man)
-
-(setq make-backup-files nil) ; stop creating those backup~ files
+;; Stop creating those backup~ files
+(setq make-backup-files nil)
 (setq backup-by-copying t)
+
 (global-subword-mode 1) ;move thru camelCaseWords
-
-;; fontify code in code blocks
-;;(setq org-src-fontify-natively t)
-
-;; swap to have to have similar behavior as shell.
-(global-set-key "\C-w" 'backward-kill-word)
-(global-set-key "\C-x\C-k" 'kill-region)
 
 (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
 (autoload 'haskell-latex-mode "haskell-latex")
 
-(defun next-user-buffer ()
-  "Switch to the next user buffer.
-User buffers are those whose name does not start with *."
-  (interactive)
-  (next-buffer)
-  (let ((i 0))
-    (while (and (string-match "^*" (buffer-name)) (< i 50)
-                (setq i (1+ i))) (next-buffer))
-
-    (defun previous-user-buffer ()
-      "Switch to the previous user buffer.
-User buffers are those whose name does not start with *."
-      (interactive)
-      (previous-buffer)
-      (let ((i 0))
-        (while (and (string-match "^*" (buffer-name)) (< i 50))
-          (setq i (1+ i)) (previous-buffer))))))
-
-(defun next-emacs-buffer ()
-  "Switch to the next emacs buffer.
-Emacs buffers are those whose name starts with *."
-  (interactive)
-  (next-buffer)
-  (let ((i 0))
-    (while (and (not (string-match "^*" (buffer-name))) (< i 50))
-      (setq i (1+ i)) (next-buffer))))
-
-(defun previous-emacs-buffer ()
-  "Switch to the previous emacs buffer.
-Emacs buffers are those whose name starts with *."
-  (interactive)
-  (previous-buffer)
-  (let ((i 0))
-    (while (and (not (string-match "^*" (buffer-name))) (< i 50))
-      (setq i (1+ i)) (previous-buffer))))
-
-;; sample easy keys
-(global-set-key (kbd "<f5>") 'load-file) ; Load file
-(global-set-key (kbd "<f6>") 'package-list-packages) ; list packages
-
-(global-set-key (kbd "<C-prior>") 'previous-user-buffer) ; Ctrl+PageUp
-(global-set-key (kbd "<C-next>") 'next-user-buffer) ; Ctrl+PageDown
-(global-set-key (kbd "<C-S-prior>") 'previous-emacs-buffer) ; Ctrl+Shift+PageUp
-(global-set-key (kbd "<C-S-next>") 'next-emacs-buffer) ; Ctrl+Shift+PageDown
 (custom-set-variables
 
  ;; custom-set-variables was added by Custom.
@@ -312,21 +251,9 @@ Emacs buffers are those whose name starts with *."
  ;; If there is more than one, they won't work right.
  )
 
-;; for evernote mode
-(setq evernote-username "patryoon") ; optional: you can use this username as default.
-(setq evernote-enml-formatter-command '("w3m" "-dump" "-I" "UTF8" "-O" "UTF8")) ; option
-(global-set-key "\C-cec" 'evernote-create-note)
-(global-set-key "\C-ceo" 'evernote-open-note)
-(global-set-key "\C-ces" 'evernote-search-notes)
-(global-set-key "\C-ceS" 'evernote-do-saved-search)
-(global-set-key "\C-cew" 'evernote-write-note)
-(global-set-key "\C-cep" 'evernote-post-region)
-(global-set-key "\C-ceb" 'evernote-browser)
-
 ;; now either el-get is `require'd already, or have been `load'ed by the
 ;; el-get installer.
-(add-to-list 'el-get-recipe-path (expand-file-name "~/prg/el-get/recipes"))
-
+;; (add-to-list 'el-get-recipe-path (expand-file-name "~/prg/el-get/recipes"))
 (require 'package)
 (package-initialize)
 
@@ -338,20 +265,6 @@ Emacs buffers are those whose name starts with *."
 (setq TeX-PDF-mode t)
 ;; set alt keys for meta
 (setq mac-option-modifier 'meta)
-;; only works in cocoa version
-;; (mac-key-mode 1)
-
-;;  http://stackoverflow.com/questions/69934/set-4-space-indent-in-emacs-in-text-mode
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(custom-set-variables
-    ;; custom-set-variables was added by Custom.
-    ;; If you edit it by hand, you could mess it up, so be careful.
-    ;; Your init file should contain only one such instance.
-    ;; If there is more than one, they won't work right.
-   '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60))))
-(setq-default indent-line-function 'indent-relative)
-;;(setq indent-line-function 'insert-tab)
 
 ;;no popup when opening buffer from terminal
 (setq-default ns-pop-up-frames nil)
@@ -363,10 +276,6 @@ Emacs buffers are those whose name starts with *."
     (while (re-search-forward "[ \t]+$" nil t)
       (replace-match "" nil nil))))
 (add-hook 'write-file-hooks 'remove-trailing-whitespace)
-
-;; Indentation
-(setq default-tab-width 2)
-(setq c-basic-offset 2)
 
 ;; yas with ido-ubiquotous
 ;;  Completing point by some yasnippet key
@@ -392,7 +301,7 @@ Emacs buffers are those whose name starts with *."
         (insert key)
         (yas-expand)))))
 
-(define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
+;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-ido-expand)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -402,11 +311,7 @@ Emacs buffers are those whose name starts with *."
                                '((tramp-parse-sconfig "/etc/ssh_config")
                                  (tramp-parse-sconfig "~/.ssh/config")))
 
-(global-set-key (kbd "<C-right>") 'right-word)
-(global-set-key (kbd "<C-left>") 'left-word)
-
-
-(toggle-debug-on-error 1)
+;; (toggle-debug-on-error 1)
 ;; Disable smart parens mode
 
 ;;  pos-tip
@@ -438,12 +343,6 @@ Emacs buffers are those whose name starts with *."
 ;; (defmacro after (mode &rest body)
 ;;   `(eval-after-load ,mode
 ;;      '(progn ,@body)))
-
-;; (after 'auto-complete
-;;        (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
-;;        (setq ac-use-menu-map t)
-;;        (define-key ac-menu-map "\C-n" 'ac-next)
-;;        (define-key ac-menu-map "\C-p" 'ac-previous))
 
 (add-hook 'lisp-mode-hook '(lambda ()
                              (local-set-key (kbd "RET") 'newline-and-indent)))
@@ -479,18 +378,7 @@ Emacs buffers are those whose name starts with *."
 (add-hook 'after-save-hook 'backup-each-save)
 ;;  (defvar backup-each-save-mirror-location "~/.backups")
 
-(define-key sp-keymap (kbd "H-<right>") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "H-<left>") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "C-<left>") nil)
-(define-key sp-keymap (kbd "C-<right>") nil)
-
-(global-set-key (kbd "C-<right>") 'right-word)
-(global-set-key (kbd "C-<left>") 'left-word)
-
-(global-set-key (kbd "C-x a a") `ag)
-
 ;; Divide files into partials.
-;; Does not seem to work..
 (defvar partial-dir (expand-file-name "personal/partials" prelude-dir)
   "This directory is for your personal configuration.")
         (message "Loading personal configuration files in %s..." partial-dir)
@@ -499,8 +387,6 @@ Emacs buffers are those whose name starts with *."
     (message "Loading personal configuration files in %s..." partial-dir)
   (mapc 'load (directory-files partial-dir 't "^[^#].*el$")))
 
-;;(push 'company-robe company-backends)
-(add-hook 'robe-mode-hook 'ac-robe-setup)
 
 ;; magit setup.
 (global-set-key (kbd "C-c g") 'magit-status)
@@ -512,9 +398,125 @@ Emacs buffers are those whose name starts with *."
                (>= emacs-major-version 24))
       (server-start)))
 
+
+;; Shows function signature in elisp mode.
+(add-hook 'prelude-emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
+;; smartparens
+;; https://ebzzry.github.io/emacs-pairs.html
 ;; Prevent behavior of smartparens.el inserting / for quotes.
 ;;  http://stackoverflow.com/questions/21661737/new-to-emacs-when-i-type-is-automatically-inserted
 (setq sp-autoescape-string-quote nil)
+
+;; Define functions for wrapping with pairs.
+(defmacro def-pairs (pairs)
+  `(progn
+     ,@(loop for (key . val) in pairs
+             collect
+             `(defun ,(read (concat
+                             "wrap-with-"
+                             (prin1-to-string key)
+                             "s"))
+                  (&optional arg)
+                (interactive "p")
+                (sp-wrap-with-pair ,val)))))
+
+(def-pairs ((paren        . "(")
+            (bracket      . "[")
+            (brace        . "{")
+            (single-quote . "'")
+            (double-quote . "\"")
+            (back-quote   . "`")))
+
+;; Define key bindings. Remove bindings for C-arrow movement.
+(bind-keys
+ :map smartparens-mode-map
+ ("C-M-a" . sp-beginning-of-sexp)
+ ("C-M-e" . sp-end-of-sexp)
+
+ ;; ("C-<down>" . sp-down-sexp)
+ ;; ("C-<up>"   . sp-up-sexp)
+ ("M-<down>" . sp-backward-down-sexp)
+ ("M-<up>"   . sp-backward-up-sexp)
+
+ ("C-M-f" . sp-forward-sexp)
+ ("C-M-b" . sp-backward-sexp)
+
+ ("C-M-n" . sp-next-sexp)
+ ("C-M-p" . sp-previous-sexp)
+
+ ("C-S-f" . sp-forward-symbol)
+ ("C-S-b" . sp-backward-symbol)
+
+ ("C-<right>" . nil)
+ ("M-<right>" . nil)
+ ("C-<left>"  . sp-backward-slurp-sexp)
+ ("M-<left>"  . sp-backward-barf-sexp)
+
+ ("C-M-t" . sp-transpose-sexp)
+ ("C-M-k" . sp-kill-sexp)
+ ("C-k"   . sp-kill-hybrid-sexp)
+ ("M-k"   . sp-backward-kill-sexp)
+ ("C-M-w" . sp-copy-sexp)
+
+ ("C-M-d" . delete-sexp)
+
+ ("M-<backspace>" . backward-kill-word)
+ ("C-<backspace>" . sp-backward-kill-word)
+ ([remap sp-backward-kill-word] . backward-kill-word)
+
+ ("M-[" . sp-backward-unwrap-sexp)
+ ("M-]" . sp-unwrap-sexp)
+
+ ("C-x C-t" . sp-transpose-hybrid-sexp)
+
+ ("C-c ("  . wrap-with-parens)
+ ("C-c ["  . wrap-with-brackets)
+ ("C-c {"  . wrap-with-braces)
+ ("C-c '"  . wrap-with-single-quotes)
+ ("C-c \"" . wrap-with-double-quotes)
+ ("C-c _"  . wrap-with-underscores)
+ ("C-c `"  . wrap-with-back-quotes))
+;; end smartparens.
+
+;; Custom key bindings.
+;;Bind compile. \C stands for ctrl key.
+(global-set-key "\C-cl" 'compile)
+
+(global-set-key (kbd "<f5>") 'load-file) ; Load file
+(global-set-key (kbd "<f6>") 'package-list-packages) ; list packages
+
+(define-key sp-keymap (kbd "H-<right>") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "H-<left>") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "C-<left>") nil)
+(define-key sp-keymap (kbd "C-<right>") nil)
+
+(global-unset-key (kbd "C-<right>"))
+(global-unset-key (kbd "C-<left>"))
+(global-set-key (kbd "C-<right>") 'right-word)
+(global-set-key (kbd "C-<left>") 'left-word)
+
+(global-set-key (kbd "C-x a a") `ag)
+
+;; swap to have to have similar behavior as shell.
+(global-set-key "\C-w" 'backward-kill-word)
+(global-set-key "\C-x\C-k" 'kill-region)
+
+(global-set-key (kbd "<C-right>") 'right-word)
+(global-set-key (kbd "<C-left>") 'left-word)
+
+;; Auto-refresh dired on file change
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+
+;; customize flycheck temp file prefix
+(setq-default flycheck-temp-prefix ".flycheck")
+
+;; https://github.com/purcell/exec-path-from-shell
+;; ensure environment variables inside Emacs look the same as in the user's shell.
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
 
 (provide 'patyoon)
 ;;; patyoon.el ends here
