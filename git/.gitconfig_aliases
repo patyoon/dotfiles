@@ -9,6 +9,8 @@
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
 	prune-merged = ! "git branch --merged master | grep -v -E '^(\\* |  master$)' | xargs -n 1 git branch -d"
   prune-merged-prod = ! "git branch --merged production | grep -v -E '^(\\* |  master$)' | xargs -n 1 git branch -d"
+  reb-prod = rebase origin/production
+  new-b = "!f() { git checkout -b patrick--\"$1\"; }; f"
   gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
 	prune-empty="git filter-branch -f --prune-empty -- --all"
   files = diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT

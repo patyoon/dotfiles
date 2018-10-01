@@ -338,7 +338,9 @@ minibuffer"
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)
 (setq flycheck-check-syntax-automatically '(save))
+(setq flycheck-python-flake8-executable (executable-find "python3"))
 (bounds-of-thing-at-point 'symbol)
+
 
 ;; (defmacro after (mode &rest body)
 ;;   `(eval-after-load ,mode
@@ -508,7 +510,6 @@ minibuffer"
 ;; Auto-refresh dired on file change
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 
-
 ;; customize flycheck temp file prefix
 (setq-default flycheck-temp-prefix ".flycheck")
 
@@ -516,7 +517,15 @@ minibuffer"
 ;; ensure environment variables inside Emacs look the same as in the user's shell.
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
+(set-default-font "Monaco 10")
 
+;; Move point to the next occurrance of the char and can type immediately.
+(global-set-key (kbd "M-m") 'iy-go-to-char)
+
+;; Save recentf every 30 minutes. By default `recentf-save-list' is called on `kill-emacs-hook'.
+(run-at-time nil (* 30 60) 'recentf-save-list)
+
+(setq projectile-completion-system 'ido)
 
 (provide 'patyoon)
 ;;; patyoon.el ends here

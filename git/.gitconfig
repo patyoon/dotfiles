@@ -29,7 +29,7 @@
 [web]
 	browser = google-chrome
 [rerere]
-	enabled = 1
+	enabled = true
 	autoupdate = 1
 [help]
 	autocorrect = 1

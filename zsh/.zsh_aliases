@@ -67,12 +67,6 @@ alias ff="find . -name"
 
 alias rmwhitespace="sed -e 's/^ *//g' -e 's/ *$//g'"
 
-alias eniac='ssh yeyoon@eniac.seas.upenn.edu'
-alias cis505='ssh cis505@eniac.seas.upenn.edu'
-alias shepard='ssh 158.130.51.23 -l yeyoon'
-alias shepardy='ssh -Y 158.130.51.23 -l yeyoon'
-alias wwbp='ssh yeyoon@ssh.wwbp.org'
-alias rms='ssh yeyoon@rms.wharton.upenn.edu'
 alias emacsw='/Applications/Emacs.app/Contents/MacOS/Emacs'
 alias killemacs='kill `ps -A | grep Emacs | sed "s/^ *//g" | cut -f1 -d " "`'
 alias ..='cd ..'
@@ -89,3 +83,7 @@ alias nginx-restart='sudo launchctl unload -w /Library/LaunchDaemons/org.macport
 alias pip-upgrade-all='pip freeze --local | grep -v "^\-e" | cut -d = -f 1  | xargs pip install -U'
 alias ipythone='ipython --no-banner --no-confirm-exit'
 
+alias delete_orig='for f in ./**/*.orig ; do rm -f $f; done; && find . -type f -regex ".*BACKUP.*"  -exec rm {} +\n && find . -type f -regex ".*LOCAL.*" -exec rm {} +\n && find . -type f -regex ".*REMOTE.*" -exec rm {} +\n'
+alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+
+alias opene="open -a Emacs.app"

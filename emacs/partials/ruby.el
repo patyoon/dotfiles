@@ -56,6 +56,32 @@
 
 ;; Indentation of Ruby statements.
 (setq ruby-indent-level 2)
+;; To avoid indentation like:
+;; default_attributes({
+;;                    'instance_metadata' => {
+;;                    'security_groups' => [
+;;                                          'allow_nerd_ssh',
+(setq ruby-use-smie nil)
+(setq enh-ruby-deep-indent-paren nil)
+(setq enh-ruby-bounce-deep-indent t)
+
+;; (defadvice ruby-indent-line (after unindent-closing-paren activate)
+;;   "Indent sole parenthesis in loca's way."
+;;   (let ((column (current-column))
+;;         indent offset)
+;;     (save-excursion
+;;       (back-to-indentation)
+;;       (let ((state (syntax-ppss)))
+;;         (setq offset (- column (current-column)))
+;;         (when (and (eq (char-after) ?\))
+;;                    (not (zerop (car state))))
+;;           (goto-char (cadr state))
+;;           (setq indent (current-indentation)))))
+;;     (when indent
+;;       (indent-line-to indent)
+;;       (when (> offset 0) (forward-char offset)))))
+
+(add-hook 'ruby-mode-hook (lambda () (setq-local indent-line-function 'ruby-indent-line)))
 
 (provide `ruby)
 ;;; ruby.el ends here
