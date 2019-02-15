@@ -1,12 +1,11 @@
-
 require 'mkmf'
 
 FILES = Hash.new
 FILES[:git] = %w(.gitconfig .gitignore .gitignore_global .gitconfig_aliases)
-FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases)
+FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases .zsh_airbnb)
 FILES[:python] = %w(.pylintrc .pythonstartup)
 FILES[:misc] = %w(.screenrc .inputrc tmux.conf)
-FILES[:emacs] = %w(patyoon.el)
+FILES[:emacs] = %w(patyoon.el partials)
 FILES[:ruby] = %w(.gemrc .pryrc .rdebugrc)
 
 PACKAGES = Hash.new
@@ -73,6 +72,7 @@ namespace 'install' do
   task 'emacs' do
     clone_emacs_prelude
     link_file(PRELUDE_MODULE_FILE, 'emacs', EMACS_PATH)
+    puts "Install dotfile to /personal"
     FILES[:emacs].each{ |file| determine_action(
       file, "emacs", "#{EMACS_PATH}/personal") }
   end
@@ -123,6 +123,9 @@ namespace 'update' do
 end
 
 def determine_action(file, type, dest=ENV['HOME'])
+  if !Dir.exists? dest
+    system "mkdir #{dest}"
+  end
   if File.exists? "#{dest}/#{file}"
     if $replace_all
       replace_file(file, type, dest)

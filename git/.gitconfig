@@ -52,7 +52,7 @@
 	default = current
 [user]
 	name = Patrick Yoon
-  email = me@patyoon.com
+	email = patrick.yoon@airbnb.com
 [include]
   path = .gitconfig_airbnb
 [include]

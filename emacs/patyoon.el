@@ -376,10 +376,6 @@ minibuffer"
 
 (setenv "TMPDIR" "/tmp")
 
-(require 'backup-each-save)
-(add-hook 'after-save-hook 'backup-each-save)
-;;  (defvar backup-each-save-mirror-location "~/.backups")
-
 ;; Divide files into partials.
 (defvar partial-dir (expand-file-name "personal/partials" prelude-dir)
   "This directory is for your personal configuration.")
@@ -430,55 +426,55 @@ minibuffer"
             (double-quote . "\"")
             (back-quote   . "`")))
 
-;; Define key bindings. Remove bindings for C-arrow movement.
-(bind-keys
- :map smartparens-mode-map
- ("C-M-a" . sp-beginning-of-sexp)
- ("C-M-e" . sp-end-of-sexp)
+;; ;; Define key bindings. Remove bindings for C-arrow movement.
+;; (bind-keys
+;;  :map smartparens-mode-map
+;;  ("C-M-a" . sp-beginning-of-sexp)
+;;  ("C-M-e" . sp-end-of-sexp)
 
- ;; ("C-<down>" . sp-down-sexp)
- ;; ("C-<up>"   . sp-up-sexp)
- ("M-<down>" . sp-backward-down-sexp)
- ("M-<up>"   . sp-backward-up-sexp)
+;;  ;; ("C-<down>" . sp-down-sexp)
+;;  ;; ("C-<up>"   . sp-up-sexp)
+;;  ("M-<down>" . sp-backward-down-sexp)
+;;  ("M-<up>"   . sp-backward-up-sexp)
 
- ("C-M-f" . sp-forward-sexp)
- ("C-M-b" . sp-backward-sexp)
+;;  ("C-M-f" . sp-forward-sexp)
+;;  ("C-M-b" . sp-backward-sexp)
 
- ("C-M-n" . sp-next-sexp)
- ("C-M-p" . sp-previous-sexp)
+;;  ("C-M-n" . sp-next-sexp)
+;;  ("C-M-p" . sp-previous-sexp)
 
- ("C-S-f" . sp-forward-symbol)
- ("C-S-b" . sp-backward-symbol)
+;;  ("C-S-f" . sp-forward-symbol)
+;;  ("C-S-b" . sp-backward-symbol)
 
- ("C-<right>" . nil)
- ("M-<right>" . nil)
- ("C-<left>"  . sp-backward-slurp-sexp)
- ("M-<left>"  . sp-backward-barf-sexp)
+;;  ("C-<right>" . nil)
+;;  ("M-<right>" . nil)
+;;  ("C-<left>"  . sp-backward-slurp-sexp)
+;;  ("M-<left>"  . sp-backward-barf-sexp)
 
- ("C-M-t" . sp-transpose-sexp)
- ("C-M-k" . sp-kill-sexp)
- ("C-k"   . sp-kill-hybrid-sexp)
- ("M-k"   . sp-backward-kill-sexp)
- ("C-M-w" . sp-copy-sexp)
+;;  ("C-M-t" . sp-transpose-sexp)
+;;  ("C-M-k" . sp-kill-sexp)
+;;  ("C-k"   . sp-kill-hybrid-sexp)
+;;  ("M-k"   . sp-backward-kill-sexp)
+;;  ("C-M-w" . sp-copy-sexp)
 
- ("C-M-d" . delete-sexp)
+;;  ("C-M-d" . delete-sexp)
 
- ("M-<backspace>" . backward-kill-word)
- ("C-<backspace>" . sp-backward-kill-word)
- ([remap sp-backward-kill-word] . backward-kill-word)
+;;  ("M-<backspace>" . backward-kill-word)
+;;  ("C-<backspace>" . sp-backward-kill-word)
+;;  ([remap sp-backward-kill-word] . backward-kill-word)
 
- ("M-[" . sp-backward-unwrap-sexp)
- ("M-]" . sp-unwrap-sexp)
+;;  ("M-[" . sp-backward-unwrap-sexp)
+;;  ("M-]" . sp-unwrap-sexp)
 
- ("C-x C-t" . sp-transpose-hybrid-sexp)
+;;  ("C-x C-t" . sp-transpose-hybrid-sexp)
 
- ("C-c ("  . wrap-with-parens)
- ("C-c ["  . wrap-with-brackets)
- ("C-c {"  . wrap-with-braces)
- ("C-c '"  . wrap-with-single-quotes)
- ("C-c \"" . wrap-with-double-quotes)
- ("C-c _"  . wrap-with-underscores)
- ("C-c `"  . wrap-with-back-quotes))
+;;  ("C-c ("  . wrap-with-parens)
+;;  ("C-c ["  . wrap-with-brackets)
+;;  ("C-c {"  . wrap-with-braces)
+;;  ("C-c '"  . wrap-with-single-quotes)
+;;  ("C-c \"" . wrap-with-double-quotes)
+;;  ("C-c _"  . wrap-with-underscores)
+;;  ("C-c `"  . wrap-with-back-quotes))
 ;; end smartparens.
 
 ;; Custom key bindings.

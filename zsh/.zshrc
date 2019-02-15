@@ -288,6 +288,11 @@ setopt HIST_IGNORE_DUPS
 
 # DIRSTACK
 
+if [ ! -f $HOME/.cache/zsh/dirs ]; then
+    mkdir -p $HOME/.cache/zsh
+    touch $HOME/.cache/zsh/dirs
+fi
+
 DIRSTACKFILE="$HOME/.cache/zsh/dirs"
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
     dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
@@ -332,12 +337,12 @@ for f in .zsh_*aliases; do
     source $f
 done
 
-if [ ! -f $HOME/.cache/zsh/dirs ]; then
-  mkdir -p $HOME/.cache/zsh
-  touch $HOME/.cache/zsh/dirs
-fi
+for f in .zsh_airbnb*; do
+    echo "Sourcing $f"
+    source $f
+done
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/.rvm/bin:/usr/local/sbin # Add RVM to PATH for scripting
 
 export EDITOR=emacs
 
@@ -348,5 +353,8 @@ if [ -d "$HOME/workspace/bin" ]; then
     PATH=$PATH:$HOME/workspace/bin
 fi
 
-# https://github.com/nvbn/thefuck
+# eval $(pyenv init -)# https://github.com/nvbn/thefuck
 # alias fuck='$(thefuck $(fc -ln -1))'
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+export PATH=$JAVA_HOME/bin:$PATH
