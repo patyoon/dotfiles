@@ -353,7 +353,11 @@ if [ -d "$HOME/workspace/bin" ]; then
     PATH=$PATH:$HOME/workspace/bin
 fi
 
-# eval $(pyenv init -)# https://github.com/nvbn/thefuck
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
+# https://github.com/nvbn/thefuck
 # alias fuck='$(thefuck $(fc -ln -1))'
 
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)

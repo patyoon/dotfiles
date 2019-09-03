@@ -3,16 +3,17 @@ export PATH=$PATH:/opt/airbnb/bin:$SYSOPS_PATH/optica_tools
 
 # afdev
 export DATA_DIR=$HOME/workspace/data #PATH WHERE YOU CLONED THE DATA REPO
-export AFDEV_HOST="i-0acf144b3ec2115b0.inst.aws.us-east-1.prod.musta.ch" #CHOOSE A DIFFERENT HOST
+export AFDEV_HOST="i-03923bd837dbdc0f6.inst.aws.us-east-1.prod.musta.ch" #CHOOSE A DIFFERENT HOST
+export CDH_GOLD_HOST="i-9dda8d4f.inst.aws.us-east-1.prod.musta.ch"
 export AFDEV_PORT=61903 #CHOOSE A DIFFERENT PORT
 
 # optional
 export AFDEV_USER="patrick_yoon"
 
 # TODO: Set your environment variables below
-export BIGHEAD_OS=~/repos/bighead
-export BIGHEAD_TH=~/repos/treehouse/projects/bighead
-export AFDEV_HOST=i-0a55744d91bc4533a.inst.aws.airbnb.com
+export BIGHEAD_OS=~/workspace/bighead
+export BIGHEAD_TH=~/workspace/treehouse/projects/bighead
+export ML_MODELS=~/workspace/ml_models/
 
 # clean up maven
 function zbuild {
@@ -28,15 +29,25 @@ function zssync {
     popd
 }
 
+function bhsync {
+    pushd $BIGHEAD_OS/zipline/batch
+    ../../gradlew shadowJar && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:/tmp/batch-0.0.1-local-all.jar
+    popd
+}
+
+function ml_models_sync {
+    scp -r $ML_MODELS $AFDEV_HOST:/tmp/
+}
+
 function zbsync {
-    pushd $BIGHEAD_TH/bighead/zipline/batch
+    pushd $BIGHEAD_TH/zipline/batch
     ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:/tmp/zipline-batch.jar
     popd
 }
 
 function gen_thrift {
     pushd $BIGHEAD_OS
-    thrift --gen py -out python/bighead/_thrift/ thrift/schemas/zipline_data.thrift
+    thrift --gen py -out python/bighead/_thrift/ thrift/schemas/zipli\ne_data.thrift
     popd
 }
 
@@ -45,3 +56,8 @@ function gen_zipline_thrift {
     thrift --gen py -out python/bighead/_thrift/ zipline/if/Api.thrift
     popd
 }
+
+alias ssh_tunnel="$DATA_DIR/scripts/compute-frameworks/utils/ssh_tunnel"
+export REDSPOT_TEST=$(optica role=redspot-test-01)
+
+

@@ -523,5 +523,7 @@ minibuffer"
 
 (setq projectile-completion-system 'ido)
 
+(pyenv-mode)
+
 (provide 'patyoon)
 ;;; patyoon.el ends here
