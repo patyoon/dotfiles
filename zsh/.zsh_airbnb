@@ -13,51 +13,102 @@ export AFDEV_USER="patrick_yoon"
 # TODO: Set your environment variables below
 export BIGHEAD_OS=~/workspace/bighead
 export BIGHEAD_TH=~/workspace/treehouse/projects/bighead
-export ML_MODELS=~/workspace/ml_models/
+export ML_MODELS_REPO=~/workspace/ml_models/
+export ZIPLINE_REPO=$ML_MODELS_REPO/zipline
+export PYTHONPATH=$ML_MODELS/zipline/:$PYTHONPATH
 
-# clean up maven
+# compile thrift
+function compile_thrift {
+    pushd $ML_MODELS_REPO/zipline/zipline2/schema; thrift --gen py -out . api.thrift;  popd
+}
+
+# materialize a join
+function materialize_join {
+    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins; popd
+}
+
+# materialize a group_by
+function materialize_group_by {
+    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys; popd
+}
+
+# materialize a staging_query
+function materialize_staging_query {
+    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries; popd
+}
+
+# Materialize all V2 configs and compile thrift.
+function materialize {
+    pushd $ZIPLINE_REPO/zipline2/schema
+    thrift --gen py -out . api.thrift
+    popd
+    pushd $ZIPLINE_REPO/
+    rm -rf production/joins production/group_bys production/staging_queries
+    python3.7 zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins
+    python3.7 zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys
+    python3.7 zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries
+    popd
+}
+
+# clean up maven and build OS zipline.
 function zbuild {
     rm -rf ~/.m2/repository/ai/bighead/
     pushd $BIGHEAD_OS/thrift/generic > /dev/null && ../../gradlew publish && popd > /dev/null
     pushd $BIGHEAD_OS/zipline/ > /dev/null && ../gradlew publish && popd > /dev/null
 }
 
-# make sure you set the BIGHEAD_VERSION in ~/repos/treehouse/gradle.properties to 0.0.1-local2
+# make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
 function zssync {
     pushd $BIGHEAD_TH/zipline/streaming
     ../../../../gradlew shadowJar && scp build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
     popd
 }
 
-function bhsync {
-    pushd $BIGHEAD_OS/zipline/batch
-    ../../gradlew shadowJar && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:/tmp/batch-0.0.1-local-all.jar
-    popd
-}
-
-function ml_models_sync {
-    scp -r $ML_MODELS $AFDEV_HOST:/tmp/
-}
-
+# build treehouse zipline batch and sync it to airflow devbox.
 function zbsync {
     pushd $BIGHEAD_TH/zipline/batch
-    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:/tmp/zipline-batch.jar
+    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:~/zipline-batch.jar
     popd
 }
 
-function gen_thrift {
-    pushd $BIGHEAD_OS
-    thrift --gen py -out python/bighead/_thrift/ thrift/schemas/zipli\ne_data.thrift
+function bhsync {
+    pushd $BIGHEAD_OS/zipline/batch
+    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:~/batch-0.0.1-local-all.jar
     popd
+}
+
+# sync ml_models repo to airflow devbox.
+function ml_models_sync {
+    rsync -avh --include='zipline' --exclude='.git/' --delete $ZIPLINE_REPO $AFDEV_HOST:~/ml_models/
 }
 
 function gen_zipline_thrift {
     pushd $BIGHEAD_OS
-    thrift --gen py -out python/bighead/_thrift/ zipline/if/Api.thrift
+    thrift --gen py -out python/bighead/_thrift/ thrift/schemas/zipline_data.thrift
     popd
 }
+
+function gen_bighead_thrift {
+    pushd $BIGHEAD_OS
+    thrift --gen py -out python/bighead/_thrift/ thrift/schemas/model.thrift
+    popd
+}
+
+function gen_ml_thrift {
+    pushd $BIGHEAD_ML/zipline/zipline2/schema
+    thrift --gen py -out . api.thrift
+    popd
+}
+
 
 alias ssh_tunnel="$DATA_DIR/scripts/compute-frameworks/utils/ssh_tunnel"
 export REDSPOT_TEST=$(optica role=redspot-test-01)
 
+
+# For compilers to find zlib you may need to set:
+export LDFLAGS="${LDFLAGS} -L/usr/local/opt/zlib/lib"
+export CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/zlib/include"
+
+# For pkg-config to find zlib you may need to set:
+export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig"
 
