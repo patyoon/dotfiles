@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-local=$1
-remote=$2
-base=$3
-merged=$4
-
-/Applications/Emacs.app/Contents/MacOS/Emacs -nw --eval "(emerge-files-with-ancestor nil \"$local\" \"$remote\" \"$base\" \"$merged\")"
