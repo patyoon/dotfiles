@@ -1,5 +1,13 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+PATH=$PATH:$HOME/.rvm/bin:/usr/local/sbin # Add RVM to PATH for scripting
+
+if [ -d "$HOME/workspace/bin" ]; then
+    PATH=$PATH:$HOME/workspace/bin
+fi
+
 #virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
 if [ ! -d $WORKON_HOME ]; then

@@ -3,7 +3,7 @@ export PATH=$PATH:/opt/airbnb/bin:$SYSOPS_PATH/optica_tools
 
 # afdev
 export DATA_DIR=$HOME/workspace/data #PATH WHERE YOU CLONED THE DATA REPO
-export AFDEV_HOST="i-03923bd837dbdc0f6.inst.aws.us-east-1.prod.musta.ch" #CHOOSE A DIFFERENT HOST
+export AFDEV_HOST="i-0b911c61132abd2e1.inst.aws.airbnb.com"
 export CDH_GOLD_HOST="i-9dda8d4f.inst.aws.us-east-1.prod.musta.ch"
 export AFDEV_PORT=61903 #CHOOSE A DIFFERENT PORT
 
@@ -19,22 +19,22 @@ export PYTHONPATH=$ML_MODELS/zipline/:$PYTHONPATH
 
 # compile thrift
 function compile_thrift {
-    pushd $ML_MODELS_REPO/zipline/zipline2/schema; thrift --gen py -out . api.thrift;  popd
+    pushd $BIGHEAD_OS/python/zipline2/schema; thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift;  popd
 }
 
 # materialize a join
 function materialize_join {
-    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins; popd
+    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins; popd
 }
 
 # materialize a group_by
 function materialize_group_by {
-    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys; popd
+    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys; popd
 }
 
 # materialize a staging_query
 function materialize_staging_query {
-    pushd $ZIPLINE_REPO/; python3.7 zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries; popd
+    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries; popd
 }
 
 # Materialize all V2 configs and compile thrift.
@@ -57,6 +57,12 @@ function zbuild {
     pushd $BIGHEAD_OS/zipline/ > /dev/null && ../gradlew publish && popd > /dev/null
 }
 
+function bhsync {
+    pushd $BIGHEAD_OS/zipline/batch
+    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:~/batch-0.0.1-local-all.jar
+    popd
+}
+
 # make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
 function zssync {
     pushd $BIGHEAD_TH/zipline/streaming
@@ -68,12 +74,6 @@ function zssync {
 function zbsync {
     pushd $BIGHEAD_TH/zipline/batch
     ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:~/zipline-batch.jar
-    popd
-}
-
-function bhsync {
-    pushd $BIGHEAD_OS/zipline/batch
-    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:~/batch-0.0.1-local-all.jar
     popd
 }
 

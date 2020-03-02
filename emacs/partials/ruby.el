@@ -28,9 +28,6 @@
 ;; Also better to have newline-and-indent method binding.
 (setq ruby-deep-indent-paren nil)
 
-;; (defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
-;;   (rvm-activate-corresponding-ruby))
-
 (add-to-list 'auto-mode-alist
              '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist
@@ -40,17 +37,10 @@
 (require 'auto-complete-config)
 (add-to-list 'ac-modes 'ruby-mode)
 
-(rvm-use-default)
-
-(require 'highlight-indentation)
-(add-hook 'ruby-mode-hook
-          (lambda () (highlight-indentation-current-column-mode)))
-
 (defun my-ruby-mode-hook ()
   "custom hooks for ruby mode."
   (setq whitespace-line-column 100)
   (add-hook 'ruby-mode-hook 'rubocop-mode)
-  (add-hook 'ruby-mode-hook 'robe-mode)
   )
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 

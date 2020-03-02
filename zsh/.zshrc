@@ -55,9 +55,6 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
@@ -88,11 +85,11 @@ countdeps() {
     LC_ALL=C pacman -Qi $1 | grep Required | sed -e 's/Required By    : \([a-z ]*\)/\1/' -e 's/  / /g' | wc -w
 }
 
-search() {
+function search {
     pacman -Ss $@ ; rawr -s "$@"
 }
 
-rcd() {
+function rcd {
     if [[ `whoami` == "root" ]]; then
         /etc/rc.d/"$1" "$2"
     elif [[ `whoami` == "ogion" ]]; then
@@ -100,7 +97,7 @@ rcd() {
     fi
 }
 
-x () {
+function x {
     if [ -f $1 ]; then
         case $1 in
             *.tar.bz2)  tar -jxvf $1        ;;
@@ -126,7 +123,7 @@ x () {
 DIRSTACKSIZE=${DIRSTACKSIZE:-20}
 DIRSTACKFILE=${DIRSTACKFILE:-${HOME}/.zdirs}
 
-dirjump() {
+function dirjump {
     emulate -L zsh
     autoload -U colors
     local color=$fg_bold[blue]
@@ -240,7 +237,7 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Get colors in manual pages
-man() {
+function man {
     env \
         LESS_TERMCAP_mb=$(printf "\e[1;31m") \
         LESS_TERMCAP_md=$(printf "\e[1;31m") \
@@ -253,7 +250,7 @@ man() {
 }
 
 # Change directory to the current Finder directory (OS X)
-cdf() {
+function cdf {
     target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
     if [ "$target" != "" ]; then
         cd "$target"; pwd
@@ -263,7 +260,7 @@ cdf() {
 }
 
 # One command to update all.
-update() {
+function update {
     #local brew="brew update; brew upgrade;"
     local macport="port selfupdate; sudo port upgrade outdated;"
     local gisty="gisty pull_all; gisty sync_delete"
@@ -326,8 +323,6 @@ export VIRTUALENVWRAPPER_PYTHON=`which python`
 export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
 # source `which virtualenvwrapper.sh`
 
-# add ec2 api tools to path
-export PATH=$PATH:$EC2_HOME/bin
 export PYTHONSTARTUP=$HOME/.pythonstartup
 
 cd $HOME
@@ -342,16 +337,10 @@ for f in .zsh_airbnb*; do
     source $f
 done
 
-PATH=$PATH:$HOME/.rvm/bin:/usr/local/sbin # Add RVM to PATH for scripting
-
-export EDITOR=emacs
+export EDITOR='emacs'
 
 # TODO: Only run after checking OS.
 defaults write NSGlobalDomain KeyRepeat -int 0.02
-
-if [ -d "$HOME/workspace/bin" ]; then
-    PATH=$PATH:$HOME/workspace/bin
-fi
 
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
@@ -362,3 +351,7 @@ fi
 
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export PATH=$JAVA_HOME/bin:$PATH
+
+function get-instance-id() {
+    echo $1 | xargs -I {} bash -c "curl -s 'https://billow.d.musta.ch/ec2?q=privateHostname==\"{}\"' | jq -r '.[].id'"
+}

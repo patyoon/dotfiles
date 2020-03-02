@@ -216,8 +216,6 @@ minibuffer"
 (define-key ac-menu-map "\C-p" 'ac-previous)
 (setq ac-ignore-case nil)
 
-(add-hook 'robe-mode-hook 'ac-robe-setup)
-
 ;;Disable flymake GUI warnings (they cause crash)
 (setq flymake-gui-warnings-enabled nil)
 
@@ -333,7 +331,7 @@ minibuffer"
 ;;   (setq auto-save-file-name-transforms
 ;;            '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
 ;;             ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "/usr/local/sacha-backup/\\2" t)))
-
+(setq python-shell-interpreter "/Users/patrick_yoon/.pyenv/shims/python")
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq flycheck-highlighting-mode 'lines)

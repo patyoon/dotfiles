@@ -150,6 +150,7 @@
 
 (setq virtual-env (getenv "VIRTUAL_ENV"))
 
+
 ;; (if (not (equal virtual-env 'nil))
 ;;     (setq load-path (append
 ;;                      (list (concat virtual-env "/src/pymacs" ))

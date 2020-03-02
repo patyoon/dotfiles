@@ -68,6 +68,7 @@ alias ff="find . -name"
 alias rmwhitespace="sed -e 's/^ *//g' -e 's/ *$//g'"
 
 alias emacsw='/Applications/Emacs.app/Contents/MacOS/Emacs'
+alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
 alias killemacs='kill `ps -A | grep Emacs | sed "s/^ *//g" | cut -f1 -d " "`'
 alias ..='cd ..'
 alias ...='cd ../../'
