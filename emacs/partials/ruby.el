@@ -37,12 +37,12 @@
 (require 'auto-complete-config)
 (add-to-list 'ac-modes 'ruby-mode)
 
-(defun my-ruby-mode-hook ()
-  "custom hooks for ruby mode."
-  (setq whitespace-line-column 100)
-  (add-hook 'ruby-mode-hook 'rubocop-mode)
-  )
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+;; (defun my-ruby-mode-hook ()
+;;   "custom hooks for ruby mode."
+;;   (setq whitespace-line-column 100)
+;;   (add-hook 'ruby-mode-hook 'rubocop-mode)
+;;   )
+;; (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 ;; Indentation of Ruby statements.
 (setq ruby-indent-level 2)

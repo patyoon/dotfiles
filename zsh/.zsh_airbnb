@@ -12,11 +12,11 @@ export AFDEV_USER="patrick_yoon"
 
 # TODO: Set your environment variables below
 export BIGHEAD_OS=~/workspace/bighead
-export BIGHEAD_TH=~/workspace/treehouse/projects/bighead
+export TREEHOUSE_PATH=~/workspace/treehouse
+export BIGHEAD_TH=$TREEHOUSE_PATH/projects/bighead
 export ML_MODELS_REPO=~/workspace/ml_models/
 export ZIPLINE_REPO=$ML_MODELS_REPO/zipline
 export PYTHONPATH=$ML_MODELS/zipline/:$PYTHONPATH
-
 # compile thrift
 function compile_thrift {
     pushd $BIGHEAD_OS/python/zipline2/schema; thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift;  popd
@@ -24,29 +24,28 @@ function compile_thrift {
 
 # materialize a join
 function materialize_join {
-    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins; popd
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=joins/ --output_root=production; popd
 }
 
 # materialize a group_by
 function materialize_group_by {
-    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys; popd
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=group_bys/ --output_root=production; popd
 }
 
 # materialize a staging_query
 function materialize_staging_query {
-    pushd $ZIPLINE_REPO/; python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries; popd
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=staging_queries/ --output_root=production; popd
 }
 
 # Materialize all V2 configs and compile thrift.
 function materialize {
-    pushd $ZIPLINE_REPO/zipline2/schema
-    thrift --gen py -out . api.thrift
+    pushd $BIGHEAD_OS/python/zipline2/schema
+    thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift
     popd
     pushd $ZIPLINE_REPO/
-    rm -rf production/joins production/group_bys production/staging_queries
-    python3.7 zipline2/repo/materialize.py join --zipline_root_path=$ZIPLINE_REPO/joins/ --input_path=$1 --output_path=production/joins
-    python3.7 zipline2/repo/materialize.py group-by --zipline_root_path=$ZIPLINE_REPO/group_bys/ --input_path=$1 --output_path=production/group_bys
-    python3.7 zipline2/repo/materialize.py staging-query --zipline_root_path=$ZIPLINE_REPO/staging_queries/ --input_path=$1 --output_path=production/staging_queries
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=joins/ --output_root=production; popd
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=group_bys/ --output_root=production; popd
+    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=staging_queries/ --output_root=production; popd
     popd
 }
 
@@ -59,21 +58,29 @@ function zbuild {
 
 function bhsync {
     pushd $BIGHEAD_OS/zipline/batch
-    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:~/batch-0.0.1-local-all.jar
+    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:/tmp/batch-0.0.1-local-all.jar
     popd
 }
 
 # make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
 function zssync {
     pushd $BIGHEAD_TH/zipline/streaming
-    ../../../../gradlew shadowJar && scp build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
+    ../../../../gradlew shadowJar && rsync -P -avz -e ssh build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
     popd
 }
+
+# make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
+function zsrsync {
+    pushd $BIGHEAD_TH/zipline/streaming
+    ../../../../gradlew fatJar && time rsync -av -e ssh build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
+    popd
+}
+
 
 # build treehouse zipline batch and sync it to airflow devbox.
 function zbsync {
     pushd $BIGHEAD_TH/zipline/batch
-    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:~/zipline-batch.jar
+    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:/tmp/zipline-batch.jar
     popd
 }
 
@@ -112,3 +119,26 @@ export CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/zlib/include"
 # For pkg-config to find zlib you may need to set:
 export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig"
 
+function afdev_sync_bighead {
+    /usr/local/bin/rsync  -P -avz \
+    --exclude ".git/" \
+    --exclude ".gradle/" \
+    --exclude "**/build/classes" \
+    --exclude "**/build/generated" \
+    --exclude "**/build/libs/" \
+    --exclude "**/build/" \
+    --exclude "**/build/tmp/" \
+    --exclude "**/build/distributions/" \
+    -e ssh  $BIGHEAD_OS  $AFDEV_HOST:/home/patrick_yoon
+}
+
+function afdev_sync_treehouse {
+    /usr/local/bin/rsync  -P -avz \
+    --exclude ".git/" \
+    --exclude ".gradle/" \
+    --exclude "**/build/classes" \
+    --exclude "**/build/generated" \
+    --exclude "**/build/libs/" \
+    --exclude "**/build/tmp/" \
+    -e ssh  $TREEHOUSE_PATH  $AFDEV_HOST:/home/patrick_yoon
+}
