@@ -11,7 +11,6 @@ FILES[:ruby] = %w(.gemrc .pryrc .rdebugrc)
 PACKAGES = Hash.new
 PACKAGES[:python] = 'python_packages.txt'
 PACKAGES[:ruby] = 'Gemfile'
-PACKAGES[:brew] = 'brew_packages.txt'
 
 EMACS_PATH = "#{ENV['HOME']}/.emacs.d"
 PRELUDE_REPO_URL = 'https://github.com/bbatsov/prelude.git'
@@ -26,7 +25,7 @@ BREW_PACKAGE_FILE = 'brew_packages.txt'
 PYTHON_PACKAGE_FILE = 'python_packages.txt'
 
 namespace 'install' do
-  task 'all' => [:git, :zsh, :python, :emacs, :ruby] do
+  task 'all' => [:git, :zsh, :emacs, :brew] do
     puts 'Installed all!'
   end
 
@@ -80,16 +79,16 @@ namespace 'install' do
   task 'brew' do
     if !find_executable 'brew'
       system BREW_INSTALL_CMD
-      print "Install all packages in #{BREW_PACKAGE_FILE}? [yn] "
-      case STDIN.gets.chomp
-      when 'y'
-        system "cat brew/#{BREW_PACKAGE_FILE} | xrags brew install"
-        break
-      when 'n'
-        exit
-      else
-        puts "Invalid Input. Type one of [yn]"
-      end
+    end
+    print "Install all packages in Brewfile? [yn] "
+    case STDIN.gets.chomp
+    when 'y'
+      system "bash brew/brew.sh"
+      break
+    when 'n'
+      exit
+    else
+      puts "Invalid Input. Type one of [yn]"
     end
   end
 end
@@ -177,6 +176,10 @@ def clone_omz
   else
     system "git clone #{OMZ_REPO_URL} #{OMZ_PATH}"
     system "cd #{OMZ_PATH} && git submodule update --init --recursive"
+  end
+  if !File.exists?("~/.oh-my-zsh/custom/themes/powerlevel10k")
+    puts "installing powerlevel10k theme"
+    system "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"
   end
 end
 

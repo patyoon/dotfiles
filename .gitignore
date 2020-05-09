@@ -1,1 +1,3 @@
 .gitconfig_airbnb
+.DS_Store
+*.log

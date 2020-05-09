@@ -229,25 +229,7 @@ minibuffer"
 (global-subword-mode 1) ;move thru camelCaseWords
 
 (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . haskell-latex-mode))
-(autoload 'haskell-latex-mode "haskell-latex")
-
-(custom-set-variables
-
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(ansi-term-color-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(custom-enabled-themes (quote (deeper-blue)))
- '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "50be9f1476216575cabae8717557fca94642f8ca9c72b4bae09b9f1606233c67" default)))
- '(fci-rule-color "#383838"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(autoload 'haskell-latex-mode "")
 
 ;; now either el-get is `require'd already, or have been `load'ed by the
 ;; el-get installer.
@@ -255,10 +237,15 @@ minibuffer"
 (require 'package)
 (package-initialize)
 
+(load-theme 'molokai t)
+(setq custom-safe-themes t)
+
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+(setq prelude-theme 'molokai-theme)
 
 (setq TeX-PDF-mode t)
 ;; set alt keys for meta
@@ -522,6 +509,14 @@ minibuffer"
 (setq projectile-completion-system 'ido)
 
 (pyenv-mode)
+
+;; ITERM2 MOUSE SUPPORT
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+  )
 
 (provide 'patyoon)
 ;;; patyoon.el ends here
