@@ -16,7 +16,7 @@ export TREEHOUSE_PATH=~/workspace/treehouse
 export BIGHEAD_TH=$TREEHOUSE_PATH/projects/bighead
 export ML_MODELS_REPO=~/workspace/ml_models/
 export ZIPLINE_REPO=$ML_MODELS_REPO/zipline
-export PYTHONPATH=$ML_MODELS/zipline/:$PYTHONPATH
+
 # compile thrift
 function compile_thrift {
     pushd $BIGHEAD_OS/python/zipline2/schema; thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift;  popd
@@ -102,14 +102,14 @@ function gen_bighead_thrift {
 }
 
 function gen_ml_thrift {
-    pushd $BIGHEAD_ML/zipline/zipline2/schema
-    thrift --gen py -out . api.thrift
+    pushd $BIGHEAD_OS/zipline/python/zipline/schema
+    thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift
     popd
 }
 
 
 alias ssh_tunnel="$DATA_DIR/scripts/compute-frameworks/utils/ssh_tunnel"
-export REDSPOT_TEST=$(optica role=redspot-test-01)
+# export REDSPOT_TEST=$(optica role=redspot-test-01)
 
 
 # For compilers to find zlib you may need to set:
@@ -140,5 +140,5 @@ function afdev_sync_treehouse {
     --exclude "**/build/generated" \
     --exclude "**/build/libs/" \
     --exclude "**/build/tmp/" \
-    -e ssh  $TREEHOUSE_PATH  $AFDEV_HOST:/home/patrick_yoon
+    -e ssh  $TREEHOUSE_PATH  $AFDEV_HOST:/home/patrick_yoon --delete
 }

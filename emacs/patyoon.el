@@ -237,7 +237,7 @@ minibuffer"
 (require 'package)
 (package-initialize)
 
-(load-theme 'molokai t)
+(load-theme 'misterioso t)
 (setq custom-safe-themes t)
 
 (setq backup-directory-alist
@@ -245,7 +245,7 @@ minibuffer"
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(setq prelude-theme 'molokai-theme)
+(setq prelude-theme 'misterioso)
 
 (setq TeX-PDF-mode t)
 ;; set alt keys for meta
