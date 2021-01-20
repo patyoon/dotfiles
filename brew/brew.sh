@@ -10,5 +10,5 @@ brew upgrade
 
 # Save Homebrew’s installed location.
 BREW_PREFIX=$(brew --prefix)
-
-brew bundle install
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+brew bundle install --file $DIR/Brewfile

@@ -198,7 +198,7 @@ minibuffer"
 ;;          ad-do-it))
 
 ;; Autocomplete mode: nicer autocomplete rendering
-(require 'auto-complete-config)
+;; (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
 (global-auto-complete-mode t)
 (ac-config-default)
@@ -498,7 +498,7 @@ minibuffer"
 ;; ensure environment variables inside Emacs look the same as in the user's shell.
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
-(set-default-font "Monaco 10")
+;;(set-default-font "Monaco 10")
 
 ;; Move point to the next occurrance of the char and can type immediately.
 (global-set-key (kbd "M-m") 'iy-go-to-char)

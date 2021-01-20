@@ -25,7 +25,7 @@ BREW_PACKAGE_FILE = 'brew_packages.txt'
 PYTHON_PACKAGE_FILE = 'python_packages.txt'
 
 namespace 'install' do
-  task 'all' => [:git, :zsh, :emacs, :brew] do
+  task 'all' => [:git, :zsh, :brew, :emacs] do
     puts 'Installed all!'
   end
 
