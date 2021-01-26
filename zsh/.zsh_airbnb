@@ -142,3 +142,5 @@ function afdev_sync_treehouse {
     --exclude "**/build/tmp/" \
     -e ssh  $TREEHOUSE_PATH  patrick_yoon@$AFDEV_HOST:/home/patrick_yoon --delete
 }
+
+alias ssh_tunnel="yk && ssh -NfqD localhost:8527 patrick_yoon@gw1.silver.musta.ch"

@@ -198,7 +198,7 @@ minibuffer"
 ;;          ad-do-it))
 
 ;; Autocomplete mode: nicer autocomplete rendering
-;; (require 'auto-complete-config)
+(require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
 (global-auto-complete-mode t)
 (ac-config-default)
