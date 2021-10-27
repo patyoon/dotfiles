@@ -3,7 +3,7 @@ export PATH=$PATH:/opt/airbnb/bin:$SYSOPS_PATH/optica_tools
 
 # afdev
 export DATA_DIR=$HOME/workspace/data #PATH WHERE YOU CLONED THE DATA REPO
-export AFDEV_HOST="i-0f68e6da91e4a52ae.inst.aws.airbnb.com"
+export AFDEV_HOST="i-0df372a95530fa6ab.inst.aws.us-east-1.prod.musta.ch"
 export CDH_GOLD_HOST="i-9dda8d4f.inst.aws.us-east-1.prod.musta.ch"
 export AFDEV_PORT=61903 #CHOOSE A DIFFERENT PORT
 

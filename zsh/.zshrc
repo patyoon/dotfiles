@@ -71,9 +71,6 @@ export LANG=en_US.UTF-8
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# ssh
-export SSH_KEY_PATH="~/.ssh/dsa_id"
-
 ## Functions ##
 zsh_stats() { history|awk '{print $2}'|grep -v zsh_stats|sort|uniq -c|sort -rn|head}
 mcd() { [ -n "$1" ] && mkdir -p "$@" && cd "$1"; }
@@ -362,3 +359,20 @@ function get-instance-id() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/patrick_yoon/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/patrick_yoon/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/patrick_yoon/opt/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/patrick_yoon/opt/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export PATH="/usr/local/opt/bison/bin:$PATH"
