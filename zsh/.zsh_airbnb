@@ -16,37 +16,11 @@ export TREEHOUSE_PATH=~/workspace/treehouse
 export BIGHEAD_TH=$TREEHOUSE_PATH/projects/bighead
 export ML_MODELS_REPO=~/workspace/ml_models/
 export ZIPLINE_REPO=$ML_MODELS_REPO/zipline
+export ZIPLINE_PATH=~/workspace/zipline
 
 # compile thrift
 function compile_thrift {
-    pushd $BIGHEAD_OS/python/zipline2/schema; thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift;  popd
-}
-
-# materialize a join
-function materialize_join {
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=joins/ --output_root=production; popd
-}
-
-# materialize a group_by
-function materialize_group_by {
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=group_bys/ --output_root=production; popd
-}
-
-# materialize a staging_query
-function materialize_staging_query {
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=staging_queries/ --output_root=production; popd
-}
-
-# Materialize all V2 configs and compile thrift.
-function materialize {
-    pushd $BIGHEAD_OS/python/zipline2/schema
-    thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift
-    popd
-    pushd $ZIPLINE_REPO/
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=joins/ --output_root=production; popd
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=group_bys/ --output_root=production; popd
-    pushd $ZIPLINE_REPO/; PYTHONPATH=$BIGHEAD_OS/python:$PYTHONPATH python3.7 $BIGHEAD_OS/python/zipline2/repo/materialize.py --zipline_root=$ZIPLINE_REPO --input_path=staging_queries/ --output_root=production; popd
-    popd
+    pushd $BIGHEAD_OS/zipline/python/zipline/schema; thrift --gen py -out . $BIGHEAD_OS/thrift/schemas/zipline_api.thrift;  popd
 }
 
 # clean up maven and build OS zipline.
@@ -58,21 +32,21 @@ function zbuild {
 
 function bhsync {
     pushd $BIGHEAD_OS/zipline/batch
-    zbuild && scp build/libs/batch-0.0.1-local-all.jar $AFDEV_HOST:/tmp/batch-0.0.1-local-all.jar
+    zbuild && scp build/libs/batch-0.0.1-local-all.jar patrick_yoon@$AFDEV_HOST:/tmp/batch-0.0.1-local-all.jar
     popd
 }
 
 # make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
 function zssync {
     pushd $BIGHEAD_TH/zipline/streaming
-    ../../../../gradlew shadowJar && rsync -P -avz -e ssh build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
+    ../../../../gradlew shadowJar && rsync -P -avz -e ssh build/libs/streaming-all.jar patrick_yoon@$AFDEV_HOST:/tmp/zipline-streaming.jar
     popd
 }
 
 # make sure you set the BIGHEAD_VERSION in treehouse/gradle/libraries.gradle to 0.0.1-local3
 function zsrsync {
     pushd $BIGHEAD_TH/zipline/streaming
-    ../../../../gradlew fatJar && time rsync -av -e ssh build/libs/streaming-all.jar $AFDEV_HOST:/tmp/zipline-streaming.jar
+    ../../../../gradlew fatJar && time rsync -av -e ssh build/libs/streaming-all.jar patrick_yoon@$AFDEV_HOST:/tmp/zipline-streaming.jar
     popd
 }
 
@@ -80,13 +54,22 @@ function zsrsync {
 # build treehouse zipline batch and sync it to airflow devbox.
 function zbsync {
     pushd $BIGHEAD_TH/zipline/batch
-    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar $AFDEV_HOST:/tmp/zipline-batch.jar
+    ../../../../gradlew shadowJar && scp build/libs/batch-all.jar patrick_yoon@$AFDEV_HOST:/tmp/zipline-batch.jar
     popd
 }
 
 # sync ml_models repo to airflow devbox.
 function ml_models_sync {
-    rsync -avh --include='zipline' --exclude='.git/' --delete $ZIPLINE_REPO $AFDEV_HOST:~/ml_models/
+    rsync -avh --include='zipline' --exclude='.git/' --delete $ZIPLINE_REPO patrick_yoon@$AFDEV_HOST:~/ml_models/
+}
+
+function afdev_sync_zipline {
+    /usr/local/bin/rsync  -P -avz \
+    --exclude ".git/" \
+    --exclude ".gradle/" \
+    --exclude "**/target/" \
+    --exclude "**/*.jar" \
+-e ssh  $ZIPLINE_PATH  patrick_yoon@$AFDEV_HOST:/home/patrick_yoon --delete
 }
 
 function gen_zipline_thrift {
@@ -144,3 +127,8 @@ function afdev_sync_treehouse {
 }
 
 alias ssh_tunnel="yk && ssh -NfqD localhost:8527 patrick_yoon@gw1.silver.musta.ch"
+
+
+export ZIPLINE_OS=~/workspace/zipline
+export ZIPLINE_API=$ZIPLINE_OS/api/py
+alias materialize="PYTHONPATH=$ZIPLINE_API:$PYTHONPATH $ZIPLINE_API/ai/zipline/repo/compile.py"
