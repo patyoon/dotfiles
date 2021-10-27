@@ -345,10 +345,6 @@ export EDITOR='emacs'
 # TODO: Only run after checking OS.
 defaults write NSGlobalDomain KeyRepeat -int 0.02
 
-if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init -)"
-fi
-
 # https://github.com/nvbn/thefuck
 # alias fuck='$(thefuck $(fc -ln -1))'
 
@@ -362,3 +358,14 @@ function get-instance-id() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# AIRLAB-DO-NOT-MODIFY section:ShellWrapper {{{
+# Airlab will only make edits inside these delimiters.
+
+# Source Airlab's shell integration, if it exists.
+if [ -e ~/.airlab/shellhelper.sh ]; then
+  source ~/.airlab/shellhelper.sh
+fi
+# AIRLAB-DO-NOT-MODIFY section:ShellWrapper }}}
+
+eval "$(pyenv init -)"

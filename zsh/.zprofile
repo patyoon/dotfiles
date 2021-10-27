@@ -28,3 +28,7 @@ autoload -U +X bashcompinit && bashcompinit
 
 # Show git branch in command line prompt
 export PS1="\\w:\$(git branch 2>/dev/null | grep '^*' | colrm 1 2)\$ "
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
