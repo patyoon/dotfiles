@@ -11,10 +11,6 @@
 ;;       (goto-char (point-max))
 ;;       (eval-print-last-sexp))))
 
-;;More package archives
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-
 ;; ;; list all packages that I want
 ;; (setq my-el-get-packages
 ;;       (append

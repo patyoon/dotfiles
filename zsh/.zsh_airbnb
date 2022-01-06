@@ -132,3 +132,6 @@ alias ssh_tunnel="yk && ssh -NfqD localhost:8527 patrick_yoon@gw1.silver.musta.c
 export ZIPLINE_OS=~/workspace/zipline
 export ZIPLINE_API=$ZIPLINE_OS/api/py
 alias materialize="PYTHONPATH=$ZIPLINE_API:$PYTHONPATH $ZIPLINE_API/ai/zipline/repo/compile.py"
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+ export PATH=$JAVA_HOME/bin:$PATH
