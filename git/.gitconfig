@@ -1,10 +1,9 @@
 [core]
-	editor = "/Applications/Emacs.app/Contents/MacOS/Emacs"
 	pager = "/usr/bin/less -N"
 	autocrlf = input
-  whitespace = trailing-space, space-before-tab, indent-with-non-tab
-  logallrefupdates = true
-  quotepath = false
+	whitespace = trailing-space, space-before-tab, indent-with-non-tab
+	logallrefupdates = true
+	quotepath = false
 	excludesfile = /Users/patrickyoon/.gitignore_global
 	precomposeunicode = true
 [color]
@@ -52,7 +51,7 @@
 	default = current
 [user]
 	name = Patrick Yoon
-	email = patrick.yoon@airbnb.com
+	email = me@patyoon.com
 [include]
   path = .gitconfig_airbnb
 [include]
@@ -72,3 +71,17 @@
         ediff-quit-merge-hook 'ediff-write-merge-buffer)\
   (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\"\
                                    \\\"$BASE\\\" nil \\\"$MERGED\\\"))\"
+[diff]
+  tool = meld
+[difftool]
+  prompt = false
+[difftool "meld"]
+  trustExitCode = true
+  cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"
+[merge]
+  tool = meld
+[mergetool]
+  prompt = false
+[mergetool "meld"]
+  trustExitCode = true
+  cmd = open -W -a Meld --args --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
