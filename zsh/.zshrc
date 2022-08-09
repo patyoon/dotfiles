@@ -332,11 +332,6 @@ for f in .zsh_*aliases; do
     source $f
 done
 
-for f in .zsh_airbnb*; do
-    echo "Sourcing $f"
-    source $f
-done
-
 export EDITOR='emacs'
 
 # TODO: Only run after checking OS.

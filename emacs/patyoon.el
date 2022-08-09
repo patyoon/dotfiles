@@ -62,6 +62,19 @@
   )
 (add-hook 'prelude-prog-mode-hook 'disable-guru-mode t)
 
+
+(setq package-list '(
+                     smex
+                     auto-complete
+                     pyenv-mode))
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
 ;; ;; ido-ubiquitous mode.
 ;; ;; First turn off icomplete to use ido instead.
 ;; (icomplete-mode 99)

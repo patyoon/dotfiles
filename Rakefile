@@ -2,7 +2,7 @@ require 'mkmf'
 
 FILES = Hash.new
 FILES[:git] = %w(.gitconfig .gitignore .gitignore_global .gitconfig_aliases)
-FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases .zsh_airbnb)
+FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases)
 FILES[:python] = %w(.pylintrc .pythonstartup)
 FILES[:misc] = %w(.screenrc .inputrc tmux.conf)
 FILES[:emacs] = %w(patyoon.el partials)
@@ -45,7 +45,7 @@ namespace 'install' do
     when 'y'
       print "Installing all packages in #{PYTHON_PACKAGE_FILE}"
       system "sudo pip install -U -r python/#{PYTHON_PACKAGE_FILE}"
-      break
+      next
     when 'n'
       exit
     else
@@ -60,7 +60,7 @@ namespace 'install' do
     when 'y'
       print "Installing all packages in #{PYTHON_PACKAGE_FILE}"
       system "sudo pip install -U -r #{PYTHON_PACKAGE_FILE}"
-      break
+      next
     when 'n'
       exit
     else
@@ -84,7 +84,7 @@ namespace 'install' do
     case STDIN.gets.chomp
     when 'y'
       system "bash brew/brew.sh"
-      break
+      next 
     when 'n'
       exit
     else
