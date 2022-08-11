@@ -17,18 +17,11 @@ fi
 export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
 export PROJECT_HOME=$HOME/workspace
 
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-		source /usr/local/bin/virtualenvwrapper.sh
-else
-    echo "virtualenvwrapper.sh not found"
-fi
+# if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+# 	source /usr/local/bin/virtualenvwrapper.sh
+# else
+#     echo "virtualenvwrapper.sh not found"
+# fi
 
 #  Enable bash complete
 autoload -U +X bashcompinit && bashcompinit
-
-# Show git branch in command line prompt
-export PS1="\\w:\$(git branch 2>/dev/null | grep '^*' | colrm 1 2)\$ "
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"

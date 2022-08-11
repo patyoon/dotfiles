@@ -40,11 +40,6 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-HIST_STAMPS="mm/dd/yyyy"
-
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -52,7 +47,7 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(python rails zeus vagrant ruby rvm rsync brew coffee common-aliases autopep8 bundler fabric gem meteor node npm osx pip screen tmux tmuxinator)
+plugins=(python rails zeus vagrant ruby rvm rsync brew coffee common-aliases autopep8 bundler fabric gem meteor node npm pip screen tmux tmuxinator)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -328,7 +323,6 @@ export PYTHONSTARTUP=$HOME/.pythonstartup
 cd $HOME
 
 for f in .zsh_*aliases; do
-    echo "Sourcing $f"
     source $f
 done
 
