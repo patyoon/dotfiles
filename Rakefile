@@ -13,7 +13,7 @@ PACKAGES[:python] = 'python_packages.txt'
 PACKAGES[:ruby] = 'Gemfile'
 
 EMACS_PATH = "#{ENV['HOME']}/.emacs.d"
-PRELUDE_REPO_URL = 'https://github.com/bbatsov/prelude.git'
+PRELUDE_REPO_URL = 'git@gitlab.com:patyoon/emacs.d.git'
 PRELUDE_MODULE_FILE = 'emacs/prelude_modules.el'
 
 OMZ_PATH = "#{ENV['HOME']}/.oh-my-zsh"
