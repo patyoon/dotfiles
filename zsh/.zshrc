@@ -365,3 +365,12 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export PATH="/usr/local/opt/bison/bin:$PATH"
+
+# The next line updates PATH for Netlify's Git Credential Helper.
+test -f '/Users/patrickyoon/Library/Preferences/netlify/helper/path.zsh.inc' && source '/Users/patrickyoon/Library/Preferences/netlify/helper/path.zsh.inc'
+
+export PATH="$PATH:/Users/patrickyoon/personal_workspace/flutter/bin:/usr/local/texlive/2022basic/bin/universal-darwin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
