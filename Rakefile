@@ -3,7 +3,7 @@ require 'mkmf'
 FILES = Hash.new
 FILES[:git] = %w(.gitconfig .gitignore .gitignore_global .gitconfig_aliases)
 FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases)
-FILES[:python] = %w(.pylintrc .pythonstartup)
+FILES[:python] = %w(.pythonstartup)
 FILES[:misc] = %w(.screenrc .inputrc tmux.conf)
 FILES[:emacs] = %w(patyoon.el partials)
 FILES[:ruby] = %w(.gemrc .pryrc .rdebugrc)
@@ -25,7 +25,7 @@ BREW_PACKAGE_FILE = 'brew_packages.txt'
 PYTHON_PACKAGE_FILE = 'python_packages.txt'
 
 namespace 'install' do
-  task 'all' => [:git, :zsh, :brew, :emacs] do
+  task 'all' => [:git, :zsh, :brew, :emacs, :python] do
     puts 'Installed all!'
   end
 
@@ -84,7 +84,7 @@ namespace 'install' do
     case STDIN.gets.chomp
     when 'y'
       system "bash brew/brew.sh"
-      next 
+      next
     when 'n'
       exit
     else
