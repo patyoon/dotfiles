@@ -14,7 +14,6 @@ if [ ! -d $WORKON_HOME ]; then
     mkdir -p $WORKON_HOME
 fi
 
-export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
 export PROJECT_HOME=$HOME/workspace
 
 # if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
