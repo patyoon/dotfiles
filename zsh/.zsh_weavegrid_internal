@@ -6,11 +6,5 @@ export PKG_CONFIG_PATH="$(brew --prefix openssl@1.1)/lib/pkgconfig:$(brew --pref
 export PATH="/Users/patrick/workspace/wg-deploy/wbin:$PATH"
 export PIP_INSTALL_URL=https://pypi.weave-grid-dev.com
 
-export VIRTUALENVWRAPPER_PYTHON=/Users/patrick/.pyenv/shims/python
-export VIRTUALENVWRAPPER_VIRTUALENV=/Users/patrick/.pyenv/shims/virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
-
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 export WG_DC_AUTO_DEFAULT=1

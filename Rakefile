@@ -2,7 +2,7 @@ require 'mkmf'
 
 FILES = Hash.new
 FILES[:git] = %w(.gitconfig .gitignore .gitignore_global .gitconfig_aliases)
-FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases)
+FILES[:zsh] = %w(.zshrc .zprofile .zsh_aliases .zsh_weavegrid_internal)
 FILES[:python] = %w(.pythonstartup)
 FILES[:misc] = %w(.screenrc .inputrc tmux.conf)
 FILES[:emacs] = %w(patyoon.el partials)
