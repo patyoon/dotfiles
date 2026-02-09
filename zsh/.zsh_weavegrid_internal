@@ -3,7 +3,7 @@ export CPPFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/includ
 export CFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix openssl@1.1)/include -I$(brew --prefix libffi)/include -I$(brew --prefix xz)/include"
 export PKG_CONFIG_PATH="$(brew --prefix openssl@1.1)/lib/pkgconfig:$(brew --prefix libffi)/lib/pkgconfig"
 
-export PATH="/Users/patrick/workspace/wg-deploy/wbin:$PATH"
+export PATH="/Users/patrickyoon/workspace/wg-deploy/wbin:$PATH"
 export PIP_INSTALL_URL=https://pypi.weave-grid-dev.com
 
 export WORKON_HOME=$HOME/.virtualenvs

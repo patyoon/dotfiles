@@ -105,9 +105,6 @@ function x {
 
 # END FUNCTIONS
 
-DIRSTACKSIZE=${DIRSTACKSIZE:-20}
-DIRSTACKFILE=${DIRSTACKFILE:-${HOME}/.zdirs}
-
 function dirjump {
     emulate -L zsh
     autoload -U colors
@@ -125,7 +122,7 @@ function dirjump {
         echo d: no such directory stack entry: $dir
         return 1
     fi
-    cd ~$dir
+    cd ~+$dir
 }
 
 ## miscellaneous code ##
@@ -254,7 +251,7 @@ function update {
     sh -c $brew$gisty; sudo sh -c $gem$pip$macport
 }
 
-export TOOL_HOME=/Users/patrick/workspace/tools
+export TOOL_HOME=/Users/patrickyoon/workspace/tools
 
 # Bash function for custom grep
 function wgrep {
@@ -300,7 +297,6 @@ function delete-known-host {
     mv tmp_283497 ~/.ssh/known_hosts
 }
 
-bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
 
@@ -308,8 +304,6 @@ export VIRTUALENVWRAPPER_PYTHON=`which python`
 export VIRTUALENVWRAPPER_VIRTUALENV=`which virtualenv`
 
 export PYTHONSTARTUP=$HOME/.pythonstartup
-
-cd $HOME
 
 export VISUAL='emacsclient -c'
 
@@ -332,11 +326,18 @@ export PATH="/usr/local/opt/bison/bin:$PATH"
 # The next line updates PATH for Netlify's Git Credential Helper.
 test -f '/Users/patrickyoon/Library/Preferences/netlify/helper/path.zsh.inc' && source '/Users/patrickyoon/Library/Preferences/netlify/helper/path.zsh.inc'
 
-export PATH="/Users/patrick/workspace/wg-deploy/wbin:$PATH:/Users/patrickyoon/personal_workspace/flutter/bin:/usr/local/texlive/2022basic/bin/universal-darwin"
+export PATH="/Users/patrickyoon/workspace/wg-deploy/wbin:$PATH:/Users/patrickyoon/personal_workspace/flutter/bin:/usr/local/texlive/2022basic/bin/universal-darwin"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+    . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \
+        . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+elif [ -s "$NVM_DIR/nvm.sh" ]; then
+    . "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \
+        . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 for f in .zsh_*aliases; do
     echo "loading aliases: $f"
@@ -352,6 +353,10 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completionexport PYENV_ROOT="$HOME/.pyenv"
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/patrickyoon/personal_workspace/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/patrickyoon/personal_workspace/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/patrickyoon/personal_workspace/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/patrickyoon/personal_workspace/google-cloud-sdk/completion.zsh.inc'; fi
+
+alias claude='wg-llm-env claude'

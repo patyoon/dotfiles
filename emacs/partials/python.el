@@ -135,7 +135,7 @@
 
 ;; (after 'auto-complete-config
 ;;        (ac-config-default)
-;;        (when (file-exists-p (expand-file-name "/Users/patrick/.emacs.d/el-get/pymacs"))
+;;        (when (file-exists-p (expand-file-name "/Users/patrickyoon/.emacs.d/el-get/pymacs"))
 ;;          (ac-ropemacs-initialize)
 ;;          (ac-ropemacs-setup)))
 

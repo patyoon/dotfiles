@@ -63,9 +63,9 @@
 #   path = /Users/patrickyoon/Library/Preferences/netlify/helper/git-config
 
 [includeIf "gitdir:~/workspace/"]
-	path = /Users/patrick/.gitconfig_weavegrid
+	path = /Users/patrickyoon/.gitconfig_weavegrid
 [includeIf "gitdir:~/personal_workspace/"]
-	path = /Users/patrick/.gitconfig_personal
+	path = /Users/patrickyoon/.gitconfig_personal
 
 [merge]
     tool = vscode
@@ -75,3 +75,6 @@
     tool = vscode
 [difftool "vscode"]
     cmd = code --wait --diff $LOCAL $REMOTE
+[user]
+	email = patrick@weavegrid.com
+	name = Patrick Yoon
