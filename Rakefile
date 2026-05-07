@@ -1,4 +1,5 @@
 require 'mkmf'
+require 'fileutils'
 
 FILES = Hash.new
 FILES[:git] = %w(.gitconfig .gitignore .gitignore_global .gitconfig_aliases)
@@ -93,6 +94,53 @@ namespace 'install' do
   end
 end
 
+namespace 'setup' do
+  task 'all' => [:ssh_key, :xcode_clt, :keyboard] do
+    puts 'Setup complete!'
+  end
+
+  task 'ssh_key' do
+    ssh_dir = File.join(ENV['HOME'], '.ssh')
+    key_path = File.join(ssh_dir, 'id_rsa')
+    pub_path = "#{key_path}.pub"
+
+    FileUtils.mkdir_p(ssh_dir) unless Dir.exists?(ssh_dir)
+
+    if File.exists?(key_path)
+      puts "SSH key already exists: #{key_path}"
+    else
+      hostname = `hostname`.strip
+      comment = "#{ENV['USER']}@#{hostname}"
+      system "ssh-keygen -t rsa -b 4096 -C \"#{comment}\" -f #{key_path}"
+    end
+
+    if File.exists?(pub_path)
+      system "pbcopy < #{pub_path}"
+      puts "Copied #{pub_path} to clipboard."
+    else
+      puts "Public key not found: #{pub_path}"
+    end
+  end
+
+  task 'xcode_clt' do
+    if system("xcode-select -p >/dev/null 2>&1")
+      puts 'Xcode Command Line Tools already installed.'
+    else
+      system 'xcode-select --install'
+      puts 'Follow the GUI prompts to complete installation.'
+    end
+  end
+
+  task 'keyboard' do
+    script = File.join(Dir.pwd, 'misc', 'macos_keyboard_shortcuts.sh')
+    if File.exists?(script)
+      system "bash #{script}"
+    else
+      puts "Missing script: #{script}"
+    end
+  end
+end
+
 namespace 'update' do
   task 'emacs' do
     if !File.directory?(EMACS_PATH)
@@ -157,6 +205,10 @@ def print_help
   puts 'install:python\t-\tInstall python files'
   puts 'install:ruby\t-\tInstall ruby files'
   puts 'install:emacs\t-\tInstall emacs files and emacs prelude'
+  puts 'setup:all\t-\tRun full Mac setup tasks'
+  puts 'setup:ssh_key\t-\tCreate SSH key and copy pubkey to clipboard'
+  puts 'setup:xcode_clt\t-\tInstall Xcode Command Line Tools'
+  puts 'setup:keyboard\t-\tApply macOS keyboard shortcut changes'
 end
 
 def clone_emacs_prelude

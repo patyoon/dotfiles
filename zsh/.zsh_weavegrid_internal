@@ -1,8 +1,3 @@
-export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib -L$(brew --prefix openssl@1.1)/lib -L$(brew --prefix libffi)/lib -L$(brew --prefix xz)/lib"
-export CPPFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix openssl@1.1)/include -I$(brew --prefix libffi)/include -I$(brew --prefix libffi)/include -I$(brew --prefix xz)/include"
-export CFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix openssl@1.1)/include -I$(brew --prefix libffi)/include -I$(brew --prefix xz)/include"
-export PKG_CONFIG_PATH="$(brew --prefix openssl@1.1)/lib/pkgconfig:$(brew --prefix libffi)/lib/pkgconfig"
-
 export PATH="/Users/patrickyoon/workspace/wg-deploy/wbin:$PATH"
 export PIP_INSTALL_URL=https://pypi.weave-grid-dev.com
 

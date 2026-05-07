@@ -313,11 +313,6 @@ defaults write NSGlobalDomain KeyRepeat -int 0.02
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export PATH=$JAVA_HOME/bin:$PATH
 
-function get-instance-id() {
-    echo $1 | xargs -I {} bash -c "curl -s 'https://billow.d.musta.ch/ec2?q=privateHostname==\"{}\"' | jq -r '.[].id'"
-}
-# source ~/gitstatus/gitstatus.prompt.zsh
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -339,12 +334,12 @@ elif [ -s "$NVM_DIR/nvm.sh" ]; then
         . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
-for f in .zsh_*aliases; do
+for f in ~/.zsh_*aliases; do
     echo "loading aliases: $f"
     source $f
 done
 
-for f in .zsh_*internal; do
+for f in ~/.zsh_*internal; do
     echo "loading internal rcs: $f"
     source $f
 done
@@ -359,4 +354,11 @@ if [ -f '/Users/patrickyoon/personal_workspace/google-cloud-sdk/path.zsh.inc' ];
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/patrickyoon/personal_workspace/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/patrickyoon/personal_workspace/google-cloud-sdk/completion.zsh.inc'; fi
 
+# Prioritize Homebrew binaries
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
 alias claude='wg-llm-env claude'
+
+export PATH="/opt/homebrew/opt/libpq/bin:${PATH}"
+export PATH="/opt/homebrew/opt/mysql-client/bin:${PATH}"
+export PATH="$HOME/.pyenv/shims:${PATH}"

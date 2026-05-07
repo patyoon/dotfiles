@@ -24,3 +24,6 @@ export PROJECT_HOME=$HOME/workspace
 
 #  Enable bash complete
 autoload -U +X bashcompinit && bashcompinit
+
+export PATH="/opt/homebrew/opt/libpq/bin:${PATH}"
+export PATH="/opt/homebrew/opt/mysql-client/bin:${PATH}"
